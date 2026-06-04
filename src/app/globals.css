@@ -1,26 +1,518 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f5f1eb;
+  --surface: rgba(255, 252, 248, 0.82);
+  --surface-strong: rgba(255, 255, 255, 0.94);
+  --line: rgba(52, 42, 28, 0.12);
+
+  --text: #2a1f12;
+  --muted: #6b5840;
+  --accent: #7a5c2e;
+  --accent-deep: #5c4220;
+  --green: #4a6741;
+  --cream: #fdf8f2;
+
+  --shadow: 0 24px 70px rgba(42, 31, 18, 0.08);
+  --radius-xl: 34px;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --max-width: 1200px;
+
+  --font-display: var(--font-cinzel), serif;
+  --font-serif: var(--font-cormorant), serif;
+  --font-body: var(--font-manrope), sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  background:
+    radial-gradient(circle at top left, rgba(122, 92, 46, 0.13), transparent 22%),
+    radial-gradient(circle at bottom right, rgba(74, 103, 65, 0.11), transparent 24%),
+    linear-gradient(180deg, #f7f3ed 0%, #ece4d8 100%);
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.page-shell {
+  width: min(calc(100% - 2rem), var(--max-width));
+  margin-inline: auto;
+}
+
+/* ── Nav ── */
+
+.site-nav {
+  width: min(calc(100% - 2rem), var(--max-width));
+  margin: 1rem auto 0;
+  padding: 0.9rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.66);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 1rem;
+  z-index: 10;
+}
+
+.site-nav-brand {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2vw, 1.45rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--accent-deep);
+}
+
+.site-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.site-nav-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.site-nav-links a:hover {
+  background: rgba(122, 92, 46, 0.1);
+  color: var(--accent-deep);
+}
+
+/* ── Hero ── */
+
+.campers-hero {
+  margin: 2rem auto 0;
+  width: min(calc(100% - 2rem), var(--max-width));
+  min-height: 28rem;
+  border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(155deg, #2e2010 0%, #4a3018 35%, #6b5230 65%, #8a7248 100%);
+  box-shadow: 0 30px 80px rgba(42, 31, 18, 0.22);
+  display: flex;
+  align-items: flex-end;
+}
+
+.campers-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 25% 55%, rgba(255, 220, 140, 0.12), transparent 50%),
+    radial-gradient(ellipse at 75% 15%, rgba(74, 103, 65, 0.2), transparent 45%);
+}
+
+.campers-hero::after {
+  content: "";
+  position: absolute;
+  inset: 1.2rem;
+  border-radius: calc(var(--radius-xl) - 8px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  pointer-events: none;
+}
+
+.campers-hero-copy {
+  position: relative;
+  z-index: 2;
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.campers-hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0.9rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 240, 210, 0.88);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.campers-hero-title {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  font-weight: 600;
+  line-height: 0.92;
+  color: rgba(255, 248, 235, 0.97);
+  letter-spacing: 0.04em;
+}
+
+.campers-hero-sub {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  color: rgba(240, 225, 195, 0.88);
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+/* ── Dev Banner ── */
+
+.dev-banner {
+  width: min(calc(100% - 2rem), var(--max-width));
+  margin: 1.5rem auto 0;
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(122, 92, 46, 0.22);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dev-banner-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid rgba(120, 180, 90, 0.4);
+  border-radius: 999px;
+  background: rgba(120, 180, 90, 0.14);
+  color: #3a6e28;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.dev-banner p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+/* ── Services ── */
+
+.services-section {
+  padding: 3rem 0;
+}
+
+.services-heading {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text);
+}
+
+.services-sub {
+  margin: 0 0 2rem;
+  color: var(--muted);
+  font-size: 1rem;
+  max-width: 54ch;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.service-card {
+  padding: 1.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow);
+}
+
+.service-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius-md);
+  background: rgba(122, 92, 46, 0.1);
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+.service-card h3 {
+  margin: 0 0 0.55rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 2.5vw, 2rem);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text);
+}
+
+.service-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.93rem;
+  line-height: 1.65;
+}
+
+/* ── Quote Band ── */
+
+.quote-band {
+  margin: 0 0 3rem;
+  padding: 2.2rem;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, #3a2812 0%, #5c4220 100%);
+  color: var(--cream);
+  box-shadow: var(--shadow);
+}
+
+.quote-band p {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  line-height: 1.1;
+  font-weight: 400;
+  color: rgba(253, 248, 242, 0.96);
+}
+
+.quote-band span {
+  color: rgba(230, 210, 175, 0.72);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+}
+
+/* ── About & Coming Soon ── */
+
+.about-section {
+  padding: 0 0 3rem;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.about-card {
+  padding: 2rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow);
+}
+
+.about-card-kicker {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0.9rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(122, 92, 46, 0.08);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.about-card h2 {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text);
+}
+
+.about-card p {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.about-card p:last-child {
+  margin-bottom: 0;
+}
+
+.coming-soon-card {
+  padding: 2rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(145deg, rgba(74, 103, 65, 0.07), rgba(255, 255, 255, 0.72));
+  box-shadow: var(--shadow);
+}
+
+.coming-soon-card h2 {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.04em;
+}
+
+.coming-soon-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.coming-soon-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.coming-soon-list li::before {
+  content: "—";
+  color: var(--accent);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ── Footer ── */
+
+.site-footer {
+  margin-top: auto;
+  padding: 2.5rem 1rem 1.5rem;
+  background: #2a1f12;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(14rem, 1fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.footer-brand {
+  text-align: center;
+}
+
+.footer-brand h2 {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: rgba(253, 248, 242, 0.95);
+}
+
+.footer-brand p {
+  margin: 0;
+  color: rgba(253, 248, 242, 0.55);
+  font-size: 0.82rem;
+}
+
+.footer-links {
+  text-align: center;
+}
+
+.footer-links h3 {
+  margin: 0 0 0.75rem;
+  color: rgba(253, 248, 242, 0.95);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.footer-links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.footer-links a {
+  color: rgba(253, 248, 242, 0.65);
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: rgba(253, 248, 242, 0.98);
+}
+
+.footer-contact {
+  text-align: center;
+}
+
+.footer-contact h3 {
+  margin: 0 0 0.5rem;
+  color: rgba(253, 248, 242, 0.95);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.footer-contact p {
+  margin: 0 0 0.3rem;
+  color: rgba(253, 248, 242, 0.62);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 900px) {
+  .services-grid,
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 2rem 1.25rem 1.5rem;
+  }
+
+  .campers-hero {
+    min-height: 20rem;
+  }
 }

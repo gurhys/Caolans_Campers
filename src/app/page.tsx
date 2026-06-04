@@ -1,65 +1,168 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      {/* Nav */}
+      <nav className="site-nav" aria-label="Main navigation">
+        <span className="site-nav-brand">Caoláns Campers</span>
+        <div className="site-nav-links">
+          <a href="#">Home</a>
+          <a href="#">Services</a>
+          <a href="#">Projects</a>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <div className="campers-hero" aria-label="Caoláns Campers hero">
+        <div className="campers-hero-copy">
+          <span className="campers-hero-kicker">Van Conversions · Ireland</span>
+          <h1 className="campers-hero-title">Caoláns Campers</h1>
+          <p className="campers-hero-sub">
+            Bespoke van builds &amp; camper conversions, custom-made for your
+            adventure
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </div>
+
+      {/* Dev Banner */}
+      <div className="dev-banner" role="status">
+        <span className="dev-banner-badge">In Development</span>
+        <p>
+          New website coming soon — Caoláns Campers is currently being rebranded
+          from Mobile Camper Solutions Ireland. Check back for updates.
+        </p>
+      </div>
+
+      <main className="page-shell">
+        {/* Services */}
+        <section className="services-section" aria-labelledby="services-heading">
+          <h2 className="services-heading" id="services-heading">
+            What We Build
+          </h2>
+          <p className="services-sub">
+            Every build is one-of-a-kind. Caoláns Campers specialises in fully
+            custom van conversions designed around how you actually live and
+            travel.
+          </p>
+
+          <div className="services-grid">
+            <div className="service-card">
+              <div className="service-card-icon" aria-hidden="true">◈</div>
+              <h3>Full Van Conversions</h3>
+              <p>
+                Complete Sprinter and high-roof van conversions — designed from
+                scratch around your life on the road. From layout and insulation
+                through to fitted furniture and finishing touches.
+              </p>
+            </div>
+
+            <div className="service-card">
+              <div className="service-card-icon" aria-hidden="true">◎</div>
+              <h3>Electrical &amp; Solar</h3>
+              <p>
+                Full off-grid electrical system design and installation, including
+                solar panels, battery banks, and 12V/240V wiring — built to keep
+                you powered wherever you park up.
+              </p>
+            </div>
+
+            <div className="service-card">
+              <div className="service-card-icon" aria-hidden="true">⬡</div>
+              <h3>Heating &amp; Comfort</h3>
+              <p>
+                Diesel heating systems, skylights, and window installation for
+                year-round comfort. Whether you&rsquo;re chasing surf in January or
+                camping under the Irish summer sky.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Quote Band */}
+        <div className="quote-band">
+          <p>
+            &ldquo;There&rsquo;s no one-size-fits-all solution when it comes to building
+            a campervan — and that&rsquo;s exactly what I love about it.&rdquo;
+          </p>
+          <span>Caoláns Campers · Custom builds from Ireland</span>
         </div>
+
+        {/* About + Coming Soon */}
+        <section className="about-section" aria-labelledby="about-heading">
+          <div className="about-grid">
+            <div className="about-card">
+              <span className="about-card-kicker">About</span>
+              <h2 id="about-heading">Built by an engineer, for adventurers</h2>
+              <p>
+                Caoláns Campers is the work of Caoláns — an engineer and
+                van-dweller who has spent years surfing, kayaking, and living on
+                the road across Ireland and beyond.
+              </p>
+              <p>
+                Every conversion is designed with that lived experience in mind:
+                practical layouts, reliable systems, and the kind of details that
+                only matter once you&rsquo;re actually living in the van.
+              </p>
+              <p>
+                Previously trading as Mobile Camper Solutions Ireland, the
+                business is now rebranding under the Caoláns Campers name — same
+                builds, same care, new identity.
+              </p>
+            </div>
+
+            <div className="coming-soon-card">
+              <h2>New Site Coming Soon</h2>
+              <ul className="coming-soon-list">
+                <li>Full project gallery with past builds</li>
+                <li>Detailed service and pricing information</li>
+                <li>Step-by-step build process walkthrough</li>
+                <li>Online enquiry and quote request form</li>
+                <li>Customer testimonials and reviews</li>
+                <li>Blog — tips, builds, and life on the road</li>
+                <li>Social media and contact links</li>
+              </ul>
+            </div>
+          </div>
+        </section>
       </main>
-    </div>
+
+      {/* Footer */}
+      <footer className="site-footer" aria-label="Site footer">
+        <div className="footer-links">
+          <h3>Navigate</h3>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+
+        <div className="footer-brand">
+          <h2>Caoláns Campers</h2>
+          <p>Bespoke van conversions from Ireland</p>
+        </div>
+
+        <div className="footer-contact">
+          <h3>Get in Touch</h3>
+          <p>New website in development.</p>
+          <p>
+            Designed by{" "}
+            <a
+              href="https://github.com/gurhys/shauna-gurhy"
+              style={{
+                textDecoration: "underline",
+                color: "rgba(253,248,242,0.75)",
+              }}
+            >
+              Shauna Gurhy
+            </a>
+            .
+          </p>
+        </div>
+      </footer>
+    </>
   );
 }

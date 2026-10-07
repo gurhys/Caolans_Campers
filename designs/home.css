@@ -1169,3 +1169,26 @@ a.service-card {
 
   .footer__nav { justify-content: center; flex-wrap: wrap; }
 }
+
+/* === NARROW MOBILE — prevent nav overflow at 390px ===
+   .nav__brand needs ~358px of space in default config;
+   at 390px viewport only ~310px is available inside nav__inner.
+   Reduce brand padding + font until it fits. */
+@media (max-width: 450px) {
+  html, body { overflow-x: hidden; }
+
+  .nav__inner {
+    padding: 0 0.75rem;
+  }
+  .nav__brand {
+    padding: 0;
+    gap: 0.4rem;
+  }
+  .nav__brand-word {
+    font-size: 0.8rem;
+    letter-spacing: 0.07em;
+  }
+  .nav__logo-placeholder {
+    height: 36px;
+  }
+}

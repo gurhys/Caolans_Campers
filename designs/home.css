@@ -1045,6 +1045,14 @@ a.service-card {
   letter-spacing: 0.05em;
 }
 
+.footer__formerly {
+  font-size: 0.68rem;
+  color: rgba(234, 243, 222, 0.35);
+  letter-spacing: 0.06em;
+  font-style: italic;
+  margin-top: 0.3rem;
+}
+
 .footer__nav {
   display: flex;
   gap: 2rem;

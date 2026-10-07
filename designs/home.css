@@ -1,4 +1,4 @@
-/* === CORNER IMAGE SIZING === */
+﻿/* === CORNER IMAGE SIZING === */
 .service-corner img,
 .page-hero__ornament img,
 .form__ornament img,
@@ -363,7 +363,7 @@ h1, h2, h3 {
       rgba(30, 107, 122, 0.55) 50%,
       rgba(42, 122, 106, 0.62) 100%
     ),
-    url('../../mountains.jpg') center center / cover no-repeat;
+    url('/images/mountains.jpg') center center / cover no-repeat;
   display: flex;
   flex-direction: column;
   align-items: center;

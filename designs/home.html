@@ -13,21 +13,6 @@
 
   <!-- Celtic corner ornament SVG (reusable via symbol) -->
   <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
-    <symbol id="celtic-corner" viewBox="0 0 80 80">
-      <g fill="none" stroke="currentColor" stroke-width="2">
-        <!-- Outer arc -->
-        <path d="M4,4 Q4,40 40,76" opacity="0.5"/>
-        <path d="M4,4 Q40,4 76,40" opacity="0.5"/>
-        <!-- Knotwork loops -->
-        <path d="M4,4 C4,20 16,20 16,36 C16,52 4,52 4,68" stroke-width="2.5"/>
-        <path d="M4,4 C20,4 20,16 36,16 C52,16 52,4 68,4" stroke-width="2.5"/>
-        <!-- Inner diamond node -->
-        <rect x="10" y="10" width="8" height="8" rx="1" transform="rotate(45 14 14)" stroke-width="1.5"/>
-        <!-- Small leaf flourish -->
-        <path d="M28,4 C28,12 20,16 16,24" stroke-width="1.5"/>
-        <path d="M4,28 C12,28 16,20 24,16" stroke-width="1.5"/>
-      </g>
-    </symbol>
     <symbol id="celtic-divider" viewBox="0 0 300 30">
       <g fill="none" stroke="currentColor" stroke-width="1.5">
         <line x1="0" y1="15" x2="110" y2="15"/>
@@ -175,7 +160,7 @@
   <!-- ABOUT -->
   <section class="about" id="about">
     <div class="about__bg-ornament">
-      <svg><use href="#celtic-corner" color="#AAD39C"/></svg>
+      <img src="corner_chain.svg" alt="" />
     </div>
     <div class="container about__inner">
       <div class="about__image-col">
@@ -467,8 +452,8 @@
         </div>
       </div>
       <form class="contact__form">
-        <div class="form__ornament form__ornament--tl"><svg width="40" height="40"><use href="#celtic-corner"/></svg></div>
-        <div class="form__ornament form__ornament--br"><svg width="40" height="40"><use href="#celtic-corner"/></svg></div>
+        <div class="form__ornament form__ornament--tl"><img src="corner_chain.svg" alt="" /></div>
+        <div class="form__ornament form__ornament--br"><img src="corner_chain.svg" alt="" /></div>
         <div class="form__group">
           <label for="name">Your Name</label>
           <input type="text" id="name" name="name" placeholder="Aoife Murphy" />

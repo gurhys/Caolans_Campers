@@ -1,3 +1,12 @@
+/* === CORNER IMAGE SIZING === */
+.service-corner img,
+.page-hero__ornament img,
+.form__ornament img,
+.about__corner img,
+.about__bg-ornament img,
+.story__corner img,
+.login-ornament img { width: 100%; height: 100%; object-fit: contain; }
+
 /* === RESET & BASE === */
 *, *::before, *::after {
   margin: 0;

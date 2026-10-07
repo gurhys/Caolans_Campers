@@ -362,9 +362,6 @@
       <div>
         <p class="service-intro__eyebrow">The Full Package</p>
         <h2 class="service-intro__title">Everything Under<br>One Roof</h2>
-        <div class="service-intro__divider">
-          <img src="divider_braid.svg" alt="" width="300" />
-        </div>
         <p class="service-intro__body">A full conversion is the most personal thing you can put in a van. Caolán handles every part of the build himself — no passing off the electrics to one person and the joinery to another. That means every decision is joined up, every system works together, and nothing gets lost in translation between trades.</p>
         <p class="service-intro__body">He starts with a proper conversation about how you'll actually use the van. Weekend surfer or full-time remote worker? Solo or with a partner? Need a proper bed or happy with a fold-down? The answers shape everything that follows.</p>
         <div class="service-intro__pull">
@@ -373,8 +370,6 @@
         <a href="quote.html" class="btn btn--primary">Start Your Build</a>
       </div>
       <div class="service-intro__image">
-        <div class="service-corner service-corner--tl"><img src="corner_chain.svg" alt="" width="200" /></div>
-        <div class="service-corner service-corner--br"><img src="corner_chain.svg" alt="" width="40" /></div>
         <svg viewBox="0 0 200 150" fill="none" stroke="#80A874" stroke-width="1.5">
           <rect x="10" y="15" width="180" height="110" rx="5"/>
           <path d="M10 35 L40 15 L160 15 L190 35"/>
@@ -626,7 +621,7 @@
   </footer>
 
   <script>
-  (function(){var btn=document.querySelector('.nav__menu-btn'),drop=document.querySelector('.nav__dropdown');if(!btn||!drop)return;var ll=document.querySelectorAll('.nav__links--left a'),pl=document.querySelector('.nav__portal-li a'),cl=document.querySelector('.nav__cta-li a'),h='';ll.forEach(function(a){h+='<a href="'+a.getAttribute('href')+'">' +a.textContent+'</a>';});if(pl)h+='<a href="'+pl.getAttribute('href')+'">' +pl.textContent+'</a>';if(cl)h+='<a href="'+cl.getAttribute('href')+'" class="nav__dropdown-cta">'+cl.textContent+'</a>';drop.innerHTML=h;btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')=== 'true';btn.setAttribute('aria-expanded',String(!o));drop.classList.toggle('open',!o);});document.addEventListener('click',function(e){if(!btn.contains(e.target)&&!drop.contains(e.target)){btn.setAttribute('aria-expanded','false');drop.classList.remove('open');}});})();
+  (function(){var btn=document.querySelector('.nav__menu-btn'),drop=document.querySelector('.nav__dropdown');if(!btn||!drop)return;var ll=document.querySelectorAll('.nav__links--left a'),pl=document.querySelector('.nav__portal-li a'),cl=document.querySelector('.nav__cta-li a'),h='';ll.forEach(function(a){h+='<a href="'+a.getAttribute('href')+'">' +a.textContent+'</a>';});if(pl)h+='<a href="'+pl.getAttribute('href')+'">' +pl.textContent+'</a>';h+='<a href="contact.html">Contact</a>';if(cl)h+='<a href="'+cl.getAttribute('href')+'" class="nav__dropdown-cta">'+cl.textContent+'</a>';drop.innerHTML=h;btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')=== 'true';btn.setAttribute('aria-expanded',String(!o));drop.classList.toggle('open',!o);});document.addEventListener('click',function(e){if(!btn.contains(e.target)&&!drop.contains(e.target)){btn.setAttribute('aria-expanded','false');drop.classList.remove('open');}});})();
   </script>
 </body>
 </html>

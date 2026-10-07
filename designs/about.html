@@ -322,9 +322,6 @@
       <div class="story__text-col">
         <p class="story__eyebrow">The Story</p>
         <h2 class="story__title">He Built His Own First</h2>
-        <div class="story__divider">
-          <img src="divider_fourleaf_loops.svg" alt="corner" width="350"/>
-        </div>
         <p class="story__body">Before building for clients, Caolán converted his own Sprinter van into a full-time home. As a qualified engineer with a passion for the outdoors and the open road, he wanted a space that was practical, comfortable, and built to last — not a cookie-cutter kit conversion.</p>
         <p class="story__body">After months of research, wiring, and woodwork, he had a van he was proud of. Friends started asking questions. Then asking for help. Then asking him to build theirs.</p>
         <div class="story__pull">
@@ -444,7 +441,7 @@
   </footer>
 
   <script>
-  (function(){var btn=document.querySelector('.nav__menu-btn'),drop=document.querySelector('.nav__dropdown');if(!btn||!drop)return;var ll=document.querySelectorAll('.nav__links--left a'),pl=document.querySelector('.nav__portal-li a'),cl=document.querySelector('.nav__cta-li a'),h='';ll.forEach(function(a){h+='<a href="'+a.getAttribute('href')+'">' +a.textContent+'</a>';});if(pl)h+='<a href="'+pl.getAttribute('href')+'">' +pl.textContent+'</a>';if(cl)h+='<a href="'+cl.getAttribute('href')+'" class="nav__dropdown-cta">'+cl.textContent+'</a>';drop.innerHTML=h;btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')=== 'true';btn.setAttribute('aria-expanded',String(!o));drop.classList.toggle('open',!o);});document.addEventListener('click',function(e){if(!btn.contains(e.target)&&!drop.contains(e.target)){btn.setAttribute('aria-expanded','false');drop.classList.remove('open');}});})();
+  (function(){var btn=document.querySelector('.nav__menu-btn'),drop=document.querySelector('.nav__dropdown');if(!btn||!drop)return;var ll=document.querySelectorAll('.nav__links--left a'),pl=document.querySelector('.nav__portal-li a'),cl=document.querySelector('.nav__cta-li a'),h='';ll.forEach(function(a){h+='<a href="'+a.getAttribute('href')+'">' +a.textContent+'</a>';});if(pl)h+='<a href="'+pl.getAttribute('href')+'">' +pl.textContent+'</a>';h+='<a href="contact.html">Contact</a>';if(cl)h+='<a href="'+cl.getAttribute('href')+'" class="nav__dropdown-cta">'+cl.textContent+'</a>';drop.innerHTML=h;btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')=== 'true';btn.setAttribute('aria-expanded',String(!o));drop.classList.toggle('open',!o);});document.addEventListener('click',function(e){if(!btn.contains(e.target)&&!drop.contains(e.target)){btn.setAttribute('aria-expanded','false');drop.classList.remove('open');}});})();
   </script>
 </body>
 </html>

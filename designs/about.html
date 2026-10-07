@@ -68,10 +68,8 @@
       background: var(--white);
     }
     .story__inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
+      max-width: 720px;
+      margin: 0 auto;
     }
     .story__image-frame {
       position: relative;
@@ -321,27 +319,14 @@
   <!-- STORY -->
   <section class="story">
     <div class="container story__inner">
-      <div class="story__image-col">
-        <div class="story__image-frame">
-          <div class="story__image-placeholder">
-            <svg viewBox="0 0 300 400" fill="none" stroke="#80A874" stroke-width="1.5">
-              <rect x="10" y="10" width="280" height="380" rx="4"/>
-              <circle cx="150" cy="160" r="50"/>
-              <path d="M80 340 Q150 280 220 340"/>
-            </svg>
-          </div>
-          <div class="story__corner story__corner--tl"><img src="clover_shamrock.svg" alt="corner" width="35"/>
-          <div class="story__corner story__corner--br"><img src="clover_shamrock.svg" alt="corner" width="35"/>
-        </div>
-      </div>
       <div class="story__text-col">
         <p class="story__eyebrow">The Story</p>
         <h2 class="story__title">He Built His Own First</h2>
         <div class="story__divider">
-          <img src="divider_fourleaf_loops.svg" alt="corner" width="300"/>
+          <img src="divider_fourleaf_loops.svg" alt="corner" width="350"/>
         </div>
         <p class="story__body">Before building for clients, Caolán converted his own Sprinter van into a full-time home. As a qualified engineer with a passion for the outdoors and the open road, he wanted a space that was practical, comfortable, and built to last — not a cookie-cutter kit conversion.</p>
-        <p class="story__body">After months of research, welding, wiring, and woodwork, he had a van he was proud of. Friends started asking questions. Then asking for help. Then asking him to build theirs.</p>
+        <p class="story__body">After months of research, wiring, and woodwork, he had a van he was proud of. Friends started asking questions. Then asking for help. Then asking him to build theirs.</p>
         <div class="story__pull">
           "No two people travel the same way. That's why every build starts with a conversation, not a catalogue."
         </div>
@@ -354,10 +339,10 @@
   <section class="values">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-header__title">How We Work</h2>
+        <h2 class="section-header__title">The Work</h2>
       </div>
       <div class="section-header__divider">
-        <img src="divider_fourleaf_loops.svg" alt="corner" width="300"/>
+        <img src="divider_fourleaf_loops.svg" alt="corner" width="400"/>
       </div>
       <div class="values__grid">
         <div class="value-card">
@@ -400,7 +385,7 @@
         <h2 class="section-header__title section-header__title--light">The Build Process</h2>
       </div>
       <div class="section-header__divider">
-        <img src="divider_shamrock.svg" alt="" width="300" class="divider-teal" />
+        <img src="divider_shamrock.svg" alt="" width="400" class="divider-teal" />
       </div>
       <div class="process__steps">
         <div class="process-step">

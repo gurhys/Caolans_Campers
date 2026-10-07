@@ -106,6 +106,10 @@ h1, h2, h3 {
   transform: scaleX(-1);
 }
 
+.divider-teal {
+  filter: invert(78%) sepia(48%) saturate(540%) hue-rotate(138deg) brightness(94%) contrast(92%);
+}
+
 .section-header__divider {
   text-align: center;
   margin-bottom: 3rem;
@@ -129,7 +133,8 @@ h1, h2, h3 {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2.5rem;
-  height: 82px;
+  min-height: 82px;
+  height: auto;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -167,7 +172,7 @@ h1, h2, h3 {
 }
 
 .nav__brand-word {
-  font-family: 'Cinzel', serif;
+  font-family: 'Uncial Antiqua', 'Cinzel', serif;
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--mint);
@@ -177,18 +182,18 @@ h1, h2, h3 {
 }
 
 .nav__logo-placeholder {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  overflow: hidden;
+  width: auto;
+  height: 52px;
+  border-radius: 0;
+  overflow: visible;
   flex-shrink: 0;
-  transition: width 0.45s ease, height 0.45s ease;
+  transition: height 0.45s ease;
 }
 
 .nav__logo-placeholder img {
-  width: 100%;
+  width: auto;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   transform: scale(1.06);
 }
@@ -290,6 +295,11 @@ h1, h2, h3 {
   top: 250px;
 }
 
+.nav--transparent .nav__links {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .nav--transparent .nav__brand {
   flex-direction: column;
   gap: 0.6rem;
@@ -348,10 +358,11 @@ h1, h2, h3 {
     ),
     url('../../mountains.jpg') center center / cover no-repeat;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   text-align: center;
-  padding: 120px 2rem 12vh;
+  padding: 110px 2rem 12vh;
   overflow: hidden;
 }
 
@@ -382,6 +393,30 @@ h1, h2, h3 {
 .hero__ornament--tr { top: 20px; right: 20px; transform: scaleX(-1); }
 .hero__ornament--bl { bottom: 60px; left: 20px; transform: scaleY(-1); }
 .hero__ornament--br { bottom: 60px; right: 20px; transform: scale(-1, -1); }
+
+.hero__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.hero__logo {
+  width: 320px;
+  height: auto;
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.35));
+}
+
+.hero__brand-word {
+  font-family: 'Uncial Antiqua', 'Cinzel', serif;
+  font-size: 2.9rem;
+  font-weight: 400;
+  color: var(--cream);
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  transform: scaleX(0.85);
+  display: inline-block;
+}
 
 .hero__content {
   position: relative;

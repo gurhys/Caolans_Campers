@@ -1019,6 +1019,43 @@ a.service-card {
   padding: 1rem 0 2rem;
 }
 
+/* === SEE ALSO === */
+.see-also {
+  padding: 3rem 0;
+  background: var(--white);
+  border-top: 1px solid rgba(128,168,116,0.18);
+}
+.see-also__label {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sage);
+  text-align: center;
+  margin-bottom: 1.4rem;
+}
+.see-also__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: center;
+}
+.see-also__card {
+  padding: 0.55rem 1.15rem;
+  border: 1px solid rgba(128,168,116,0.35);
+  border-radius: 3px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  color: var(--dark);
+  text-decoration: none;
+  background: var(--cream);
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.see-also__card:hover {
+  border-color: var(--dark);
+  background: var(--dark);
+  color: var(--cream);
+}
+
 .footer__border {
   margin-bottom: 1.5rem;
   opacity: 0.4;

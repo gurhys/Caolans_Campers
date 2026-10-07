@@ -401,6 +401,7 @@
       .estimate-bk-row__name { color: rgba(234, 243, 222, 0.45); font-size: 0.75rem; letter-spacing: 0.04em; }
       .estimate-bk-row__val { color: var(--mint); font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
       .estimate-bk-note { font-size: 0.7rem; color: rgba(234, 243, 222, 0.3); margin-top: 0.6rem; }
+      .estimate-bk-row__val--dim { color: rgba(234, 243, 222, 0.4) !important; font-weight: 400; }
       .estimate-bk-row--labour { border-top: 1px solid rgba(234, 243, 222, 0.18); margin-top: 0.25rem; padding-top: 0.45rem; }
       .estimate-bk-row--labour .estimate-bk-row__name { color: rgba(234, 243, 222, 0.65); }
       .estimate-bk-row--labour .estimate-bk-row__val { color: var(--teal); }
@@ -1052,7 +1053,7 @@
                     value="2"
                     data-min="0"
                     data-max="0"
-                    data-scale="1.25"
+                    data-scale="1.2"
                     onchange="updateEstimate()"
                   />
                   <label for="vs-large" class="opt-card">
@@ -2692,10 +2693,15 @@
         var waterTime = getCheckedTimes("water");
         var layoutTime = getCheckedTimes("layout");
 
+        var vanPrepT = vanEl ? (TIME_DATA[vanEl.id] || [0,0]) : [0,0];
+        var vanLabel = vanEl ? (vanEl.closest('div').querySelector('.opt-card__name') || {textContent:''}).textContent.trim() : '';
+
         var totalMin = power.min + heat.min + sky.min + water.min + layout.min;
         var totalMax = power.max + heat.max + sky.max + water.max + layout.max;
-        var totalTimeMin = powerTime.min + heatTime.min + skyTime.min + waterTime.min + layoutTime.min;
-        var totalTimeMax = powerTime.max + heatTime.max + skyTime.max + waterTime.max + layoutTime.max;
+        var rawTimeMin = powerTime.min + heatTime.min + skyTime.min + waterTime.min + layoutTime.min;
+        var rawTimeMax = powerTime.max + heatTime.max + skyTime.max + waterTime.max + layoutTime.max;
+        var totalTimeMin = Math.round(rawTimeMin * vanScale) + vanPrepT[0];
+        var totalTimeMax = Math.round(rawTimeMax * vanScale) + vanPrepT[1];
 
         var valEl = document.getElementById("estimate-val");
         var timeEl = document.getElementById("estimate-time");
@@ -2722,13 +2728,17 @@
               timeEl.textContent = "";
             }
           }
+          var scaleLabel = vanScale === 1.0 ? '' : ' ×' + vanScale;
+          var html = '<div class="estimate-bk">';
+          if (vanLabel) {
+            html += '<div class="estimate-bk-row"><span class="estimate-bk-row__name">Van size</span><span class="estimate-bk-row__val estimate-bk-row__val--dim">' + vanLabel + (scaleLabel ? scaleLabel : '') + '</span></div>';
+          }
           var rows = [];
           if (power.min > 0 || power.max > 0) rows.push({ name: "Power & Electrics", price: power, time: powerTime });
           if (heat.min > 0 || heat.max > 0) rows.push({ name: "Heating", price: heat, time: heatTime });
           if (sky.min > 0 || sky.max > 0) rows.push({ name: "Skylights & Windows", price: sky, time: skyTime });
           if (water.min > 0 || water.max > 0) rows.push({ name: "Water", price: water, time: waterTime });
           if (layout.min > 0 || layout.max > 0) rows.push({ name: "Layout & Furniture", price: layout, time: layoutTime });
-          var html = '<div class="estimate-bk">';
           rows.forEach(function(r) {
             var timeStr = fmtDays(r.time.min, r.time.max);
             html += '<div class="estimate-bk-row"><span class="estimate-bk-row__name">' + r.name + '</span><span class="estimate-bk-row__val">' + fmt(r.price.min) + '–' + fmt(r.price.max) + (timeStr ? ' · ' + timeStr : '') + '</span></div>';

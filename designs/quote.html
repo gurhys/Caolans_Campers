@@ -1007,6 +1007,7 @@
                     value="0"
                     data-min="0"
                     data-max="0"
+                    data-scale="0.85"
                     onchange="updateEstimate()"
                   />
                   <label for="vs-small" class="opt-card">
@@ -1028,6 +1029,7 @@
                     value="1"
                     data-min="0"
                     data-max="0"
+                    data-scale="1.0"
                     checked
                     onchange="updateEstimate()"
                   />
@@ -1050,6 +1052,7 @@
                     value="2"
                     data-min="0"
                     data-max="0"
+                    data-scale="1.25"
                     onchange="updateEstimate()"
                   />
                   <label for="vs-large" class="opt-card">
@@ -1589,14 +1592,14 @@
             <div class="form__row">
               <div class="form__group">
                 <label for="q-name">Name</label>
-                <input type="text" id="q-name" placeholder="Aoife Murphy" />
+                <input type="text" id="q-name" placeholder="Shauna Gurhy" />
               </div>
               <div class="form__group">
                 <label for="q-email">Email</label>
                 <input
                   type="email"
                   id="q-email"
-                  placeholder="aoife@example.ie"
+                  placeholder="shauna@example.ie"
                 />
               </div>
               <div class="form__group">
@@ -2191,11 +2194,11 @@
               <div class="form__row">
                 <div class="form__group">
                   <label>First Name</label
-                  ><input type="text" placeholder="Aoife" />
+                  ><input type="text" placeholder="Shauna" />
                 </div>
                 <div class="form__group">
                   <label>Last Name</label
-                  ><input type="text" placeholder="Murphy" />
+                  ><input type="text" placeholder="Gurhy" />
                 </div>
                 <div class="form__group">
                   <label>Phone</label><input type="tel" placeholder="087 ..." />
@@ -2207,7 +2210,7 @@
               >
                 <div class="form__group">
                   <label>Email</label
-                  ><input type="email" placeholder="aoife@example.ie" />
+                  ><input type="email" placeholder="shauna@example.ie" />
                 </div>
                 <div class="form__group">
                   <label>Van (make, model, year)</label
@@ -2673,12 +2676,15 @@
 
       // ---- OVERALL ESTIMATE ----
       function updateEstimate() {
-        var vanSize = getSelectedRange("van_size");
-        var power = getCheckedRanges("power");
-        var heat = getCheckedRanges("heat");
-        var sky = getCheckedRangesQty("sky");
-        var water = getCheckedRanges("water");
-        var layout = getCheckedRanges("layout");
+        var vanEl = document.querySelector('input[name="van_size"]:checked');
+        var vanScale = vanEl && vanEl.dataset.scale ? parseFloat(vanEl.dataset.scale) : 1.0;
+        function sc(r) { return { min: Math.round(r.min * vanScale), max: Math.round(r.max * vanScale) }; }
+
+        var power = sc(getCheckedRanges("power"));
+        var heat  = sc(getCheckedRanges("heat"));
+        var sky   = sc(getCheckedRangesQty("sky"));
+        var water = sc(getCheckedRanges("water"));
+        var layout= sc(getCheckedRanges("layout"));
 
         var powerTime = getCheckedTimes("power");
         var heatTime = getCheckedTimes("heat");
@@ -2686,8 +2692,8 @@
         var waterTime = getCheckedTimes("water");
         var layoutTime = getCheckedTimes("layout");
 
-        var totalMin = vanSize.min + power.min + heat.min + sky.min + water.min + layout.min;
-        var totalMax = vanSize.max + power.max + heat.max + sky.max + water.max + layout.max;
+        var totalMin = power.min + heat.min + sky.min + water.min + layout.min;
+        var totalMax = power.max + heat.max + sky.max + water.max + layout.max;
         var totalTimeMin = powerTime.min + heatTime.min + skyTime.min + waterTime.min + layoutTime.min;
         var totalTimeMax = powerTime.max + heatTime.max + skyTime.max + waterTime.max + layoutTime.max;
 

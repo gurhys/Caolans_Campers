@@ -1,0 +1,598 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skylights & Windows - Caolán's Campers</title>
+  <link rel="stylesheet" href="home.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    .page-hero {
+      padding: 140px 2rem 80px;
+      background: linear-gradient(160deg, var(--dark) 0%, #1e6b7a 60%, #2a7a6a 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 20% 60%, rgba(128,168,116,0.12) 0%, transparent 50%);
+    }
+    .page-hero__ornament {
+      position: absolute;
+      width: 100px; height: 100px;
+      color: rgba(170, 211, 156, 0.28);
+    }
+    .page-hero__ornament svg { width: 100%; height: 100%; }
+    .page-hero__ornament--tl { top: 16px; left: 16px; }
+    .page-hero__ornament--tr { top: 16px; right: 16px; transform: scaleX(-1); }
+    .page-hero__breadcrumb {
+      position: relative;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(234,243,222,0.45);
+      margin-bottom: 0.6rem;
+    }
+    .page-hero__breadcrumb a { color: var(--teal); text-decoration: none; }
+    .page-hero__eyebrow {
+      position: relative;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .page-hero__title {
+      position: relative;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+    .page-hero__sub {
+      position: relative;
+      font-size: 1rem;
+      color: rgba(234,243,222,0.75);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    .service-intro {
+      padding: 6rem 0;
+      background: var(--white);
+    }
+    .service-intro__inner {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .service-intro__eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 0.8rem;
+    }
+    .service-intro__title {
+      font-size: 2rem;
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+    .service-intro__divider { margin-bottom: 1.5rem; }
+    .service-intro__body {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .service-intro__pull {
+      border-left: 3px solid var(--sage);
+      padding-left: 1.4rem;
+      margin: 1.8rem 0;
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      color: var(--dark);
+      line-height: 1.7;
+      font-style: italic;
+    }
+    .service-intro__image {
+      background: var(--cream);
+      border: 2px solid rgba(128,168,116,0.25);
+      border-radius: 4px;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .service-intro__image svg { width: 55%; opacity: 0.3; }
+    .service-corner {
+      position: absolute;
+      width: 40px; height: 40px;
+      color: var(--sage);
+    }
+    .service-corner svg { width: 100%; height: 100%; }
+    .service-corner--tl { top: -12px; left: -12px; }
+    .service-corner--br { bottom: -12px; right: -12px; transform: scale(-1); }
+
+    /* OPTIONS */
+    .window-options {
+      padding: 6rem 0;
+      background: var(--cream);
+    }
+    .window-options__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .window-card {
+      background: var(--white);
+      border: 1px solid rgba(128,168,116,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .window-card__header {
+      background: var(--dark);
+      padding: 1.8rem 1.6rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.8rem;
+    }
+    .window-card__icon {
+      width: 44px; height: 44px;
+      color: var(--mint);
+    }
+    .window-card__icon svg { width: 100%; height: 100%; }
+    .window-card__title {
+      font-size: 1rem;
+      color: var(--cream);
+    }
+    .window-card__body {
+      padding: 1.4rem 1.6rem;
+      font-size: 0.87rem;
+      color: var(--text-light);
+      line-height: 1.72;
+    }
+    .window-card__detail {
+      padding: 0 1.6rem 1.6rem;
+    }
+    .window-card__detail-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      padding: 0.3rem 0;
+      border-top: 1px solid rgba(128,168,116,0.1);
+    }
+    .window-card__detail-item::before { content: '·'; color: var(--sage); font-size: 1.2rem; }
+
+    /* WHY IT MATTERS */
+    .why-matters {
+      padding: 6rem 0;
+      background: var(--dark);
+    }
+    .why-matters__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .why-matters__text-col { color: var(--cream); }
+    .why-matters__title { font-size: 1.8rem; color: var(--cream); margin-bottom: 0.8rem; }
+    .why-matters__divider { margin-bottom: 1.5rem; }
+    .why-matters__body { font-size: 0.92rem; color: rgba(234,243,222,0.72); line-height: 1.8; margin-bottom: 1rem; }
+    .why-matters__points { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; margin-top: 1.2rem; }
+    .why-matters__points li {
+      display: flex;
+      gap: 0.7rem;
+      font-size: 0.88rem;
+      color: rgba(234,243,222,0.65);
+      line-height: 1.55;
+    }
+    .why-matters__points li::before { content: '—'; color: var(--teal); flex-shrink: 0; }
+    .why-matters__visual {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(147,199,207,0.25);
+      border-radius: 4px;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .why-matters__visual svg { width: 65%; opacity: 0.35; }
+
+    .service-cta {
+      padding: 5rem 0;
+      background: var(--sage);
+      text-align: center;
+    }
+    .service-cta__title { font-size: 1.8rem; color: var(--white); margin-bottom: 0.7rem; }
+    .service-cta__sub { color: rgba(255,255,255,0.82); font-size: 0.95rem; margin-bottom: 2rem; }
+    .service-cta .btn--primary { background: var(--dark); border-color: var(--dark); }
+    .service-cta .btn--primary:hover { background: var(--white); border-color: var(--white); color: var(--dark); }
+
+    @media (max-width: 900px) {
+      .service-intro__inner { grid-template-columns: 1fr; gap: 3rem; }
+      .window-options__grid { grid-template-columns: 1fr 1fr; }
+      .why-matters__inner { grid-template-columns: 1fr; gap: 3rem; }
+    }
+    @media (max-width: 600px) {
+      .window-options__grid { grid-template-columns: 1fr; }
+    }
+
+    /* SERVICE QUOTE SECTION */
+    .service-quote { background: var(--cream); padding: 5rem 2rem; }
+    .service-quote__head { text-align: center; max-width: 700px; margin: 0 auto 2.5rem; }
+    .service-quote__title { font-size: 1.8rem; color: var(--dark); margin-bottom: 0.5rem; }
+    .service-quote__sub { font-size: 0.9rem; color: var(--text-light); }
+    .service-quote__estimate { max-width: 900px; margin: 2rem auto 0; background: var(--dark); border-radius: 4px; padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .service-quote__val-label { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(234,243,222,0.4); margin-bottom: 0.2rem; }
+    .service-quote__val { font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--mint); }
+    .service-quote__note { font-size: 0.75rem; color: rgba(234,243,222,0.45); max-width: 280px; line-height: 1.5; }
+    .option-group { display: grid; gap: 0.6rem; max-width: 900px; margin: 0 auto; }
+    .option-group--3 { grid-template-columns: repeat(3, 1fr); }
+    .opt-check { display: none; }
+    .opt-check-card { display: block; border: 2px solid rgba(128,168,116,0.25); border-radius: 3px; padding: 0.9rem 1rem; cursor: pointer; transition: border-color 0.18s, background 0.18s; position: relative; background: white; user-select: none; }
+    .opt-check-card:hover { border-color: var(--sage); background: rgba(128,168,116,0.05); }
+    .opt-check:checked + .opt-check-card { border-color: #39cccc; background: rgba(57,204,204,0.07); }
+    .opt-check:checked + .opt-check-card::after { content: "✓"; position: absolute; top: 6px; right: 8px; color: #39cccc; font-size: 0.9rem; font-weight: 700; }
+    .opt-check-card__name { font-family: 'Cinzel', serif; font-size: 0.82rem; color: var(--dark); margin-bottom: 0.25rem; }
+    .opt-check-card__desc { font-size: 0.73rem; color: var(--text-light); line-height: 1.5; }
+    .opt-qty-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.3rem; padding: 0.15rem 0.3rem; }
+    .opt-qty-label { font-size: 0.72rem; color: rgba(25,87,100,0.45); }
+    .opt-qty-num { width: 52px; padding: 0.18rem 0.35rem; border: 1px solid rgba(25,87,100,0.2); border-radius: 3px; font-size: 0.82rem; text-align: center; background: #fff; color: var(--dark); }
+    .opt-check:checked ~ .opt-qty-row .opt-qty-label { color: rgba(25,87,100,0.65); }
+    .opt-check:checked ~ .opt-qty-row .opt-qty-num { border-color: #39cccc; }
+    @media (max-width: 700px) { .option-group--3 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .option-group--3 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="celtic-corner" viewBox="0 0 80 80">
+      <g fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4,4 Q4,40 40,76" opacity="0.5"/>
+        <path d="M4,4 Q40,4 76,40" opacity="0.5"/>
+        <path d="M4,4 C4,20 16,20 16,36 C16,52 4,52 4,68" stroke-width="2.5"/>
+        <path d="M4,4 C20,4 20,16 36,16 C52,16 52,4 68,4" stroke-width="2.5"/>
+        <rect x="10" y="10" width="8" height="8" rx="1" transform="rotate(45 14 14)" stroke-width="1.5"/>
+        <path d="M28,4 C28,12 20,16 16,24" stroke-width="1.5"/>
+        <path d="M4,28 C12,28 16,20 24,16" stroke-width="1.5"/>
+      </g>
+    </symbol>
+    <symbol id="celtic-divider" viewBox="0 0 300 30">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="0" y1="15" x2="110" y2="15"/>
+        <line x1="190" y1="15" x2="300" y2="15"/>
+        <path d="M110,15 C120,5 130,25 150,15 C170,5 180,25 190,15"/>
+        <circle cx="150" cy="15" r="4" stroke-width="2"/>
+        <circle cx="130" cy="15" r="2.5"/>
+        <circle cx="170" cy="15" r="2.5"/>
+      </g>
+    </symbol>
+    <symbol id="leaf-motif" viewBox="0 0 40 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M20,58 C20,40 4,30 4,16 C4,6 12,2 20,2 C28,2 36,6 36,16 C36,30 20,40 20,58Z"/>
+        <path d="M20,58 C20,40 20,20 20,2" stroke-width="1"/>
+        <path d="M20,30 C14,28 8,22 8,16"/>
+        <path d="M20,30 C26,28 32,22 32,16"/>
+        <path d="M20,44 C16,42 12,38 10,34"/>
+        <path d="M20,44 C24,42 28,38 30,34"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <nav class="nav">
+    <div class="nav__inner">
+
+      <ul class="nav__links nav__links--left">
+        <li><a href="home.html#services">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="home.html#gallery">Gallery</a></li>
+      </ul>
+
+      <a href="home.html" class="nav__brand">
+        <span class="nav__brand-word">Caolán's</span>
+        <div class="nav__logo-placeholder">
+          <img src="logo_no_name.svg" alt="Caolán's Campers" />
+        </div>
+        <span class="nav__brand-word">Campers</span>
+      </a>
+
+      <ul class="nav__links nav__links--right">
+        <li class="nav__cta-li"><a href="quote.html" class="nav__cta">Get a Quote</a></li>
+        <li class="nav__portal-li"><a href="client.html">Client Portal</a></li>
+        <li class="nav__menu-wrap">
+          <button class="nav__menu-btn" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+          <div class="nav__dropdown"></div>
+        </li>
+      </ul>
+
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="page-hero__ornament page-hero__ornament--tl"><svg><use href="#celtic-corner"/></svg></div>
+    <div class="page-hero__ornament page-hero__ornament--tr"><svg><use href="#celtic-corner"/></svg></div>
+    <p class="page-hero__breadcrumb"><a href="home.html#services">Services</a> / Skylights & Windows</p>
+    <p class="page-hero__eyebrow">Light & Fresh Air</p>
+    <h1 class="page-hero__title">Skylights &amp; Windows</h1>
+    <p class="page-hero__sub">A van with good light and ventilation feels bigger and more liveable. Cut and fitted properly so the Irish rain stays where it belongs — outside.</p>
+  </section>
+
+  <section class="service-intro">
+    <div class="container service-intro__inner">
+      <div>
+        <p class="service-intro__eyebrow">Why It Transforms a Van</p>
+        <h2 class="service-intro__title">More Than Just Holes<br>in the Roof</h2>
+        <div class="service-intro__divider">
+          <svg width="200" height="30"><use href="#celtic-divider" color="#80A874"/></svg>
+        </div>
+        <p class="service-intro__body">The difference between a van with a roof fan and one without is enormous — in comfort, in air quality, in how long you can actually stay in the thing. Proper ventilation removes moisture that would otherwise rot your insulation and your furniture from the inside out. In Ireland, that matters more than most places.</p>
+        <p class="service-intro__body">Cutting holes in a van roof is a job that needs to be done right — once. Caolán templates the cut carefully, trims the opening cleanly, fits the unit with the correct butyl tape and sealant, and finishes the interior edge neatly. You won't be mopping up leaks six months later.</p>
+        <div class="service-intro__pull">
+          "Moisture is the enemy of a van interior. One decent roof fan deals with most of it before it becomes a problem."
+        </div>
+        <a href="quote.html" class="btn btn--primary">Get a Quote</a>
+      </div>
+      <div class="service-intro__image">
+        <div class="service-corner service-corner--tl"><svg><use href="#celtic-corner"/></svg></div>
+        <div class="service-corner service-corner--br"><svg><use href="#celtic-corner"/></svg></div>
+        <svg viewBox="0 0 200 150" fill="none" stroke="#80A874" stroke-width="1.5">
+          <rect x="20" y="20" width="160" height="110" rx="4"/>
+          <rect x="60" y="10" width="80" height="60" rx="4"/>
+          <line x1="100" y1="10" x2="100" y2="70"/>
+          <line x1="60" y1="40" x2="140" y2="40"/>
+          <circle cx="100" cy="40" r="15" stroke-dasharray="4 3"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="window-options">
+    <div class="container">
+      <div class="section-header">
+        <svg class="section-header__leaf" width="40" height="60"><use href="#leaf-motif" color="#80A874"/></svg>
+        <h2 class="section-header__title">What Caolán Installs</h2>
+        <svg class="section-header__leaf section-header__leaf--flip" width="40" height="60"><use href="#leaf-motif" color="#80A874"/></svg>
+      </div>
+      <div class="section-header__divider">
+        <svg width="300" height="30"><use href="#celtic-divider" color="#195764"/></svg>
+      </div>
+      <div class="window-options__grid">
+
+        <div class="window-card">
+          <div class="window-card__header">
+            <div class="window-card__icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="8" y="8" width="32" height="24" rx="3"/>
+                <path d="M8 20 L40 20"/>
+                <path d="M22 32 L22 40 M26 32 L26 40"/>
+                <path d="M24 14 L28 17 L24 20 L20 17 Z"/>
+              </svg>
+            </div>
+            <h3 class="window-card__title">Roof Fan Vent</h3>
+          </div>
+          <div class="window-card__body">The single most impactful addition to any van. A powered fan like the MaxxAir or Fiamma draws out stale, humid air and massively improves comfort — especially when cooking or after a wet day on the hill.</div>
+          <div class="window-card__detail">
+            <div class="window-card__detail-item">Reversible — in or out airflow</div>
+            <div class="window-card__detail-item">Speed controls included</div>
+            <div class="window-card__detail-item">Rain cover fitted as standard</div>
+          </div>
+        </div>
+
+        <div class="window-card">
+          <div class="window-card__header">
+            <div class="window-card__icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="10" width="36" height="28" rx="3"/>
+                <path d="M6 24 L42 24"/>
+                <circle cx="24" cy="17" r="3"/>
+                <circle cx="24" cy="31" r="3"/>
+              </svg>
+            </div>
+            <h3 class="window-card__title">Fixed Skylight</h3>
+          </div>
+          <div class="window-card__body">Floods a dark van with natural light without losing any security or waterproofing. Ideal positioned above the living area, kitchen, or over the bed for morning light.</div>
+          <div class="window-card__detail">
+            <div class="window-card__detail-item">Smoked or clear options</div>
+            <div class="window-card__detail-item">Interior trim ring fitted</div>
+            <div class="window-card__detail-item">Fully sealed and tested</div>
+          </div>
+        </div>
+
+        <div class="window-card">
+          <div class="window-card__header">
+            <div class="window-card__icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="14" width="40" height="26" rx="3"/>
+                <path d="M4 27 L44 27"/>
+                <path d="M20 14 L20 40"/>
+              </svg>
+            </div>
+            <h3 class="window-card__title">Side Windows</h3>
+          </div>
+          <div class="window-card__body">Sliding or fixed side windows open up a van enormously. Caolán cuts and fits van-specific windows properly trimmed — no rattling, no leaking around the seal in a downpour.</div>
+          <div class="window-card__detail">
+            <div class="window-card__detail-item">Sliding or fixed</div>
+            <div class="window-card__detail-item">Privacy glass available</div>
+            <div class="window-card__detail-item">Interior trim included</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="why-matters">
+    <div class="container why-matters__inner">
+      <div class="why-matters__text-col">
+        <h2 class="why-matters__title">The Cut Matters as Much as the Unit</h2>
+        <div class="why-matters__divider">
+          <svg width="200" height="30"><use href="#celtic-divider" color="#93C7CF"/></svg>
+        </div>
+        <p class="why-matters__body">Anyone can fit a roof fan. The quality is in the preparation, the cut, and the seal. A rushed job — wrong tape, poor edge finish, sealant applied in the rain — is a slow leak waiting to happen. In Ireland, a slow leak in a van roof ruins everything underneath it.</p>
+        <p class="why-matters__body">Caolán takes the time to do it properly — every time, on every van, regardless of what else is going on in the build.</p>
+        <ul class="why-matters__points">
+          <li>Butyl tape seal on every installation</li>
+          <li>Cut edge protected against rust before fitting</li>
+          <li>Tested with water before handover</li>
+          <li>Neat interior finish — no raw edges showing</li>
+          <li>Fitted to complement your insulation, not cut through it carelessly</li>
+        </ul>
+      </div>
+      <div class="why-matters__visual">
+        <svg viewBox="0 0 200 150" fill="none" stroke="#93C7CF" stroke-width="1.5">
+          <ellipse cx="100" cy="75" rx="70" ry="50"/>
+          <path d="M30 75 Q100 20 170 75 Q100 130 30 75Z"/>
+          <circle cx="100" cy="75" r="20"/>
+          <path d="M100 55 L100 75 M85 65 L100 75 L115 65"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-quote" id="estimate">
+    <div class="container">
+      <div class="service-quote__head">
+        <h2 class="service-quote__title">Estimate Your Skylights &amp; Windows</h2>
+        <p class="service-quote__sub">Select what you'd like — costs update instantly. For items with a quantity, just enter how many.</p>
+      </div>
+      <div class="option-group option-group--3">
+        <div>
+          <input type="checkbox" id="sq-fan" class="opt-check" data-min="300" data-max="600" />
+          <label for="sq-fan" class="opt-check-card">
+            <div class="opt-check-card__name">Roof Fan</div>
+            <div class="opt-check-card__desc">Powered roof vent (MaxxAir / Fiamma). Best ventilation per euro.</div>
+          </label>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-toiletvent" class="opt-check" data-min="150" data-max="300" />
+          <label for="sq-toiletvent" class="opt-check-card">
+            <div class="opt-check-card__name">Toilet Vent</div>
+            <div class="opt-check-card__desc">Small roof vent above the toilet area for odour extraction.</div>
+          </label>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-largesky" class="opt-check" data-min="450" data-max="800" data-qty-id="qty-largesky" />
+          <label for="sq-largesky" class="opt-check-card">
+            <div class="opt-check-card__name">Large Skylight</div>
+            <div class="opt-check-card__desc">Fixed polycarbonate skylight with interior trim ring. Price per unit.</div>
+          </label>
+          <div class="opt-qty-row">
+            <span class="opt-qty-label">Qty:</span>
+            <input type="number" id="qty-largesky" class="opt-qty-num" min="1" max="6" value="1" />
+          </div>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-smallsky" class="opt-check" data-min="280" data-max="500" data-qty-id="qty-smallsky" />
+          <label for="sq-smallsky" class="opt-check-card">
+            <div class="opt-check-card__name">Small Skylight</div>
+            <div class="opt-check-card__desc">Compact fixed skylight — adds light without dominating the roof. Price per unit.</div>
+          </label>
+          <div class="opt-qty-row">
+            <span class="opt-qty-label">Qty:</span>
+            <input type="number" id="qty-smallsky" class="opt-qty-num" min="1" max="6" value="1" />
+          </div>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-smallwin" class="opt-check" data-min="200" data-max="400" data-qty-id="qty-smallwin" />
+          <label for="sq-smallwin" class="opt-check-card">
+            <div class="opt-check-card__name">Small Side Window</div>
+            <div class="opt-check-card__desc">Privacy-tinted sliding or fixed window. Price per window.</div>
+          </label>
+          <div class="opt-qty-row">
+            <span class="opt-qty-label">Qty:</span>
+            <input type="number" id="qty-smallwin" class="opt-qty-num" min="1" max="6" value="1" />
+          </div>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-largewin" class="opt-check" data-min="300" data-max="600" data-qty-id="qty-largewin" />
+          <label for="sq-largewin" class="opt-check-card">
+            <div class="opt-check-card__name">Large Side Window</div>
+            <div class="opt-check-card__desc">Larger opening or panoramic style window. Price per window.</div>
+          </label>
+          <div class="opt-qty-row">
+            <span class="opt-qty-label">Qty:</span>
+            <input type="number" id="qty-largewin" class="opt-qty-num" min="1" max="6" value="1" />
+          </div>
+        </div>
+      </div>
+      <div class="service-quote__estimate">
+        <div>
+          <p class="service-quote__val-label">Rough Estimate</p>
+          <p class="service-quote__val" id="sq-val">Select options above</p>
+        </div>
+        <p class="service-quote__note">Ballpark only — not a quote. Get in touch for a real number based on your van and spec.</p>
+        <a href="quote.html" class="btn btn--primary">Full Quote →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-cta">
+    <div class="container">
+      <h2 class="service-cta__title">Let the Light In</h2>
+      <p class="service-cta__sub">Tell Caolán what you're after — roof fan, skylight, windows, or all three — and he'll give you an honest quote.</p>
+      <a href="quote.html" class="btn btn--primary">Get a Free Quote</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__border">
+      <svg width="100%" height="30" preserveAspectRatio="none">
+        <line x1="0" y1="15" x2="100%" y2="15" stroke="#195764" stroke-width="1" stroke-dasharray="6 4"/>
+      </svg>
+    </div>
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <p class="footer__name">Caolán's Campers</p>
+        <p class="footer__tagline">Your Dream Campervan, Made Reality</p>
+      </div>
+      <nav class="footer__nav">
+        <a href="home.html#services">Services</a>
+        <a href="about.html">About</a>
+        <a href="home.html#gallery">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <p class="footer__copy">&copy; 2026 Caolán's Campers. Ireland.</p>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    function fmt(n) { return '€' + n.toLocaleString('en-IE'); }
+    function sqUpdate() {
+      var min = 0, max = 0;
+      document.querySelectorAll('.service-quote .opt-check:checked').forEach(function(el) {
+        var qty = 1;
+        if (el.dataset.qtyId) { var q = document.getElementById(el.dataset.qtyId); if (q) qty = Math.max(1, parseInt(q.value) || 1); }
+        min += parseInt(el.dataset.min || 0) * qty;
+        max += parseInt(el.dataset.max || 0) * qty;
+      });
+      var el = document.getElementById('sq-val');
+      if (el) el.textContent = (min === 0 && max === 0) ? 'Select options above' : fmt(min) + ' – ' + fmt(max);
+    }
+    document.querySelectorAll('.service-quote .opt-check').forEach(function(el) { el.addEventListener('change', sqUpdate); });
+    document.querySelectorAll('.opt-qty-num').forEach(function(inp) {
+      inp.addEventListener('change', function() {
+        var chk = document.querySelector('[data-qty-id="' + this.id + '"]');
+        if (chk) chk.checked = true;
+        sqUpdate();
+      });
+    });
+  })();
+  </script>
+  <script>
+  (function(){var btn=document.querySelector('.nav__menu-btn'),drop=document.querySelector('.nav__dropdown');if(!btn||!drop)return;var ll=document.querySelectorAll('.nav__links--left a'),pl=document.querySelector('.nav__portal-li a'),cl=document.querySelector('.nav__cta-li a'),h='';ll.forEach(function(a){h+='<a href="'+a.getAttribute('href')+'">' +a.textContent+'</a>';});if(pl)h+='<a href="'+pl.getAttribute('href')+'">' +pl.textContent+'</a>';if(cl)h+='<a href="'+cl.getAttribute('href')+'" class="nav__dropdown-cta">'+cl.textContent+'</a>';drop.innerHTML=h;btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')=== 'true';btn.setAttribute('aria-expanded',String(!o));drop.classList.toggle('open',!o);});document.addEventListener('click',function(e){if(!btn.contains(e.target)&&!drop.contains(e.target)){btn.setAttribute('aria-expanded','false');drop.classList.remove('open');}});})();
+  </script>
+</body>
+</html>
+

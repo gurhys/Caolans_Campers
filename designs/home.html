@@ -1,0 +1,562 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caolán's Campers - Custom Van Conversions Ireland</title>
+  <link rel="stylesheet" href="home.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Celtic corner ornament SVG (reusable via symbol) -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="celtic-corner" viewBox="0 0 80 80">
+      <g fill="none" stroke="currentColor" stroke-width="2">
+        <!-- Outer arc -->
+        <path d="M4,4 Q4,40 40,76" opacity="0.5"/>
+        <path d="M4,4 Q40,4 76,40" opacity="0.5"/>
+        <!-- Knotwork loops -->
+        <path d="M4,4 C4,20 16,20 16,36 C16,52 4,52 4,68" stroke-width="2.5"/>
+        <path d="M4,4 C20,4 20,16 36,16 C52,16 52,4 68,4" stroke-width="2.5"/>
+        <!-- Inner diamond node -->
+        <rect x="10" y="10" width="8" height="8" rx="1" transform="rotate(45 14 14)" stroke-width="1.5"/>
+        <!-- Small leaf flourish -->
+        <path d="M28,4 C28,12 20,16 16,24" stroke-width="1.5"/>
+        <path d="M4,28 C12,28 16,20 24,16" stroke-width="1.5"/>
+      </g>
+    </symbol>
+    <symbol id="celtic-divider" viewBox="0 0 300 30">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="0" y1="15" x2="110" y2="15"/>
+        <line x1="190" y1="15" x2="300" y2="15"/>
+        <!-- Central knotwork -->
+        <path d="M110,15 C120,5 130,25 150,15 C170,5 180,25 190,15"/>
+        <circle cx="150" cy="15" r="4" stroke-width="2"/>
+        <circle cx="130" cy="15" r="2.5"/>
+        <circle cx="170" cy="15" r="2.5"/>
+      </g>
+    </symbol>
+    <symbol id="leaf-motif" viewBox="0 0 40 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M20,58 C20,40 4,30 4,16 C4,6 12,2 20,2 C28,2 36,6 36,16 C36,30 20,40 20,58Z"/>
+        <path d="M20,58 C20,40 20,20 20,2" stroke-width="1"/>
+        <path d="M20,30 C14,28 8,22 8,16"/>
+        <path d="M20,30 C26,28 32,22 32,16"/>
+        <path d="M20,44 C16,42 12,38 10,34"/>
+        <path d="M20,44 C24,42 28,38 30,34"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <!-- NAV -->
+  <nav class="nav nav--transparent">
+    <div class="nav__inner">
+
+      <ul class="nav__links nav__links--left">
+        <li><a href="#services">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+      </ul>
+
+      <a href="#" class="nav__brand">
+        <span class="nav__brand-word">Caolán's</span>
+        <div class="nav__logo-placeholder">
+          <img src="logo_no_name.svg" alt="Caolán's Campers" />
+        </div>
+        <span class="nav__brand-word">Campers</span>
+      </a>
+
+      <ul class="nav__links nav__links--right">
+        <li class="nav__cta-li"><a href="quote.html" class="nav__cta">Get a Quote</a></li>
+        <li class="nav__portal-li"><a href="client.html">Client Portal</a></li>
+        <li class="nav__menu-wrap">
+          <button class="nav__menu-btn" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+          <div class="nav__dropdown"></div>
+        </li>
+      </ul>
+
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__ornament hero__ornament--tl">
+      <svg><use href="#celtic-corner"/></svg>
+    </div>
+    <div class="hero__ornament hero__ornament--tr">
+      <svg><use href="#celtic-corner"/></svg>
+    </div>
+    <div class="hero__ornament hero__ornament--bl">
+      <svg><use href="#celtic-corner"/></svg>
+    </div>
+    <div class="hero__ornament hero__ornament--br">
+      <svg><use href="#celtic-corner"/></svg>
+    </div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">Handcrafted in Ireland</p>
+      <h1 class="hero__title">Your Dream Campervan,<br>Made Reality</h1>
+      <div class="hero__divider">
+        <svg width="300" height="30"><use href="#celtic-divider" color="#AAD39C"/></svg>
+      </div>
+      <p class="hero__sub">Bespoke van conversions built for the way you adventure.<br>No two builds the same. No hidden costs. Ever.</p>
+      <div class="hero__actions">
+        <a href="#contact" class="btn btn--primary">Start Your Build</a>
+        <a href="#services" class="btn btn--ghost">Services</a>
+      </div>
+    </div>
+    <div class="hero__scroll-hint">
+      <span></span>
+    </div>
+  </section>
+
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="section-header">
+        <svg class="section-header__leaf" width="40" height="60"><use href="#leaf-motif" color="#80A874"/></svg>
+        <h2 class="section-header__title">The Build</h2>
+        <svg class="section-header__leaf section-header__leaf--flip" width="40" height="60"><use href="#leaf-motif" color="#80A874"/></svg>
+      </div>
+      <div class="section-header__divider">
+        <svg width="300" height="30"><use href="#celtic-divider" color="#195764"/></svg>
+      </div>
+
+      <a class="service-card service-card--featured" href="full_build.html">
+        <div class="service-card__image service-card__image--featured"></div>
+        <div class="service-card__featured-text">
+          <h3 class="service-card__title">Full Van Conversion</h3>
+          <p class="service-card__desc">The complete package — layout, electrics, heating, water, windows, and finishings. One person, start to finish. Designed around how you actually want to live and travel.</p>
+        </div>
+        <span class="service-card__link">Explore full builds &rarr;</span>
+      </a>
+
+      <div class="services__grid">
+
+        <a class="service-card" href="power_and_electrics.html">
+          <div class="service-card__image"></div>
+          <h3 class="service-card__title">Power & Electrics</h3>
+          <p class="service-card__desc">Solar panels, lithium batteries, 12V and 240V circuits — all designed and wired by an engineer. Off-grid power done properly and safely.</p>
+          <span class="service-card__link">Learn more &rarr;</span>
+        </a>
+
+        <a class="service-card" href="heating.html">
+          <div class="service-card__image"></div>
+          <h3 class="service-card__title">Heating</h3>
+          <p class="service-card__desc">Diesel and Chinese heater installations, servicing, and repairs. Stay warm through Irish winters — even the long ones.</p>
+          <span class="service-card__link">Learn more &rarr;</span>
+        </a>
+
+        <a class="service-card" href="water_needs.html">
+          <div class="service-card__image"></div>
+          <h3 class="service-card__title">Water Solutions</h3>
+          <p class="service-card__desc">Fresh and grey water tanks, pumps, sinks, and hot water setups. Clean running water wherever you park up.</p>
+          <span class="service-card__link">Learn more &rarr;</span>
+        </a>
+
+        <a class="service-card" href="skylights_and_windows.html">
+          <div class="service-card__image"></div>
+          <h3 class="service-card__title">Skylights & Windows</h3>
+          <p class="service-card__desc">Roof lights, fan vents, and side windows cut and fitted to weatherproof standards. Let the Irish sky in without letting the Irish rain in.</p>
+          <span class="service-card__link">Learn more &rarr;</span>
+        </a>
+
+        <a class="service-card" href="layout.html">
+          <div class="service-card__image"></div>
+          <h3 class="service-card__title">Layout & Storage Solutions</h3>
+          <p class="service-card__desc">Every build starts with a plan. Bespoke floor plans, sleeping arrangements, kitchen areas, and storage designed around how you actually travel.</p>
+          <span class="service-card__link">Learn more &rarr;</span>
+        </a>
+
+        <a class="service-card" href="finishings.html">
+          <div class="service-card__image"></div>
+          <h3 class="service-card__title">Finishings</h3>
+          <p class="service-card__desc">Cladding, flooring, upholstery, and furniture. The finishing touches that turn a van into somewhere you actually want to live.</p>
+          <span class="service-card__link">Learn more &rarr;</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about__bg-ornament">
+      <svg><use href="#celtic-corner" color="#AAD39C"/></svg>
+    </div>
+    <div class="container about__inner">
+      <div class="about__image-col">
+        <div class="about__image-frame">
+          <div class="about__image-placeholder">
+            <!-- Replace with actual image -->
+            <svg viewBox="0 0 300 400" fill="none" stroke="#80A874" stroke-width="1.5">
+              <rect x="10" y="10" width="280" height="380" rx="4"/>
+              <path d="M60 200 Q150 100 240 200 Q150 300 60 200Z"/>
+              <circle cx="150" cy="180" r="40"/>
+              <path d="M150 220 L150 300 M110 250 L190 250"/>
+            </svg>
+          </div>
+          <div class="about__corner about__corner--tl"><svg width="40" height="40"><use href="#celtic-corner"/></svg></div>
+          <div class="about__corner about__corner--br"><svg width="40" height="40"><use href="#celtic-corner"/></svg></div>
+        </div>
+      </div>
+      <div class="about__text-col">
+        <p class="about__eyebrow">The Craftsman</p>
+        <h2 class="about__title">Built by Someone<br>Who Lives the Life</h2>
+        <div class="about__divider">
+          <svg width="200" height="30"><use href="#celtic-divider" color="#80A874"/></svg>
+        </div>
+        <a href="about.html" class="btn btn--primary">Meet Caolán &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- GALLERY PLACEHOLDER -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <div class="section-header">
+        <svg class="section-header__leaf" width="40" height="60"><use href="#leaf-motif" color="#EAF3DE"/></svg>
+        <h2 class="section-header__title section-header__title--light">Previous Builds</h2>
+        <svg class="section-header__leaf section-header__leaf--flip" width="40" height="60"><use href="#leaf-motif" color="#EAF3DE"/></svg>
+      </div>
+      <div class="section-header__divider">
+        <svg width="300" height="30"><use href="#celtic-divider" color="#93C7CF"/></svg>
+      </div>
+      <div class="gallery__grid">
+        <div class="gallery__item gallery__item--tall">
+          <div class="gallery__placeholder">Build 01</div>
+        </div>
+        <div class="gallery__item">
+          <div class="gallery__placeholder">Build 02</div>
+        </div>
+        <div class="gallery__item">
+          <div class="gallery__placeholder">Build 03</div>
+        </div>
+        <div class="gallery__item gallery__item--wide">
+          <div class="gallery__placeholder">Build 04</div>
+        </div>
+        <div class="gallery__item">
+          <div class="gallery__placeholder">Build 05</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews" id="reviews">
+    <div class="container">
+      <div class="section-header">
+        <svg class="section-header__leaf" width="40" height="60"><use href="#leaf-motif" color="#EAF3DE"/></svg>
+        <h2 class="section-header__title section-header__title--light">What Customers Say</h2>
+        <svg class="section-header__leaf section-header__leaf--flip" width="40" height="60"><use href="#leaf-motif" color="#EAF3DE"/></svg>
+      </div>
+      <div class="section-header__divider">
+        <svg width="300" height="30"><use href="#celtic-divider" color="#93C7CF"/></svg>
+      </div>
+
+      <div class="reviews__summary">
+        <p class="reviews__score">5.0</p>
+        <span class="reviews__stars">★★★★★</span>
+        <p class="reviews__meta">20 reviews &middot; Google</p>
+      </div>
+
+      <div class="reviews__grid">
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Caolán sourced and fitted a solar panel on my van with a Victron MPPT controller with Bluetooth. Straightforward, friendly, explained everything. Work completed when he said. Reasonably priced. Definitely recommended.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Paula Doran</span>
+            <span class="review-card__date">a month ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Came across Caolán on a Google search. Made a call, then had a Zoom call — I told him what I needed, he sent a fair price, and I got an excellent job done. I cannot recommend this man enough for wiring a campervan. 10/10.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Patrick Fahy</span>
+            <span class="review-card__date">a month ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Huge thanks to Caolán for the brilliant work on my van. He installed a new solar controller and sorted a few other electrical issues, and the difference is night and day. Super knowledgeable, tidy, and took the time to explain everything.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Greg C</span>
+            <span class="review-card__date">a month ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★☆</div>
+          <p class="review-card__text">I had the pleasure of dealing with Caolàn recently. I had a problem with my water heater — he called to my house promptly, had a look, and came back a week later and fixed the problem. I'm going to get some more things updated on my 35-year-old camper with him.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Wendy Fay</span>
+            <span class="review-card__date">4 weeks ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Fantastic service. Very professional, arrived on time and carried out work to a high standard for a very reasonable price. Highly recommended.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Donal Mac Niocaill</span>
+            <span class="review-card__date">a year ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Arrived on time, knew what he was doing — left him to it and when finished it was tidy work, cables tucked away etc. Would definitely use again.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Daniel Lavery</span>
+            <span class="review-card__date">a year ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Fantastic — would absolutely recommend. Knows what he is doing and won't steer you wrong. Really appreciate your help and everything else done for me.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Vidjai Dwarka</span>
+            <span class="review-card__date">a year ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">I cannot recommend this guy enough. Asked me what I wanted to do with the camper and recommended a parts list. Turned up on time and spent the whole day working on it. It's so handy having a service that comes to you.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Colin Bolton</span>
+            <span class="review-card__date">a year ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Chinese heater didn't work and I couldn't find anyone who could fix it until I found this site. Caolán made a house visit and worked in the rain for a few hours to get it working again. Turned out there were two issues and some rewiring required. Great price and great work. Highly recommend.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Tim Long</span>
+            <span class="review-card__date">a year ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Amazing work! Easy to communicate and deal with. Caolán came to my house and helped me with all the electrical stuff, clarifying all questions related to the system. Highly recommended.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Jankiel Rohr</span>
+            <span class="review-card__date">a year ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Caolán was absolutely great. He installed all my electrics and also fitted my skylight. He was very efficient and I was delighted with the results. Would definitely recommend him!</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Jennifer Arlow</span>
+            <span class="review-card__date">a year ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Had Caolán fit 2 back windows and upgrade my electrics including a solar panel on my roof. He done a great job and would definitely recommend him.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Tim Finnegan</span>
+            <span class="review-card__date">a year ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Caolán really knows his stuff. Excellent install, top quality work and a really pleasant chap to deal with. Very happy to recommend him. Give him a call — you won't be disappointed.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Ciaran Bergin</span>
+            <span class="review-card__date">2 years ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Excellant service! We got a solar panel put on the roof of our caravan and got an 80ltr water tank installed under the seating area. Caolán was great to work with, listened to what our requirements were and delivered accordingly. Neat, efficient, and above all affordable. Highly recommended!</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Ann Marie Regan</span>
+            <span class="review-card__date">2 years ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Fitted a diesel heater to my van recently. Fitting was exactly as I wanted it — very tidy job done with cables etc. Would highly recommend. Thanks Caolán.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Aidan Looneyweew</span>
+            <span class="review-card__date">2 years ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Caolán installed a new diesel heater in my van in April — first class service and such a tidy job he did, highly recommend!! Very efficient 10/10.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Niamh McArdle</span>
+            <span class="review-card__date">2 years ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Super service and a tasty workman. Caolán fitted a diesel heater to my van and from making the initial enquiry through booking it in and the day of fitting — everything was hassle free. I can't recommend him highly enough.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Fergal Hill</span>
+            <span class="review-card__date">2 years ago</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <span class="review-card__quote">&ldquo;</span>
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">Caolán did an excellent job with my electrical installation. I would recommend him most highly for any job — his knowledge and work ethic is 100%. Thanks for a job well done.</p>
+          <div class="review-card__footer">
+            <span class="review-card__name">Deirdre Buckley</span>
+            <span class="review-card__date">2 years ago</span>
+          </div>
+        </div>
+
+      </div>
+
+      <button class="reviews__toggle" id="reviews-toggle" onclick="toggleReviews()">
+        Show all 18 reviews &#9662;
+      </button>
+    </div>
+  </section>
+
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container contact__inner">
+      <div class="contact__text">
+        <p class="contact__eyebrow">Get Started</p>
+        <h2 class="contact__title">Ready to Build<br>Your Adventure?</h2>
+        <div class="contact__divider">
+          <svg width="200" height="30"><use href="#celtic-divider" color="#80A874"/></svg>
+        </div>
+        <p class="contact__body">Tell Caolán about your dream build. He'll get back to you quickly with an honest conversation — no sales pitch, no obligation.</p>
+        <div class="contact__details">
+          <a href="tel:0894774522" class="contact__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>
+            089 477 4522
+          </a>
+          <a href="mailto:info@mobilecampersolutionsireland.ie" class="contact__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+            info@Caoláns-campers.ie
+          </a>
+          <a href="https://instagram.com/mobilecampersolutions" class="contact__link" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+            @Caolánscampers
+          </a>
+        </div>
+      </div>
+      <form class="contact__form">
+        <div class="form__ornament form__ornament--tl"><svg width="40" height="40"><use href="#celtic-corner"/></svg></div>
+        <div class="form__ornament form__ornament--br"><svg width="40" height="40"><use href="#celtic-corner"/></svg></div>
+        <div class="form__group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" placeholder="Aoife Murphy" />
+        </div>
+        <div class="form__group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="aoife@example.ie" />
+        </div>
+        <div class="form__group">
+          <label for="van">Van Type / Project</label>
+          <input type="text" id="van" name="van" placeholder="e.g. Ford Transit, full conversion" />
+        </div>
+        <div class="form__group">
+          <label for="message">Tell Caolán About Your Build</label>
+          <textarea id="message" name="message" rows="5" placeholder="What are you dreaming of?"></textarea>
+        </div>
+        <button type="submit" class="btn btn--primary btn--full">Send Enquiry</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__border">
+      <svg width="100%" height="30" preserveAspectRatio="none">
+        <line x1="0" y1="15" x2="100%" y2="15" stroke="#195764" stroke-width="1" stroke-dasharray="6 4"/>
+      </svg>
+    </div>
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <p class="footer__name">Caolán's Campers</p>
+        <p class="footer__tagline">Your Dream Campervan, Made Reality</p>
+      </div>
+      <nav class="footer__nav">
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <p class="footer__copy">&copy; 2026 Caolán's Campers. Ireland.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var nav = document.querySelector('.nav--transparent');
+      if (nav) {
+        window.addEventListener('scroll', function () {
+          nav.classList.toggle('nav--scrolled', window.scrollY > 80);
+        }, { passive: true });
+      }
+    })();
+
+    (function () {
+      const cards = document.querySelectorAll('.reviews__grid .review-card');
+      const extra = Array.from(cards).slice(4);
+      extra.forEach(function (c) { c.style.display = 'none'; });
+    })();
+
+    function toggleReviews() {
+      var btn = document.getElementById('reviews-toggle');
+      var expanded = btn.dataset.expanded === 'true';
+      var cards = document.querySelectorAll('.reviews__grid .review-card');
+      Array.from(cards).slice(4).forEach(function (c) {
+        c.style.display = expanded ? 'none' : 'inline-block';
+      });
+      btn.dataset.expanded = !expanded;
+      btn.innerHTML = expanded ? 'Show all 18 reviews &#9662;' : 'Show fewer reviews &#9652;';
+    }
+  </script>
+  <script>
+  (function(){var btn=document.querySelector('.nav__menu-btn'),drop=document.querySelector('.nav__dropdown');if(!btn||!drop)return;var ll=document.querySelectorAll('.nav__links--left a'),pl=document.querySelector('.nav__portal-li a'),cl=document.querySelector('.nav__cta-li a'),h='';ll.forEach(function(a){h+='<a href="'+a.getAttribute('href')+'">' +a.textContent+'</a>';});if(pl)h+='<a href="'+pl.getAttribute('href')+'">' +pl.textContent+'</a>';if(cl)h+='<a href="'+cl.getAttribute('href')+'" class="nav__dropdown-cta">'+cl.textContent+'</a>';drop.innerHTML=h;btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')=== 'true';btn.setAttribute('aria-expanded',String(!o));drop.classList.toggle('open',!o);});document.addEventListener('click',function(e){if(!btn.contains(e.target)&&!drop.contains(e.target)){btn.setAttribute('aria-expanded','false');drop.classList.remove('open');}});})();
+  </script>
+</body>
+</html>
+

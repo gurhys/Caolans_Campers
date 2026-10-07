@@ -1,0 +1,481 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Power & Electrics - Caolán's Campers</title>
+  <link rel="stylesheet" href="home.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    .page-hero {
+      padding: 140px 2rem 80px;
+      background: linear-gradient(160deg, var(--dark) 0%, #1e6b7a 60%, #2a7a6a 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 20% 60%, rgba(128,168,116,0.12) 0%, transparent 50%);
+    }
+    .page-hero__ornament {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      color: rgba(170, 211, 156, 0.28);
+    }
+    .page-hero__ornament svg { width: 100%; height: 100%; }
+    .page-hero__ornament--tl { top: 16px; left: 16px; }
+    .page-hero__ornament--tr { top: 16px; right: 16px; transform: scaleX(-1); }
+    .page-hero__breadcrumb {
+      position: relative;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(234,243,222,0.45);
+      margin-bottom: 0.6rem;
+    }
+    .page-hero__breadcrumb a { color: var(--teal); text-decoration: none; }
+    .page-hero__eyebrow {
+      position: relative;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .page-hero__title {
+      position: relative;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+    .page-hero__sub {
+      position: relative;
+      font-size: 1rem;
+      color: rgba(234,243,222,0.75);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* INTRO */
+    .service-intro {
+      padding: 6rem 0;
+      background: var(--white);
+    }
+    .service-intro__inner {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .service-intro__eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 0.8rem;
+    }
+    .service-intro__title {
+      font-size: 2rem;
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+    .service-intro__divider { margin-bottom: 1.5rem; }
+    .service-intro__body {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .service-intro__pull {
+      border-left: 3px solid var(--sage);
+      padding-left: 1.4rem;
+      margin: 1.8rem 0;
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      color: var(--dark);
+      line-height: 1.7;
+      font-style: italic;
+    }
+    .service-intro__image {
+      background: var(--cream);
+      border: 2px solid rgba(128,168,116,0.25);
+      border-radius: 4px;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .service-intro__image svg { width: 55%; opacity: 0.3; }
+    .service-corner {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      color: var(--sage);
+    }
+    .service-corner svg { width: 100%; height: 100%; }
+    .service-corner--tl { top: -12px; left: -12px; }
+    .service-corner--br { bottom: -12px; right: -12px; transform: scale(-1); }
+
+    /* COMPONENTS */
+    .components {
+      padding: 6rem 0;
+      background: var(--cream);
+    }
+    .components__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .component-card {
+      background: var(--white);
+      border: 1px solid rgba(128,168,116,0.2);
+      border-radius: 4px;
+      padding: 2rem 1.6rem;
+      position: relative;
+    }
+    .component-card__accent {
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--sage), var(--teal));
+      border-radius: 2px;
+      margin-bottom: 1.2rem;
+    }
+    .component-card__title {
+      font-size: 1rem;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+    .component-card__desc {
+      font-size: 0.87rem;
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    /* WHY RIGHT */
+    .why-right {
+      padding: 6rem 0;
+      background: var(--dark);
+    }
+    .why-right__inner {
+      max-width: 820px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .why-right__body {
+      font-size: 0.95rem;
+      color: rgba(234,243,222,0.75);
+      line-height: 1.85;
+      margin-bottom: 1rem;
+    }
+    .why-right__list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem 2rem;
+      margin: 2rem auto;
+      max-width: 620px;
+      text-align: left;
+    }
+    .why-right__list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.88rem;
+      color: rgba(234,243,222,0.7);
+      line-height: 1.55;
+    }
+    .why-right__list li::before {
+      content: '—';
+      color: var(--teal);
+      flex-shrink: 0;
+    }
+
+    /* CTA */
+    .service-cta {
+      padding: 5rem 0;
+      background: var(--sage);
+      text-align: center;
+    }
+    .service-cta__title {
+      font-size: 1.8rem;
+      color: var(--white);
+      margin-bottom: 0.7rem;
+    }
+    .service-cta__sub {
+      color: rgba(255,255,255,0.82);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+    .service-cta .btn--primary {
+      background: var(--dark);
+      border-color: var(--dark);
+    }
+    .service-cta .btn--primary:hover {
+      background: var(--white);
+      border-color: var(--white);
+      color: var(--dark);
+    }
+
+    @media (max-width: 900px) {
+      .service-intro__inner { grid-template-columns: 1fr; gap: 3rem; }
+      .components__grid { grid-template-columns: 1fr 1fr; }
+      .why-right__list { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .components__grid { grid-template-columns: 1fr; }
+    }
+
+    /* SERVICE QUOTE SECTION */
+    .service-quote { background: var(--cream); padding: 5rem 2rem; }
+    .service-quote__head { text-align: center; max-width: 700px; margin: 0 auto 2.5rem; }
+    .service-quote__title { font-size: 1.8rem; color: var(--dark); margin-bottom: 0.5rem; }
+    .service-quote__sub { font-size: 0.9rem; color: var(--text-light); }
+    .service-quote__estimate { max-width: 900px; margin: 2rem auto 0; background: var(--dark); border-radius: 4px; padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .service-quote__val-label { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(234,243,222,0.4); margin-bottom: 0.2rem; }
+    .service-quote__val { font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--mint); }
+    .service-quote__note { font-size: 0.75rem; color: rgba(234,243,222,0.45); max-width: 280px; line-height: 1.5; }
+    .option-group { display: grid; gap: 0.6rem; max-width: 900px; margin: 0 auto; }
+    .option-group--3 { grid-template-columns: repeat(3, 1fr); }
+    .opt-check { display: none; }
+    .opt-check-card { display: block; border: 2px solid rgba(128,168,116,0.25); border-radius: 3px; padding: 0.9rem 1rem; cursor: pointer; transition: border-color 0.18s, background 0.18s; position: relative; background: white; user-select: none; }
+    .opt-check-card:hover { border-color: var(--sage); background: rgba(128,168,116,0.05); }
+    .opt-check:checked + .opt-check-card { border-color: #39cccc; background: rgba(57,204,204,0.07); }
+    .opt-check:checked + .opt-check-card::after { content: "✓"; position: absolute; top: 6px; right: 8px; color: #39cccc; font-size: 0.9rem; font-weight: 700; }
+    .opt-check-card__name { font-family: 'Cinzel', serif; font-size: 0.82rem; color: var(--dark); margin-bottom: 0.25rem; }
+    .opt-check-card__desc { font-size: 0.73rem; color: var(--text-light); line-height: 1.5; }
+    @media (max-width: 700px) { .option-group--3 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .option-group--3 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="celtic-corner" viewBox="0 0 80 80">
+      <g fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4,4 Q4,40 40,76" opacity="0.5"/>
+        <path d="M4,4 Q40,4 76,40" opacity="0.5"/>
+        <path d="M4,4 C4,20 16,20 16,36 C16,52 4,52 4,68" stroke-width="2.5"/>
+        <path d="M4,4 C20,4 20,16 36,16 C52,16 52,4 68,4" stroke-width="2.5"/>
+        <rect x="10" y="10" width="8" height="8" rx="1" transform="rotate(45 14 14)" stroke-width="1.5"/>
+        <path d="M28,4 C28,12 20,16 16,24" stroke-width="1.5"/>
+        <path d="M4,28 C12,28 16,20 24,16" stroke-width="1.5"/>
+      </g>
+    </symbol>
+    <symbol id="celtic-divider" viewBox="0 0 300 30">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="0" y1="15" x2="110" y2="15"/>
+        <line x1="190" y1="15" x2="300" y2="15"/>
+        <path d="M110,15 C120,5 130,25 150,15 C170,5 180,25 190,15"/>
+        <circle cx="150" cy="15" r="4" stroke-width="2"/>
+        <circle cx="130" cy="15" r="2.5"/>
+        <circle cx="170" cy="15" r="2.5"/>
+      </g>
+    </symbol>
+    <symbol id="leaf-motif" viewBox="0 0 40 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M20,58 C20,40 4,30 4,16 C4,6 12,2 20,2 C28,2 36,6 36,16 C36,30 20,40 20,58Z"/>
+        <path d="M20,58 C20,40 20,20 20,2" stroke-width="1"/>
+        <path d="M20,30 C14,28 8,22 8,16"/>
+        <path d="M20,30 C26,28 32,22 32,16"/>
+        <path d="M20,44 C16,42 12,38 10,34"/>
+        <path d="M20,44 C24,42 28,38 30,34"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <nav class="nav">
+    <div class="nav__inner">
+
+      <ul class="nav__links nav__links--left">
+        <li><a href="home.html#services">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="home.html#gallery">Gallery</a></li>
+      </ul>
+
+      <a href="home.html" class="nav__brand">
+        <span class="nav__brand-word">Caolán's</span>
+        <div class="nav__logo-placeholder">
+          <img src="logo_no_name.svg" alt="Caolán's Campers" />
+        </div>
+        <span class="nav__brand-word">Campers</span>
+      </a>
+
+      <ul class="nav__links nav__links--right">
+        <li class="nav__cta-li"><a href="quote.html" class="nav__cta">Get a Quote</a></li>
+        <li class="nav__portal-li"><a href="client.html">Client Portal</a></li>
+        <li class="nav__menu-wrap">
+          <button class="nav__menu-btn" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+          <div class="nav__dropdown"></div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="page-hero__ornament page-hero__ornament--tl"><svg><use href="#celtic-corner"/></svg></div>
+    <div class="page-hero__ornament page-hero__ornament--tr"><svg><use href="#celtic-corner"/></svg></div>
+    <p class="page-hero__breadcrumb"><a href="home.html#services">Services</a> / Power & Electrics</p>
+    <p class="page-hero__eyebrow">12V Systems</p>
+    <h1 class="page-hero__title">Power &amp; Electrics</h1>
+    <p class="page-hero__sub">Some text </p>
+  </section>
+
+  <section class="service-intro">
+    <div class="container service-intro__inner">
+      <div>
+        <p class="service-intro__eyebrow">Why It Matters</p>
+        <h2 class="service-intro__title">The Backbone of Every Build</h2>
+        <div class="service-intro__divider">
+          <svg width="200" height="30"><use href="#celtic-divider" color="#80A874"/></svg>
+        </div>
+        <p class="service-intro__body">A van's electrical system is the one thing you really don't want to get wrong. Undersized cables, poorly fused circuits, and dodgy connections are a fire risk — full stop. Caolán designs every system from scratch, sized to your actual usage, not a generic template.</p>
+        <p class="service-intro__body">As a qualified engineer, he understands load calculations, cable ratings, and fault protection in a way most conversion builders simply don't. Every circuit is fused correctly, every connection is solid, and the whole system is documented so you know exactly what's in your van.</p>
+  
+        <a href="quote.html" class="btn btn--primary">Discuss Your Power Needs</a>
+      </div>
+      <div class="service-intro__image">
+        <div class="service-corner service-corner--tl"><svg><use href="#celtic-corner"/></svg></div>
+        <div class="service-corner service-corner--br"><svg><use href="#celtic-corner"/></svg></div>
+        <svg viewBox="0 0 200 150" fill="none" stroke="#80A874" stroke-width="1.5">
+          <rect x="20" y="20" width="160" height="110" rx="4"/>
+          <path d="M60 70 L80 40 L100 70 L120 40 L140 70"/>
+          <path d="M40 95 L160 95"/>
+          <circle cx="65" cy="95" r="6"/>
+          <circle cx="100" cy="95" r="6"/>
+          <circle cx="135" cy="95" r="6"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  
+  
+
+  <section class="service-quote" id="estimate">
+    <div class="container">
+      <div class="service-quote__head">
+        <h2 class="service-quote__title">Estimate Your Power Setup</h2>
+        <p class="service-quote__sub">Select the components you need — the cost range updates instantly. No commitment required.</p>
+      </div>
+      <div class="option-group option-group--3">
+        <div>
+          <input type="checkbox" id="sq-light" class="opt-check" data-min="200" data-max="500" />
+          <label for="sq-light" class="opt-check-card">
+            <div class="opt-check-card__name">Lighting</div>
+            <div class="opt-check-card__desc">LED strip and spot lighting throughout the van.</div>
+          </label>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-charge" class="opt-check" data-min="150" data-max="300" />
+          <label for="sq-charge" class="opt-check-card">
+            <div class="opt-check-card__name">Charging Ports &amp; Plugs</div>
+            <div class="opt-check-card__desc">USB-A, USB-C, and 12V power points throughout.</div>
+          </label>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-battery" class="opt-check" data-min="400" data-max="1200" />
+          <label for="sq-battery" class="opt-check-card">
+            <div class="opt-check-card__name">Leisure Battery</div>
+            <div class="opt-check-card__desc">Deep-cycle battery, isolator, and battery management system.</div>
+          </label>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-solar" class="opt-check" data-min="500" data-max="1500" />
+          <label for="sq-solar" class="opt-check-card">
+            <div class="opt-check-card__name">Solar Panels</div>
+            <div class="opt-check-card__desc">Roof-mounted panels with MPPT charge controller.</div>
+          </label>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-induction" class="opt-check" data-min="300" data-max="800" />
+          <label for="sq-induction" class="opt-check-card">
+            <div class="opt-check-card__name">Induction Cooker</div>
+            <div class="opt-check-card__desc">Portable induction hob wired to your leisure battery via inverter.</div>
+          </label>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-gas" class="opt-check" data-min="150" data-max="450" />
+          <label for="sq-gas" class="opt-check-card">
+            <div class="opt-check-card__name">Gas Cooker</div>
+            <div class="opt-check-card__desc">Gas hob with proper bottle storage, regulator, and safety cut-off.</div>
+          </label>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-mains" class="opt-check" data-min="300" data-max="700" />
+          <label for="sq-mains" class="opt-check-card">
+            <div class="opt-check-card__name">Mains Hookup</div>
+            <div class="opt-check-card__desc">240V hookup socket. Plug in on campsites for free charging.</div>
+          </label>
+        </div>
+      </div>
+      <div class="service-quote__estimate">
+        <div>
+          <p class="service-quote__val-label">Rough Estimate</p>
+          <p class="service-quote__val" id="sq-val">Select options above</p>
+        </div>
+        <p class="service-quote__note">Ballpark only — not a quote. Get in touch for a real number based on your van and spec.</p>
+        <a href="quote.html" class="btn btn--primary">Full Quote →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-cta">
+    <div class="container">
+      <h2 class="service-cta__title">Talk Power with Caolán</h2>
+      <p class="service-cta__sub">Not sure how much solar you need, or whether lithium is worth it for you? Ask him — he's happy to talk it through with no strings attached.</p>
+      <a href="quote.html" class="btn btn--primary">Get a Free Quote</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__border">
+      <svg width="100%" height="30" preserveAspectRatio="none">
+        <line x1="0" y1="15" x2="100%" y2="15" stroke="#195764" stroke-width="1" stroke-dasharray="6 4"/>
+      </svg>
+    </div>
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <p class="footer__name">Caolán's Campers</p>
+        <p class="footer__tagline">Your Dream Campervan, Made Reality</p>
+      </div>
+      <nav class="footer__nav">
+        <a href="home.html#services">Services</a>
+        <a href="about.html">About</a>
+        <a href="home.html#gallery">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <p class="footer__copy">&copy; 2026 Caolán's Campers. Ireland.</p>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    function fmt(n) { return '€' + n.toLocaleString('en-IE'); }
+    function sqUpdate() {
+      var min = 0, max = 0;
+      document.querySelectorAll('.service-quote .opt-check:checked').forEach(function(el) {
+        min += parseInt(el.dataset.min || 0);
+        max += parseInt(el.dataset.max || 0);
+      });
+      var el = document.getElementById('sq-val');
+      if (!el) return;
+      el.textContent = (min === 0 && max === 0) ? 'Select options above' : fmt(min) + ' – ' + fmt(max);
+    }
+    document.querySelectorAll('.service-quote .opt-check').forEach(function(el) {
+      el.addEventListener('change', sqUpdate);
+    });
+  })();
+  </script>
+  <script>
+  (function(){var btn=document.querySelector('.nav__menu-btn'),drop=document.querySelector('.nav__dropdown');if(!btn||!drop)return;var ll=document.querySelectorAll('.nav__links--left a'),pl=document.querySelector('.nav__portal-li a'),cl=document.querySelector('.nav__cta-li a'),h='';ll.forEach(function(a){h+='<a href="'+a.getAttribute('href')+'">' +a.textContent+'</a>';});if(pl)h+='<a href="'+pl.getAttribute('href')+'">' +pl.textContent+'</a>';if(cl)h+='<a href="'+cl.getAttribute('href')+'" class="nav__dropdown-cta">'+cl.textContent+'</a>';drop.innerHTML=h;btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')=== 'true';btn.setAttribute('aria-expanded',String(!o));drop.classList.toggle('open',!o);});document.addEventListener('click',function(e){if(!btn.contains(e.target)&&!drop.contains(e.target)){btn.setAttribute('aria-expanded','false');drop.classList.remove('open');}});})();
+  </script>
+</body>
+</html>
+

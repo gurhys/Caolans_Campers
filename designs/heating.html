@@ -1,0 +1,547 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heating - Caolán's Campers</title>
+  <link rel="stylesheet" href="home.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    .page-hero {
+      padding: 140px 2rem 80px;
+      background: linear-gradient(160deg, var(--dark) 0%, #1e6b7a 60%, #2a7a6a 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 20% 60%, rgba(128,168,116,0.12) 0%, transparent 50%);
+    }
+    .page-hero__ornament {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      color: rgba(170, 211, 156, 0.28);
+    }
+    .page-hero__ornament svg { width: 100%; height: 100%; }
+    .page-hero__ornament--tl { top: 16px; left: 16px; }
+    .page-hero__ornament--tr { top: 16px; right: 16px; transform: scaleX(-1); }
+    .page-hero__breadcrumb {
+      position: relative;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(234,243,222,0.45);
+      margin-bottom: 0.6rem;
+    }
+    .page-hero__breadcrumb a { color: var(--teal); text-decoration: none; }
+    .page-hero__eyebrow {
+      position: relative;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .page-hero__title {
+      position: relative;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+    .page-hero__sub {
+      position: relative;
+      font-size: 1rem;
+      color: rgba(234,243,222,0.75);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    .service-intro {
+      padding: 6rem 0;
+      background: var(--white);
+    }
+    .service-intro__inner {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .service-intro__eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 0.8rem;
+    }
+    .service-intro__title {
+      font-size: 2rem;
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+    .service-intro__divider { margin-bottom: 1.5rem; }
+    .service-intro__body {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .service-intro__pull {
+      border-left: 3px solid var(--sage);
+      padding-left: 1.4rem;
+      margin: 1.8rem 0;
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      color: var(--dark);
+      line-height: 1.7;
+      font-style: italic;
+    }
+    .service-intro__image {
+      background: var(--cream);
+      border: 2px solid rgba(128,168,116,0.25);
+      border-radius: 4px;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .service-intro__image svg { width: 55%; opacity: 0.3; }
+    .service-corner {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      color: var(--sage);
+    }
+    .service-corner svg { width: 100%; height: 100%; }
+    .service-corner--tl { top: -12px; left: -12px; }
+    .service-corner--br { bottom: -12px; right: -12px; transform: scale(-1); }
+
+    /* HEATER TYPES */
+    .heater-types {
+      padding: 6rem 0;
+      background: var(--cream);
+    }
+    .heater-types__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .heater-card {
+      background: var(--white);
+      border: 1px solid rgba(128,168,116,0.2);
+      border-radius: 4px;
+      padding: 2.4rem;
+      position: relative;
+    }
+    .heater-card--featured {
+      border-color: var(--sage);
+    }
+    .heater-card__badge {
+      position: absolute;
+      top: -1px;
+      right: 1.5rem;
+      background: var(--sage);
+      color: var(--white);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      border-radius: 0 0 4px 4px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+    }
+    .heater-card__icon {
+      width: 52px;
+      height: 52px;
+      color: var(--sage);
+      margin-bottom: 1.2rem;
+    }
+    .heater-card__icon svg { width: 100%; height: 100%; }
+    .heater-card__title {
+      font-size: 1.2rem;
+      color: var(--dark);
+      margin-bottom: 0.4rem;
+    }
+    .heater-card__subtitle {
+      font-size: 0.78rem;
+      color: var(--teal);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .heater-card__desc {
+      font-size: 0.88rem;
+      color: var(--text-light);
+      line-height: 1.75;
+      margin-bottom: 1.2rem;
+    }
+    .heater-card__pros {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .heater-card__pros li {
+      display: flex;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+    .heater-card__pros li::before { content: '✓'; color: var(--sage); flex-shrink: 0; }
+
+    /* WHAT'S INVOLVED */
+    .install-steps {
+      padding: 6rem 0;
+      background: var(--dark);
+    }
+    .install-steps__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 0;
+      position: relative;
+    }
+    .install-steps__grid::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 12%;
+      right: 12%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--teal), var(--sage), transparent);
+      opacity: 0.35;
+    }
+    .install-step {
+      text-align: center;
+      padding: 1.2rem 0.8rem;
+    }
+    .install-step__num {
+      width: 56px;
+      height: 56px;
+      border: 2px solid var(--sage);
+      border-radius: 50%;
+      margin: 0 auto 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      color: var(--mint);
+      background: var(--dark);
+    }
+    .install-step__title {
+      font-size: 0.9rem;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .install-step__desc {
+      font-size: 0.8rem;
+      color: rgba(234,243,222,0.55);
+      line-height: 1.65;
+    }
+
+    .service-cta {
+      padding: 5rem 0;
+      background: var(--sage);
+      text-align: center;
+    }
+    .service-cta__title {
+      font-size: 1.8rem;
+      color: var(--white);
+      margin-bottom: 0.7rem;
+    }
+    .service-cta__sub {
+      color: rgba(255,255,255,0.82);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+    .service-cta .btn--primary {
+      background: var(--dark);
+      border-color: var(--dark);
+    }
+    .service-cta .btn--primary:hover {
+      background: var(--white);
+      border-color: var(--white);
+      color: var(--dark);
+    }
+
+    @media (max-width: 900px) {
+      .service-intro__inner { grid-template-columns: 1fr; gap: 3rem; }
+      .heater-types__grid { grid-template-columns: 1fr; }
+      .install-steps__grid { grid-template-columns: 1fr 1fr; }
+      .install-steps__grid::before { display: none; }
+    }
+    @media (max-width: 600px) {
+      .install-steps__grid { grid-template-columns: 1fr; }
+    }
+
+    /* SERVICE QUOTE SECTION */
+    .service-quote { background: var(--cream); padding: 5rem 2rem; }
+    .service-quote__head { text-align: center; max-width: 700px; margin: 0 auto 2.5rem; }
+    .service-quote__title { font-size: 1.8rem; color: var(--dark); margin-bottom: 0.5rem; }
+    .service-quote__sub { font-size: 0.9rem; color: var(--text-light); }
+    .service-quote__estimate { max-width: 900px; margin: 2rem auto 0; background: var(--dark); border-radius: 4px; padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .service-quote__val-label { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(234,243,222,0.4); margin-bottom: 0.2rem; }
+    .service-quote__val { font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--mint); }
+    .service-quote__note { font-size: 0.75rem; color: rgba(234,243,222,0.45); max-width: 280px; line-height: 1.5; }
+    .option-group { display: grid; gap: 0.6rem; max-width: 900px; margin: 0 auto; }
+    .option-group--3 { grid-template-columns: repeat(3, 1fr); }
+    .opt-check { display: none; }
+    .opt-check-card { display: block; border: 2px solid rgba(128,168,116,0.25); border-radius: 3px; padding: 0.9rem 1rem; cursor: pointer; transition: border-color 0.18s, background 0.18s; position: relative; background: white; user-select: none; }
+    .opt-check-card:hover { border-color: var(--sage); background: rgba(128,168,116,0.05); }
+    .opt-check:checked + .opt-check-card { border-color: #39cccc; background: rgba(57,204,204,0.07); }
+    .opt-check:checked + .opt-check-card::after { content: "✓"; position: absolute; top: 6px; right: 8px; color: #39cccc; font-size: 0.9rem; font-weight: 700; }
+    .opt-check-card__name { font-family: 'Cinzel', serif; font-size: 0.82rem; color: var(--dark); margin-bottom: 0.25rem; }
+    .opt-check-card__desc { font-size: 0.73rem; color: var(--text-light); line-height: 1.5; }
+    @media (max-width: 700px) { .option-group--3 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .option-group--3 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="celtic-corner" viewBox="0 0 80 80">
+      <g fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4,4 Q4,40 40,76" opacity="0.5"/>
+        <path d="M4,4 Q40,4 76,40" opacity="0.5"/>
+        <path d="M4,4 C4,20 16,20 16,36 C16,52 4,52 4,68" stroke-width="2.5"/>
+        <path d="M4,4 C20,4 20,16 36,16 C52,16 52,4 68,4" stroke-width="2.5"/>
+        <rect x="10" y="10" width="8" height="8" rx="1" transform="rotate(45 14 14)" stroke-width="1.5"/>
+        <path d="M28,4 C28,12 20,16 16,24" stroke-width="1.5"/>
+        <path d="M4,28 C12,28 16,20 24,16" stroke-width="1.5"/>
+      </g>
+    </symbol>
+    <symbol id="celtic-divider" viewBox="0 0 300 30">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="0" y1="15" x2="110" y2="15"/>
+        <line x1="190" y1="15" x2="300" y2="15"/>
+        <path d="M110,15 C120,5 130,25 150,15 C170,5 180,25 190,15"/>
+        <circle cx="150" cy="15" r="4" stroke-width="2"/>
+        <circle cx="130" cy="15" r="2.5"/>
+        <circle cx="170" cy="15" r="2.5"/>
+      </g>
+    </symbol>
+    <symbol id="leaf-motif" viewBox="0 0 40 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M20,58 C20,40 4,30 4,16 C4,6 12,2 20,2 C28,2 36,6 36,16 C36,30 20,40 20,58Z"/>
+        <path d="M20,58 C20,40 20,20 20,2" stroke-width="1"/>
+        <path d="M20,30 C14,28 8,22 8,16"/>
+        <path d="M20,30 C26,28 32,22 32,16"/>
+        <path d="M20,44 C16,42 12,38 10,34"/>
+        <path d="M20,44 C24,42 28,38 30,34"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <nav class="nav">
+    <div class="nav__inner">
+
+      <ul class="nav__links nav__links--left">
+        <li><a href="home.html#services">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="home.html#gallery">Gallery</a></li>
+      </ul>
+
+      <a href="home.html" class="nav__brand">
+        <span class="nav__brand-word">Caolán's</span>
+        <div class="nav__logo-placeholder">
+          <img src="logo_no_name.svg" alt="Caolán's Campers" />
+        </div>
+        <span class="nav__brand-word">Campers</span>
+      </a>
+
+      <ul class="nav__links nav__links--right">
+        <li class="nav__cta-li"><a href="quote.html" class="nav__cta">Get a Quote</a></li>
+        <li class="nav__portal-li"><a href="client.html">Client Portal</a></li>
+        <li class="nav__menu-wrap">
+          <button class="nav__menu-btn" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+          <div class="nav__dropdown"></div>
+        </li>
+      </ul>
+
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="page-hero__ornament page-hero__ornament--tl"><svg><use href="#celtic-corner"/></svg></div>
+    <div class="page-hero__ornament page-hero__ornament--tr"><svg><use href="#celtic-corner"/></svg></div>
+    <p class="page-hero__breadcrumb"><a href="home.html#services">Services</a> / Heating</p>
+    <p class="page-hero__eyebrow">Diesel Air Heaters</p>
+    <h1 class="page-hero__title">Stay Warm in Ireland</h1>
+    <p class="page-hero__sub">Irish weather doesn't do warm winters. A properly installed diesel heater changes everything — warm van in minutes, whatever the weather outside.</p>
+  </section>
+
+  <section class="service-intro">
+    <div class="container service-intro__inner">
+      <div>
+        <p class="service-intro__eyebrow">Why Diesel Heating</p>
+        <h2 class="service-intro__title">The Right Call for<br>Year-Round Van Life</h2>
+        <div class="service-intro__divider">
+          <svg width="200" height="30"><use href="#celtic-divider" color="#80A874"/></svg>
+        </div>
+        <p class="service-intro__body">In a country where you can get four seasons in one afternoon, a quality heating system isn't optional — it's what separates a useable van from one that gets parked up from October to March. Diesel heaters are the gold standard for campervan use: they're fuel-efficient, reliable, and work even when it's proper Baltic outside.</p>
+        <p class="service-intro__body">Caolán sources and installs top-range units — 
+          properly, with the fuel line routed safely, the combustion air intake and 
+          exhaust positioned correctly, and the controller wired so it's actually easy to use.</p>
+        <div class="service-intro__pull">
+          "A badly fitted heater is a carbon monoxide risk. There's no cutting corners on this one."
+        </div>
+        <a href="quote.html" class="btn btn--primary">Get a Heating Quote</a>
+      </div>
+      <div class="service-intro__image">
+        <div class="service-corner service-corner--tl"><svg><use href="#celtic-corner"/></svg></div>
+        <div class="service-corner service-corner--br"><svg><use href="#celtic-corner"/></svg></div>
+        <svg viewBox="0 0 200 150" fill="none" stroke="#80A874" stroke-width="1.5">
+          <path d="M100 30 C80 30 60 50 60 75 C60 100 80 120 100 120 C120 120 140 100 140 75 C140 50 120 30 100 30Z"/>
+          <path d="M100 50 C90 60 85 70 90 80 C95 90 105 90 110 80 C115 70 110 60 100 50Z" fill="rgba(128,168,116,0.2)"/>
+          <path d="M60 75 L30 75 M140 75 L170 75"/>
+          <path d="M100 120 L100 140"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="heater-types">
+    <div class="container">
+      <div class="section-header">
+        <svg class="section-header__leaf" width="40" height="60"><use href="#leaf-motif" color="#80A874"/></svg>
+        <h2 class="section-header__title">Heater Options</h2>
+        <svg class="section-header__leaf section-header__leaf--flip" width="40" height="60"><use href="#leaf-motif" color="#80A874"/></svg>
+      </div>
+      <div class="section-header__divider">
+        <svg width="300" height="30"><use href="#celtic-divider" color="#195764"/></svg>
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="install-steps">
+    <div class="container">
+      <div class="section-header">
+        <svg class="section-header__leaf" width="40" height="60"><use href="#leaf-motif" color="#EAF3DE"/></svg>
+        <h2 class="section-header__title section-header__title--light">The Installation</h2>
+        <svg class="section-header__leaf section-header__leaf--flip" width="40" height="60"><use href="#leaf-motif" color="#EAF3DE"/></svg>
+      </div>
+      <div class="section-header__divider">
+        <svg width="300" height="30"><use href="#celtic-divider" color="#93C7CF"/></svg>
+      </div>
+      <div class="install-steps__grid">
+        <div class="install-step">
+          <div class="install-step__num">01</div>
+          <h3 class="install-step__title">Position & Plan</h3>
+          <p class="install-step__desc">Caolán plans the heater, fuel tank tap, intake and exhaust positions before touching anything — safety first, always.</p>
+        </div>
+        <div class="install-step">
+          <div class="install-step__num">02</div>
+          <h3 class="install-step__title">Fuel & Mounting</h3>
+          <p class="install-step__desc">Fuel line routed safely away from heat, properly clipped and supported. Heater body mounted solidly to the van structure.</p>
+        </div>
+        <div class="install-step">
+          <div class="install-step__num">03</div>
+          <h3 class="install-step__title">Ducting & Outlets</h3>
+          <p class="install-step__desc">Hot air ducted where it's actually needed — under the bed, into the living space — not just dumped behind a panel.</p>
+        </div>
+        <div class="install-step">
+          <div class="install-step__num">04</div>
+          <h3 class="install-step__title">Wire & Commission</h3>
+          <p class="install-step__desc">Wired directly to the battery with a proper fuse. Commissioned, run-tested, and handed over with the controller fully explained.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-quote" id="estimate">
+    <div class="container">
+      <div class="service-quote__head">
+        <h2 class="service-quote__title">Estimate Your Heating Setup</h2>
+        <p class="service-quote__sub">Select what you'd like included — the cost range updates instantly. No commitment required.</p>
+      </div>
+      <div class="option-group option-group--3">
+        <div>
+          <input type="checkbox" id="sq-insulation" class="opt-check" data-min="500" data-max="1200" />
+          <label for="sq-insulation" class="opt-check-card">
+            <div class="opt-check-card__name">Insulation</div>
+            <div class="opt-check-card__desc">Full insulation pack — spray foam, rigid board, and thermal break treatment throughout.</div>
+          </label>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-diesel" class="opt-check" data-min="1000" data-max="2500" />
+          <label for="sq-diesel" class="opt-check-card">
+            <div class="opt-check-card__name">Diesel Heater</div>
+            <div class="opt-check-card__desc">Air heater unit (Webasto, Eberspächer, or quality Chinese unit). Warm van in minutes.</div>
+          </label>
+        </div>
+        <div>
+          <input type="checkbox" id="sq-hotwater" class="opt-check" data-min="600" data-max="1500" />
+          <label for="sq-hotwater" class="opt-check-card">
+            <div class="opt-check-card__name">Hot Water</div>
+            <div class="opt-check-card__desc">Diesel water heater or calorifier for constant hot water. Full-timer standard.</div>
+          </label>
+        </div>
+      </div>
+      <div class="service-quote__estimate">
+        <div>
+          <p class="service-quote__val-label">Rough Estimate</p>
+          <p class="service-quote__val" id="sq-val">Select options above</p>
+        </div>
+        <p class="service-quote__note">Ballpark only — not a quote. Get in touch for a real number based on your van and spec.</p>
+        <a href="quote.html" class="btn btn--primary">Full Quote →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-cta">
+    <div class="container">
+      <h2 class="service-cta__title">Ready to Never Be Cold Again?</h2>
+      <p class="service-cta__sub">Talk to Caolán about the right heater for your van, your budget, and how you use it.</p>
+      <a href="quote.html" class="btn btn--primary">Get a Heating Quote</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__border">
+      <svg width="100%" height="30" preserveAspectRatio="none">
+        <line x1="0" y1="15" x2="100%" y2="15" stroke="#195764" stroke-width="1" stroke-dasharray="6 4"/>
+      </svg>
+    </div>
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <p class="footer__name">Caolán's Campers</p>
+        <p class="footer__tagline">Your Dream Campervan, Made Reality</p>
+      </div>
+      <nav class="footer__nav">
+        <a href="home.html#services">Services</a>
+        <a href="about.html">About</a>
+        <a href="home.html#gallery">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <p class="footer__copy">&copy; 2026 Caolán's Campers. Ireland.</p>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    function fmt(n) { return '€' + n.toLocaleString('en-IE'); }
+    function sqUpdate() {
+      var min = 0, max = 0;
+      document.querySelectorAll('.service-quote .opt-check:checked').forEach(function(el) {
+        min += parseInt(el.dataset.min || 0); max += parseInt(el.dataset.max || 0);
+      });
+      var el = document.getElementById('sq-val');
+      if (el) el.textContent = (min === 0 && max === 0) ? 'Select options above' : fmt(min) + ' – ' + fmt(max);
+    }
+    document.querySelectorAll('.service-quote .opt-check').forEach(function(el) { el.addEventListener('change', sqUpdate); });
+  })();
+  </script>
+  <script>
+  (function(){var btn=document.querySelector('.nav__menu-btn'),drop=document.querySelector('.nav__dropdown');if(!btn||!drop)return;var ll=document.querySelectorAll('.nav__links--left a'),pl=document.querySelector('.nav__portal-li a'),cl=document.querySelector('.nav__cta-li a'),h='';ll.forEach(function(a){h+='<a href="'+a.getAttribute('href')+'">' +a.textContent+'</a>';});if(pl)h+='<a href="'+pl.getAttribute('href')+'">' +pl.textContent+'</a>';if(cl)h+='<a href="'+cl.getAttribute('href')+'" class="nav__dropdown-cta">'+cl.textContent+'</a>';drop.innerHTML=h;btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')=== 'true';btn.setAttribute('aria-expanded',String(!o));drop.classList.toggle('open',!o);});document.addEventListener('click',function(e){if(!btn.contains(e.target)&&!drop.contains(e.target)){btn.setAttribute('aria-expanded','false');drop.classList.remove('open');}});})();
+  </script>
+</body>
+</html>
+

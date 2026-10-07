@@ -1,0 +1,3402 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Portal - Caolán's Campers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== TOKENS ===== */
+    :root {
+      --sage:   #80A874;
+      --teal:   #93C7CF;
+      --mint:   #AAD39C;
+      --dark:   #195764;
+      --cream:  #EAF3DE;
+      --white:  #ffffff;
+      --text:   #1a2e26;
+      --light:  #4a6358;
+      --border: rgba(128,168,116,0.22);
+      --border-dark: rgba(255,255,255,0.1);
+      --sidebar-w: 240px;
+      --header-h: 60px;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height: 100%; }
+    body { font-family:'Lato',sans-serif; color:var(--text); background:var(--cream); }
+
+    /* ===== LOGIN SCREEN ===== */
+    #login-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(160deg, var(--dark) 0%, #1e6b7a 55%, #2a7a6a 100%);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+    }
+    #login-screen.hidden { display: none; }
+
+    .login-ornament {
+      position: absolute;
+      width: 90px; height: 90px;
+      color: rgba(170,211,156,0.25);
+    }
+    .login-ornament svg { width:100%; height:100%; }
+    .login-ornament--tl { top:16px; left:16px; }
+    .login-ornament--br { bottom:16px; right:16px; transform:scale(-1); }
+
+    .login-card {
+      background: var(--white);
+      border-radius: 6px;
+      padding: 2.8rem 2.4rem;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+    }
+    .login-card__logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .login-card__logo svg { width:28px; height:28px; color:var(--sage); }
+    .login-card__sub {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--light);
+      margin-bottom: 2rem;
+    }
+    .login-card__title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      color: var(--dark);
+      margin-bottom: 0.3rem;
+    }
+    .login-card__hint {
+      font-size: 0.82rem;
+      color: var(--light);
+      margin-bottom: 1.6rem;
+      line-height: 1.5;
+    }
+    .login-field { margin-bottom: 1rem; }
+    .login-field label {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.35rem;
+    }
+    .login-field input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--cream);
+      color: var(--text);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .login-field input:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(128,168,116,0.13);
+    }
+    .login-btn {
+      width: 100%;
+      padding: 0.85rem;
+      background: var(--dark);
+      color: var(--cream);
+      border: none;
+      border-radius: 3px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    .login-btn:hover { background: var(--sage); }
+    .login-demos {
+      margin-top: 1.4rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 0.6rem;
+    }
+    .demo-btn {
+      flex: 1;
+      padding: 0.6rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--cream);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--light);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .demo-btn:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
+    .demo-btn span { display:block; font-size:0.65rem; opacity:0.65; font-weight:400; letter-spacing:0; text-transform:none; margin-top:2px; }
+
+    /* ===== APP SHELL ===== */
+    #app { height: 100%; display: flex; flex-direction: column; }
+    #app.hidden { display: none; }
+
+    /* Header */
+    .app-header {
+      height: var(--header-h);
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      padding: 0 1.2rem;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .app-header__logo {
+      font-family: 'Cinzel', serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--mint);
+      white-space: nowrap;
+    }
+    .app-header__badge {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border-radius: 2px;
+      background: rgba(147,199,207,0.18);
+      color: var(--teal);
+    }
+    .app-header__badge--admin { background: rgba(128,168,116,0.2); color: var(--mint); }
+    .app-header__spacer { flex: 1; }
+    .app-header__user {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 0.82rem;
+      color: rgba(234,243,222,0.65);
+    }
+    .app-header__avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--sage);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      color: var(--white);
+      font-weight: 600;
+    }
+    .app-header__logout {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 3px;
+      color: rgba(234,243,222,0.55);
+      padding: 0.35rem 0.7rem;
+      font-size: 0.72rem;
+      font-family: 'Lato', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .app-header__logout:hover { background: rgba(255,255,255,0.08); color: var(--cream); }
+
+    /* Body */
+    .app-body {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      height: calc(100vh - var(--header-h));
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    .sidebar-section {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-section__label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--light);
+      padding: 0 1.1rem;
+      margin-bottom: 0.4rem;
+      opacity: 0.7;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.6rem 1.1rem;
+      font-size: 0.86rem;
+      color: var(--light);
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .sidebar-link svg { width:16px; height:16px; flex-shrink:0; opacity:0.6; }
+    .sidebar-link:hover { background: var(--cream); color: var(--dark); }
+    .sidebar-link.active {
+      background: rgba(128,168,116,0.1);
+      color: var(--dark);
+      border-left-color: var(--sage);
+      font-weight: 700;
+    }
+    .sidebar-link.active svg { opacity:1; }
+    .sidebar-link__badge {
+      margin-left: auto;
+      background: var(--sage);
+      color: var(--white);
+      font-size: 0.62rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    /* Admin client list in sidebar */
+    .client-list-item {
+      padding: 0.7rem 1.1rem;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+    }
+    .client-list-item:hover { background: var(--cream); }
+    .client-list-item.active { background: rgba(128,168,116,0.1); border-left-color: var(--sage); }
+    .client-list-item__name {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.2rem;
+    }
+    .client-list-item__van {
+      font-size: 0.74rem;
+      color: var(--light);
+      margin-bottom: 0.3rem;
+    }
+    .status-badge {
+      display: inline-block;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 2px;
+    }
+    .status-badge--progress { background: rgba(147,199,207,0.25); color: var(--dark); }
+    .status-badge--complete { background: rgba(128,168,116,0.25); color: #2a5a1e; }
+    .status-badge--quoted   { background: rgba(234,243,222,0.8); color: var(--light); border: 1px solid var(--border); }
+    .status-badge--deposit  { background: rgba(255,200,100,0.2); color: #7a5a00; }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem;
+      background: #f2f7ee;
+    }
+
+    /* Panel system */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ===== SHARED COMPONENTS ===== */
+    .page-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem;
+      color: var(--dark);
+      margin-bottom: 0.3rem;
+    }
+    .page-sub {
+      font-size: 0.85rem;
+      color: var(--light);
+      margin-bottom: 1.8rem;
+    }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .card__head {
+      background: var(--dark);
+      padding: 0.9rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .card__head svg { width:18px; height:18px; color:var(--mint); flex-shrink:0; }
+    .card__title { font-family:'Cinzel',serif; font-size:0.88rem; color:var(--cream); }
+    .card__badge {
+      margin-left: auto;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(234,243,222,0.5);
+    }
+    .card__body { padding: 1.4rem; }
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.2rem 1.4rem;
+    }
+    .stat__label {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--light);
+      margin-bottom: 0.3rem;
+    }
+    .stat__value {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      color: var(--dark);
+      line-height: 1;
+    }
+    .stat__sub { font-size: 0.74rem; color: var(--light); margin-top: 0.25rem; }
+    .stat--green .stat__value { color: #2a6b1a; }
+    .stat--teal .stat__value { color: var(--dark); }
+
+    /* Progress bar */
+    .progress-bar-wrap { margin-bottom: 1.4rem; }
+    .progress-bar-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: var(--light);
+      margin-bottom: 0.4rem;
+    }
+    .progress-bar-track {
+      height: 8px;
+      background: var(--cream);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--sage), var(--teal));
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+    .step:last-child { border-bottom: none; }
+    .step__dot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step__dot--done { background: var(--sage); color: var(--white); }
+    .step__dot--active { background: var(--teal); color: var(--dark); }
+    .step__dot--pending { background: var(--cream); border: 2px solid var(--border); color: var(--light); }
+    .step__dot svg { width: 14px; height: 14px; }
+    .step__num { font-size: 0.7rem; font-weight: 700; }
+    .step__title { font-weight: 700; font-size: 0.88rem; color: var(--dark); margin-bottom: 0.2rem; }
+    .step__note { font-size: 0.8rem; color: var(--light); line-height: 1.5; }
+    .step__date { font-size: 0.72rem; color: var(--teal); margin-top: 0.2rem; }
+    .step__pending { font-size: 0.8rem; color: rgba(74,99,88,0.45); font-style: italic; }
+
+    /* Quote items */
+    .quote-section { margin-bottom: 1.4rem; }
+    .quote-section__head {
+      background: var(--cream);
+      padding: 0.65rem 1rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      color: var(--dark);
+      display: flex;
+      justify-content: space-between;
+      border-radius: 3px 3px 0 0;
+      border: 1px solid var(--border);
+    }
+    .quote-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--border);
+      border-top: none;
+      gap: 1rem;
+    }
+    .quote-line:last-child { border-radius: 0 0 3px 3px; }
+    .quote-line__name { font-size: 0.86rem; color: var(--dark); }
+    .quote-line__detail { font-size: 0.75rem; color: var(--light); }
+    .quote-line__price { font-size: 0.88rem; color: var(--dark); font-weight: 700; white-space: nowrap; }
+    .quote-line__cost { font-size: 0.75rem; color: var(--light); white-space: nowrap; }
+    .quote-total {
+      background: var(--dark);
+      color: var(--cream);
+      padding: 1rem 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 3px;
+      margin-top: 0.8rem;
+    }
+    .quote-total__label { font-family:'Cinzel',serif; font-size:0.82rem; }
+    .quote-total__amount { font-family:'Cinzel',serif; font-size:1.5rem; color:var(--mint); }
+
+    /* Parts table */
+    .parts-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .parts-table th {
+      background: var(--cream);
+      padding: 0.6rem 1rem;
+      text-align: left;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--light);
+      border-bottom: 2px solid var(--border);
+    }
+    .parts-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    .parts-table tr:last-child td { border-bottom: none; }
+    .parts-table tr:hover td { background: #f8fbf6; }
+    .part-status {
+      display: inline-block;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0.15rem 0.4rem;
+      border-radius: 2px;
+    }
+    .part-status--ordered { background: rgba(255,200,80,0.2); color: #7a5a00; }
+    .part-status--received { background: rgba(128,168,116,0.2); color: #2a5a1e; }
+    .part-status--fitted { background: rgba(147,199,207,0.25); color: var(--dark); }
+    .parts-foot {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0.9rem 1rem;
+      background: var(--cream);
+      border-top: 2px solid var(--border);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--dark);
+      gap: 3rem;
+    }
+
+    /* Photo grid */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.8rem;
+    }
+    .photo-item {
+      aspect-ratio: 4/3;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      color: var(--light);
+      font-size: 0.72rem;
+      text-align: center;
+      padding: 0.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+    .photo-item__stage {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(25,87,100,0.8);
+      color: var(--cream);
+      font-size: 0.65rem;
+      padding: 0.3rem 0.5rem;
+      text-align: center;
+    }
+    .photo-item svg { width: 32px; height: 32px; opacity: 0.3; }
+
+    /* Messages */
+    .message-thread { display: flex; flex-direction: column; gap: 1rem; }
+    .message {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+    }
+    .message--Caolán { flex-direction: row; }
+    .message--client { flex-direction: row-reverse; }
+    .message__avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .message--Caolán .message__avatar { background: var(--dark); color: var(--mint); }
+    .message--client .message__avatar { background: var(--sage); color: var(--white); }
+    .message__bubble {
+      max-width: 72%;
+      padding: 0.8rem 1rem;
+      border-radius: 4px;
+      font-size: 0.86rem;
+      line-height: 1.6;
+    }
+    .message--Caolán .message__bubble {
+      background: var(--white);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .message--client .message__bubble {
+      background: var(--dark);
+      color: rgba(234,243,222,0.9);
+    }
+    .message__meta {
+      font-size: 0.68rem;
+      color: var(--light);
+      margin-top: 0.3rem;
+    }
+    .message--client .message__meta { text-align: right; }
+    .message-input-row {
+      display: flex;
+      gap: 0.7rem;
+      margin-top: 1.5rem;
+      align-items: flex-end;
+    }
+    .message-input-row textarea {
+      flex: 1;
+      padding: 0.7rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--white);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.88rem;
+      resize: none;
+      outline: none;
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+    .message-input-row textarea:focus { border-color: var(--sage); }
+    .send-btn {
+      padding: 0.7rem 1.2rem;
+      background: var(--dark);
+      color: var(--cream);
+      border: none;
+      border-radius: 3px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .send-btn:hover { background: var(--sage); }
+
+    /* Admin update form */
+    .update-form { margin-top: 1rem; }
+    .uf-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--light);
+      margin-bottom: 0.35rem;
+      font-weight: 700;
+    }
+    .uf-input {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--cream);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text);
+      outline: none;
+      margin-bottom: 0.8rem;
+      transition: border-color 0.2s;
+    }
+    .uf-input:focus { border-color: var(--sage); }
+    select.uf-input { appearance: none; }
+    .uf-btn {
+      padding: 0.6rem 1.4rem;
+      background: var(--sage);
+      color: var(--white);
+      border: none;
+      border-radius: 3px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .uf-btn:hover { background: var(--dark); }
+    .uf-btn--sm { padding: 0.4rem 0.9rem; font-size: 0.7rem; }
+
+    /* Grid helpers */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; }
+    .mb1 { margin-bottom: 1rem; }
+    .mb15 { margin-bottom: 1.5rem; }
+    .mb2 { margin-bottom: 2rem; }
+    .divider { border:none; border-top:1px solid var(--border); margin:1.4rem 0; }
+
+    /* Profit row */
+    .profit-summary {
+      background: rgba(128,168,116,0.1);
+      border: 1px solid rgba(128,168,116,0.3);
+      border-radius: 4px;
+      padding: 1rem 1.4rem;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .profit-item__label { font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--light); }
+    .profit-item__value { font-family:'Cinzel',serif; font-size:1.1rem; color:var(--dark); }
+    .profit-item__value--green { color: #2a6b1a; }
+
+    /* ===== ORDER PARTS ===== */
+    .ord-layout {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 1.2rem;
+      align-items: start;
+    }
+    .ord-picker {
+      position: sticky;
+      top: 0;
+      max-height: calc(100vh - 90px);
+      overflow-y: auto;
+    }
+    .ord-selected-strip {
+      background: var(--dark);
+      border-radius: 4px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 0.8rem;
+    }
+    .ord-selected-strip__label {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(234,243,222,0.45);
+      margin-bottom: 0.5rem;
+    }
+    .ord-chips { display: flex; flex-direction: column; gap: 0.4rem; }
+    .ord-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(128,168,116,0.2);
+      border: 1px solid rgba(128,168,116,0.35);
+      border-radius: 3px;
+      padding: 0.35rem 0.6rem;
+      font-size: 0.75rem;
+      color: var(--cream);
+      gap: 0.5rem;
+    }
+    .ord-chip__name { flex: 1; line-height: 1.3; }
+    .ord-chip__remove {
+      background: none;
+      border: none;
+      color: rgba(234,243,222,0.4);
+      font-size: 1rem;
+      line-height: 1;
+      cursor: pointer;
+      flex-shrink: 0;
+      padding: 0;
+    }
+    .ord-chip__remove:hover { color: #ff8a8a; }
+    .ord-empty-chips { font-size:0.78rem; color:rgba(234,243,222,0.3); font-style:italic; }
+    .ord-cat {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 0.6rem;
+      overflow: hidden;
+    }
+    .ord-cat__head {
+      padding: 0.7rem 1rem;
+      background: var(--cream);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+    .ord-cat__name { font-size:0.8rem; font-weight:700; color:var(--dark); }
+    .ord-cat__arrow { font-size:0.75rem; color:var(--light); transition:transform 0.2s; }
+    .ord-cat.open .ord-cat__arrow { transform: rotate(90deg); }
+    .ord-cat__jobs { display: none; padding: 0.4rem 0; }
+    .ord-cat.open .ord-cat__jobs { display: block; }
+    .ord-job-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.55rem 1rem;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    .ord-job-row:last-child { border-bottom: none; }
+    .ord-job-row:hover { background: #f5faf3; }
+    .ord-job-row__text { flex: 1; }
+    .ord-job-row__name { font-size:0.82rem; font-weight:700; color:var(--dark); }
+    .ord-job-row__desc { font-size:0.7rem; color:var(--light); margin-top:1px; line-height:1.3; }
+    .ord-add-btn {
+      flex-shrink: 0;
+      background: var(--sage);
+      color: var(--white);
+      border: none;
+      border-radius: 3px;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .ord-add-btn:hover { background: var(--dark); }
+    .ord-add-btn:disabled { background: rgba(128,168,116,0.3); cursor: default; }
+
+    /* Tabs */
+    .ord-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 1rem;
+      gap: 0;
+    }
+    .ord-tab {
+      padding: 0.6rem 1.2rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--light);
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+    }
+    .ord-tab:hover { color: var(--dark); }
+    .ord-tab.active { color: var(--dark); border-bottom-color: var(--sage); }
+
+    /* Parts list table */
+    .ord-parts-table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+    .ord-parts-table th {
+      background: var(--cream);
+      padding: 0.5rem 0.8rem;
+      text-align: left;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--light);
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+    .ord-parts-table td {
+      padding: 0.5rem 0.8rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      color: var(--text);
+    }
+    .ord-parts-table tr:hover td { background: #f8fbf6; }
+    .ord-qty-input {
+      width: 52px;
+      padding: 0.25rem 0.4rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-size: 0.82rem;
+      color: var(--text);
+      background: var(--cream);
+      text-align: center;
+      font-family: 'Lato', sans-serif;
+    }
+    .ord-qty-input:focus { outline: none; border-color: var(--sage); }
+    .ord-text-input {
+      width: 100%;
+      padding: 0.25rem 0.4rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-size: 0.8rem;
+      color: var(--text);
+      background: var(--cream);
+      font-family: 'Lato', sans-serif;
+    }
+    .ord-text-input:focus { outline: none; border-color: var(--sage); }
+    .ord-del-btn {
+      background: none;
+      border: none;
+      color: rgba(180,60,60,0.4);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 0 0.2rem;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    .ord-del-btn:hover { color: #c03030; }
+    .ord-job-label {
+      font-size: 0.65rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 2px;
+      background: rgba(128,168,116,0.15);
+      color: var(--dark);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .ord-group-head {
+      background: var(--dark);
+      color: var(--cream);
+      padding: 0.7rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 0 0 0;
+    }
+    .ord-group-head__name { font-family:'Cinzel',serif; font-size:0.82rem; }
+    .ord-group-head__count { font-size:0.7rem; color:rgba(234,243,222,0.45); }
+    .ord-group-head__total { font-size:0.82rem; font-weight:700; color:var(--mint); }
+    .ord-group-wrap { background:var(--white); border:1px solid var(--border); border-radius:4px; overflow:hidden; margin-bottom:1rem; }
+    .ord-supplier-badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0.1rem 0.35rem;
+      border-radius: 2px;
+      background: rgba(147,199,207,0.25);
+      color: var(--dark);
+    }
+    .ord-total-bar {
+      background: var(--dark);
+      color: var(--cream);
+      padding: 0.7rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      border-radius: 0 0 4px 4px;
+      font-size: 0.82rem;
+      margin-top: -1px;
+    }
+    .ord-total-bar__label { font-family:'Cinzel',serif; font-size:0.82rem; }
+    .ord-total-bar__val { color:var(--mint); font-family:'Cinzel',serif; }
+    .ord-empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--light);
+      font-size: 0.88rem;
+      font-style: italic;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+    .ord-add-custom-row td {
+      padding: 0.5rem 0.8rem !important;
+      background: #f9fbf6 !important;
+    }
+    .ord-print-btn {
+      padding: 0.45rem 1rem;
+      background: var(--dark);
+      color: var(--cream);
+      border: none;
+      border-radius: 3px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .ord-print-btn:hover { background: var(--sage); }
+
+    /* ===== FINANCES ===== */
+    .fin-year-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.6rem;
+    }
+    .fin-year-btn {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.88rem;
+      color: var(--light);
+      transition: all 0.15s;
+    }
+    .fin-year-btn:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
+    .fin-year-label { font-family:'Cinzel',serif; font-size:1rem; color:var(--dark); }
+    .fin-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem; }
+    .fin-table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+    .fin-table th {
+      background: var(--cream);
+      padding: 0.55rem 1rem;
+      text-align: left;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--light);
+      border-bottom: 2px solid var(--border);
+    }
+    .fin-table td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: middle;
+    }
+    .fin-table tr:last-child td { border-bottom: none; }
+    .fin-table tr:hover td { background: #f8fbf6; }
+    .fin-table .right { text-align: right; font-weight: 700; }
+    .fin-table .muted { color: var(--light); }
+    .fin-cat-badge {
+      display: inline-block;
+      font-size: 0.62rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0.12rem 0.4rem;
+      border-radius: 2px;
+      background: rgba(128,168,116,0.15);
+      color: var(--dark);
+    }
+    .fin-foot {
+      background: var(--cream);
+      border-top: 2px solid var(--border);
+      padding: 0.7rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .fin-tax-box {
+      background: var(--dark);
+      border-radius: 4px;
+      padding: 1.4rem;
+      color: var(--cream);
+      margin-bottom: 1.2rem;
+    }
+    .fin-tax-box__title { font-family:'Cinzel',serif; font-size:0.9rem; color:var(--mint); margin-bottom:1rem; }
+    .fin-tax-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.45rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.84rem;
+    }
+    .fin-tax-row:last-of-type { border-bottom: none; }
+    .fin-tax-row__label { color: rgba(234,243,222,0.6); }
+    .fin-tax-row__val { font-weight: 700; color: var(--cream); }
+    .fin-tax-row__val--green { color: var(--mint); font-family:'Cinzel',serif; font-size:1rem; }
+    .fin-tax-row__val--red   { color: #ff8a8a; }
+    .fin-doc-area {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1.2rem 1.4rem;
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: var(--text);
+      white-space: pre-wrap;
+      line-height: 1.7;
+      max-height: 360px;
+      overflow-y: auto;
+    }
+    .fin-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(25,87,100,0.55);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .fin-modal {
+      background: var(--white);
+      border-radius: 6px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .fin-modal__head {
+      background: var(--dark);
+      padding: 1rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .fin-modal__title { font-family:'Cinzel',serif; color:var(--cream); font-size:0.9rem; flex:1; }
+    .fin-modal__close {
+      background: none;
+      border: none;
+      color: rgba(234,243,222,0.5);
+      font-size: 1.3rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .fin-modal__close:hover { color: var(--cream); }
+    .fin-modal__body { padding: 1.4rem; overflow-y: auto; flex: 1; }
+    .fin-modal__foot {
+      padding: 1rem 1.4rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 0.7rem;
+      justify-content: flex-end;
+    }
+
+    /* ===== CALENDAR ===== */
+    .cal-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 1.2rem;
+      align-items: start;
+    }
+    .cal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+    }
+    .cal-month-title { font-family:'Cinzel',serif; font-size:1.05rem; color:var(--dark); }
+    .cal-nav-btn {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--light);
+      transition: all 0.15s;
+    }
+    .cal-nav-btn:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
+    .cal-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.9rem;
+      margin-bottom: 0.8rem;
+    }
+    .cal-legend-item { display:flex; align-items:center; gap:0.35rem; font-size:0.7rem; color:var(--light); }
+    .cal-legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7,1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .cal-day-header {
+      background: var(--dark);
+      color: rgba(234,243,222,0.55);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 0.45rem 0;
+    }
+    .cal-day {
+      background: var(--white);
+      min-height: 84px;
+      padding: 0.35rem;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .cal-day:hover { background: #f5faf3; }
+    .cal-day--other-month { background: #f9fbf8; }
+    .cal-day--other-month .cal-day__num { opacity: 0.28; }
+    .cal-day--today .cal-day__num {
+      background: var(--dark);
+      color: var(--cream);
+      border-radius: 50%;
+    }
+    .cal-day--selected { background: rgba(128,168,116,0.1); outline: 2px solid var(--sage); outline-offset: -2px; }
+    .cal-day__num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.2rem;
+      width: 20px; height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cal-chip {
+      font-size: 0.58rem;
+      padding: 0.08rem 0.3rem;
+      border-radius: 2px;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .cal-chip--meeting       { background: rgba(147,199,207,0.35); color: #0a4452; }
+    .cal-chip--due-date      { background: rgba(210,70,70,0.15);  color: #8a1515; }
+    .cal-chip--parts-ordered { background: rgba(210,165,40,0.2);  color: #7a5200; }
+    .cal-chip--parts-arrive  { background: rgba(128,168,116,0.28);color: #2a5a1e; }
+    .cal-chip--work-planned  { background: rgba(170,211,156,0.35);color: #2a5a1e; }
+    .cal-chip--work-done     { background: rgba(25,87,100,0.18);  color: var(--dark); }
+    .cal-chip--other         { background: rgba(74,99,88,0.12);   color: var(--light); }
+    .cal-more { font-size:0.56rem; color:var(--light); padding:0 0.3rem; display:block; }
+
+    /* Day detail + add form */
+    .cal-detail { position: sticky; top: 0; }
+    .cal-detail__head {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      color: var(--dark);
+      margin-bottom: 0.7rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .cal-event-item {
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .cal-event-item:last-of-type { border-bottom: none; }
+    .cal-event-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+    .cal-event-dot--meeting       { background: var(--teal); }
+    .cal-event-dot--due-date      { background: #d04040; }
+    .cal-event-dot--parts-ordered { background: #d4a820; }
+    .cal-event-dot--parts-arrive  { background: var(--sage); }
+    .cal-event-dot--work-planned  { background: var(--mint); }
+    .cal-event-dot--work-done     { background: var(--dark); }
+    .cal-event-dot--other         { background: var(--light); }
+    .cal-event-title { font-size:0.83rem; font-weight:700; color:var(--dark); }
+    .cal-event-type  { font-size:0.67rem; color:var(--light); text-transform:uppercase; letter-spacing:0.08em; margin-top:1px; }
+    .cal-event-client{ font-size:0.7rem; color:var(--teal); margin-top:1px; }
+    .cal-del-btn {
+      margin-left: auto;
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      color: rgba(180,60,60,0.45);
+      font-size: 1rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 0.2rem;
+      transition: color 0.15s;
+    }
+    .cal-del-btn:hover { color: #c03030; }
+    .cal-no-events { font-size:0.82rem; color:var(--light); font-style:italic; padding:1rem 0; text-align:center; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 720px) {
+      .sidebar { display: none; }
+      .g2, .g3 { grid-template-columns: 1fr; }
+    }
+
+    /* ===== LOGIN NAV ===== */
+    .login-nav {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .login-nav__logo {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--mint);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      flex: 1;
+    }
+    .login-nav__links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .login-nav__link {
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(234,243,222,0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .login-nav__link:hover { color: var(--cream); }
+    .login-nav__cta {
+      color: #39cccc !important;
+      border: 1px solid rgba(57,204,204,0.35);
+      padding: 0.45rem 1.1rem;
+      border-radius: 2px;
+    }
+    .login-nav__cta:hover { border-color: #39cccc !important; background: rgba(57,204,204,0.08); }
+    .login-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    /* ===== FAQ MANAGER ===== */
+    .faq-list { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+    .faq-item { background: var(--white); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+    .faq-item__head {
+      background: #39cccc;
+      padding: 0.7rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .faq-item__num { font-family:'Cinzel',serif; font-size:0.72rem; color: rgba(25,87,100,0.6); }
+    .faq-item__del {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: rgba(25,87,100,0.45);
+      font-size: 1rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    .faq-item__del:hover { color: #c03030; }
+    .faq-item__body { padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: 0.7rem; }
+    .faq-save-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--dark);
+      color: var(--mint);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.7rem 1.4rem;
+      border-radius: 4px;
+      letter-spacing: 0.06em;
+      box-shadow: 0 4px 16px rgba(25,87,100,0.3);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .faq-save-toast.show { opacity: 1; transform: translateY(0); }
+    .faq-loc-section { margin-top: 0.2rem; }
+    .faq-loc-group-label {
+      font-size: 0.63rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--light);
+      opacity: 0.7;
+      margin-bottom: 0.4rem;
+      margin-top: 0.8rem;
+    }
+    .faq-loc-group-label:first-child { margin-top: 0; }
+    .faq-loc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem 1.2rem; margin-bottom: 0.5rem; }
+    .faq-loc-item { display: flex; align-items: center; gap: 0.45rem; cursor: pointer; font-size: 0.81rem; color: var(--text); line-height: 1.3; }
+    .faq-loc-item input[type="checkbox"] { accent-color: #39cccc; width: 14px; height: 14px; flex-shrink: 0; cursor: pointer; }
+    .faq-loc-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
+    .faq-loc-tag {
+      font-size: 0.62rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      background: rgba(57,204,204,0.12);
+      color: #1a7a7a;
+      border: 1px solid rgba(57,204,204,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================== SVG SYMBOLS ======================== -->
+  <svg style="display:none">
+    <symbol id="celtic-corner" viewBox="0 0 80 80">
+      <g fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4,4 Q4,40 40,76" opacity="0.5"/><path d="M4,4 Q40,4 76,40" opacity="0.5"/>
+        <path d="M4,4 C4,20 16,20 16,36 C16,52 4,52 4,68" stroke-width="2.5"/>
+        <path d="M4,4 C20,4 20,16 36,16 C52,16 52,4 68,4" stroke-width="2.5"/>
+        <rect x="10" y="10" width="8" height="8" rx="1" transform="rotate(45 14 14)" stroke-width="1.5"/>
+      </g>
+    </symbol>
+    <!-- Icons -->
+    <symbol id="ic-home" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 10L10 3l7 7"/><path d="M5 8.5V17h4v-4h2v4h4V8.5"/></symbol>
+    <symbol id="ic-doc" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="2" width="12" height="16" rx="1"/><path d="M7 7h6M7 10h6M7 13h4"/></symbol>
+    <symbol id="ic-progress" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 2"/></symbol>
+    <symbol id="ic-photo" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="16" height="12" rx="2"/><circle cx="7" cy="9" r="2"/><path d="M2 14l5-4 4 3 3-2 4 3"/></symbol>
+    <symbol id="ic-msg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h16v10H2z" rx="1"/><path d="M6 14l-2 3h12l-2-3"/></symbol>
+    <symbol id="ic-client" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3.3 2.7-6 6-6s6 2.7 6 6"/></symbol>
+    <symbol id="ic-parts" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4l3 3-1.5 4L10 10l4 1.5 3-3 1 5-5-1-4 4-1-5-5 1Z"/></symbol>
+    <symbol id="ic-pound" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 8h6M6 12h8M9 5a3 3 0 012 5.2V16H8v-1H6"/></symbol>
+    <symbol id="ic-check" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7l4 4 6-6"/></symbol>
+    <symbol id="ic-dot" viewBox="0 0 14 14"><circle cx="7" cy="7" r="3" fill="currentColor"/></symbol>
+    <symbol id="ic-cal"  viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="16" height="14" rx="1.5"/><path d="M2 8h16M6 2v4M14 2v4"/></symbol>
+    <symbol id="ic-euro"  viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 6a6 6 0 100 8M3 9h9M3 11h9"/></symbol>
+    <symbol id="ic-order" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="2" width="14" height="16" rx="1"/><path d="M7 6h6M7 10h6M7 14h4"/><circle cx="15" cy="15" r="4" fill="#f2f7ee" stroke="currentColor"/><path d="M13.5 15h3M15 13.5v3"/></symbol>
+    <symbol id="ic-person-add" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="7" r="3"/><path d="M2 17c0-3.3 2.7-6 6-6"/><path d="M15 11v6M12 14h6"/></symbol>
+    <symbol id="ic-dl"   viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 3v10M6 9l4 4 4-4M4 16h12"/></symbol>
+    <symbol id="ic-faq"  viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7.5"/><path d="M8 8c0-1.1.9-2 2-2s2 .9 2 2c0 1.1-1 1.6-2 2v1"/><circle cx="10" cy="14.5" r="0.75" fill="currentColor" stroke="none"/></symbol>
+  </svg>
+
+  <!-- ======================== LOGIN SCREEN ======================== -->
+  <div id="login-screen">
+    <nav class="login-nav">
+      <a href="home.html" class="login-nav__logo">Caolán's Campers</a>
+      <div class="login-nav__links">
+        <a href="home.html" class="login-nav__link">Home</a>
+        <a href="about.html" class="login-nav__link">About</a>
+        <a href="contact.html" class="login-nav__link">Contact</a>
+        <a href="quote.html" class="login-nav__link login-nav__cta">Get a Quote</a>
+      </div>
+    </nav>
+    <div class="login-ornament login-ornament--tl"><svg><use href="#celtic-corner"/></svg></div>
+    <div class="login-ornament login-ornament--br"><svg><use href="#celtic-corner"/></svg></div>
+    <div class="login-main">
+    <div class="login-card">
+      <div class="login-card__logo">
+        <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M14 3C14 3 5 10 5 17 C5 22 9 25 14 25 C19 25 23 22 23 17 C23 10 14 3 14 3Z"/>
+        </svg>
+        Caolán's Campers
+      </div>
+      <p class="login-card__sub">Client Portal</p>
+      <h2 class="login-card__title">Sign In</h2>
+      <p class="login-card__hint">Your secure project dashboard — view your quote, track your build, and message Caolán directly.</p>
+      <div class="login-field">
+        <label for="login-email">Email Address</label>
+        <input type="email" id="login-email" placeholder="your@email.ie" />
+      </div>
+      <div class="login-field">
+        <label for="login-pass">Password</label>
+        <input type="password" id="login-pass" placeholder="••••••••" />
+      </div>
+      <button class="login-btn" onclick="login('manual')">Sign In</button>
+      <div class="login-demos">
+        <button class="demo-btn" onclick="login('client')">
+          Demo — Client View
+          <span>Aoife Murphy's build</span>
+        </button>
+        <button class="demo-btn" onclick="login('Caolán')">
+          Demo — Caolán's View
+          <span>Full workshop dashboard</span>
+        </button>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- ======================== APP SHELL ======================== -->
+  <div id="app" class="hidden">
+
+    <header class="app-header">
+      <span class="app-header__logo">Caolán's Campers</span>
+      <span class="app-header__badge" id="header-badge">Client Portal</span>
+      <div class="app-header__spacer"></div>
+      <div class="app-header__user">
+        <div class="app-header__avatar" id="header-avatar">AM</div>
+        <span id="header-name">Aoife Murphy</span>
+        <button class="app-header__logout" onclick="logout()">Sign Out</button>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <!-- ===== SIDEBAR ===== -->
+      <nav class="sidebar" id="sidebar">
+        <!-- CLIENT sidebar -->
+        <div id="sidebar-client">
+          <div class="sidebar-section">
+            <p class="sidebar-section__label">My Project</p>
+            <div class="sidebar-link active" onclick="showPanel('client-overview')">
+              <svg><use href="#ic-home"/></svg> Overview
+            </div>
+            <div class="sidebar-link" onclick="showPanel('client-quote')">
+              <svg><use href="#ic-doc"/></svg> My Quote
+            </div>
+            <div class="sidebar-link" onclick="showPanel('client-progress')">
+              <svg><use href="#ic-progress"/></svg> Build Progress
+            </div>
+            <div class="sidebar-link" onclick="showPanel('client-photos')">
+              <svg><use href="#ic-photo"/></svg> Photos
+              <span class="sidebar-link__badge">8</span>
+            </div>
+            <div class="sidebar-link" onclick="showPanel('client-messages')">
+              <svg><use href="#ic-msg"/></svg> Messages
+              <span class="sidebar-link__badge">2</span>
+            </div>
+          </div>
+        </div>
+        <!-- Caolán sidebar -->
+        <div id="sidebar-Caolán" style="display:none">
+          <div class="sidebar-section">
+            <p class="sidebar-section__label">Clients</p>
+            <div class="client-list-item active" onclick="selectClient(0)">
+              <div class="client-list-item__name">Aoife Murphy</div>
+              <div class="client-list-item__van">Ford Transit LWB 2021</div>
+              <span class="status-badge status-badge--progress">In Progress</span>
+            </div>
+            <div class="client-list-item" onclick="selectClient(1)">
+              <div class="client-list-item__name">Ciarán Doyle</div>
+              <div class="client-list-item__van">VW Crafter 2019</div>
+              <span class="status-badge status-badge--complete">Complete</span>
+            </div>
+            <div class="client-list-item" onclick="selectClient(2)">
+              <div class="client-list-item__name">Siobhán Kelly</div>
+              <div class="client-list-item__van">Mercedes Sprinter 2022</div>
+              <span class="status-badge status-badge--progress">In Progress</span>
+            </div>
+            <div class="client-list-item" onclick="selectClient(3)">
+              <div class="client-list-item__name">Padraig Walsh</div>
+              <div class="client-list-item__van">Ford Transit 2020</div>
+              <span class="status-badge status-badge--quoted">Quoted</span>
+            </div>
+          </div>
+          <div class="sidebar-section">
+            <p class="sidebar-section__label">Admin</p>
+            <div class="sidebar-link" onclick="showPanel('admin-overview')">
+              <svg><use href="#ic-home"/></svg> Workshop Overview
+            </div>
+            <div class="sidebar-link" onclick="showPanel('admin-calendar');renderCalendar()">
+              <svg><use href="#ic-cal"/></svg> Calendar
+            </div>
+            <div class="sidebar-link" onclick="showPanel('admin-finances');renderFinances()">
+              <svg><use href="#ic-euro"/></svg> Finances
+            </div>
+            <div class="sidebar-link" onclick="showPanel('admin-orders');renderOrderPicker()">
+              <svg><use href="#ic-order"/></svg> Order Parts
+            </div>
+            <div class="sidebar-link" onclick="showPanel('admin-clients');renderMcList()">
+              <svg><use href="#ic-person-add"/></svg> Manage Clients
+            </div>
+            <div class="sidebar-link" onclick="showPanel('admin-faqs');renderFaqs()">
+              <svg><use href="#ic-faq"/></svg> Website FAQs
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- ===== MAIN CONTENT ===== -->
+      <main class="main-content" id="main">
+
+        <!-- ============ CLIENT: OVERVIEW ============ -->
+        <div class="panel active" id="panel-client-overview">
+          <p class="page-title">Your Build Overview</p>
+          <p class="page-sub">Ford Transit LWB 2021 — Full Conversion</p>
+          <div class="stat-row">
+            <div class="stat">
+              <p class="stat__label">Quote Total</p>
+              <p class="stat__value">€18,350</p>
+              <p class="stat__sub">Inc. all materials &amp; labour</p>
+            </div>
+            <div class="stat">
+              <p class="stat__label">Deposit Paid</p>
+              <p class="stat__value stat--green">€2,000</p>
+              <p class="stat__sub">Remaining: €16,350</p>
+            </div>
+            <div class="stat">
+              <p class="stat__label">Est. Completion</p>
+              <p class="stat__value">14 Jul</p>
+              <p class="stat__sub">~3 weeks remaining</p>
+            </div>
+            <div class="stat">
+              <p class="stat__label">Build Progress</p>
+              <p class="stat__value stat--teal">62%</p>
+              <p class="stat__sub">Step 4 of 8 active</p>
+            </div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-meta"><span>Build Progress</span><span>62%</span></div>
+            <div class="progress-bar-track"><div class="progress-bar-fill" style="width:62%"></div></div>
+          </div>
+          <div class="g2 mb2">
+            <div class="card">
+              <div class="card__head">
+                <svg><use href="#ic-progress"/></svg>
+                <span class="card__title">Current Step</span>
+                <span class="card__badge">Active Now</span>
+              </div>
+              <div class="card__body">
+                <p style="font-weight:700;color:var(--dark);margin-bottom:0.3rem">Step 4 — Framing &amp; Structure</p>
+                <p style="font-size:0.85rem;color:var(--light);line-height:1.6">Bed frame, overhead locker structure, and kitchen unit carcasses going in this week. The bones of the layout are taking shape.</p>
+                <p style="font-size:0.75rem;color:var(--teal);margin-top:0.5rem">Updated by Caolán · 3 Jun 2026</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card__head">
+                <svg><use href="#ic-msg"/></svg>
+                <span class="card__title">Latest Message</span>
+                <span class="card__badge">2 unread</span>
+              </div>
+              <div class="card__body">
+                <p style="font-size:0.82rem;color:var(--light);margin-bottom:0.3rem;font-size:0.72rem;letter-spacing:0.05em;text-transform:uppercase">Caolán · 2 Jun</p>
+                <p style="font-size:0.86rem;color:var(--text);line-height:1.6">"Aoife, just to let you know the Webasto arrived today — slightly earlier than expected which is brilliant. Fitting it Thursday..."</p>
+                <div onclick="showPanel('client-messages')" style="font-size:0.78rem;color:var(--sage);margin-top:0.6rem;cursor:pointer;font-weight:700">View conversation →</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__head">
+              <svg><use href="#ic-progress"/></svg>
+              <span class="card__title">Build Timeline</span>
+            </div>
+            <div class="card__body">
+              <div class="steps">
+                <div class="step"><div class="step__dot step__dot--done"><svg><use href="#ic-check"/></svg></div><div><p class="step__title">1 — Strip &amp; Preparation</p><p class="step__note">Bare metal, rust treated, sound deadening applied to floor and wheel arches.</p><p class="step__date">Completed 12 May 2026</p></div></div>
+                <div class="step"><div class="step__dot step__dot--done"><svg><use href="#ic-check"/></svg></div><div><p class="step__title">2 — Insulation</p><p class="step__note">Spray foam in all ribs and voids, rigid board on walls and floor, thinsulate in door cards.</p><p class="step__date">Completed 19 May 2026</p></div></div>
+                <div class="step"><div class="step__dot step__dot--done"><svg><use href="#ic-check"/></svg></div><div><p class="step__title">3 — Electrical Rough-In</p><p class="step__note">Cable runs in place before cladding goes on. All circuits mapped and documented.</p><p class="step__date">Completed 27 May 2026</p></div></div>
+                <div class="step"><div class="step__dot step__dot--active"><svg><use href="#ic-dot"/></svg></div><div><p class="step__title">4 — Framing &amp; Structure</p><p class="step__note">Bed frame, overhead locker carcasses, and kitchen structure being built this week.</p><p class="step__date">Started 2 Jun 2026 · In Progress</p></div></div>
+                <div class="step"><div class="step__dot step__dot--pending"><span class="step__num">5</span></div><div><p class="step__title">5 — Cladding &amp; Flooring</p><p class="step__pending">Pending — oak tongue &amp; groove walls, vinyl plank floor</p></div></div>
+                <div class="step"><div class="step__dot step__dot--pending"><span class="step__num">6</span></div><div><p class="step__title">6 — Heating &amp; Water Systems</p><p class="step__pending">Pending — Webasto fitting, water system plumbing</p></div></div>
+                <div class="step"><div class="step__dot step__dot--pending"><span class="step__num">7</span></div><div><p class="step__title">7 — Final Fit-Out &amp; Electrics</p><p class="step__pending">Pending — furniture, appliances, full electrical commissioning</p></div></div>
+                <div class="step"><div class="step__dot step__dot--pending"><span class="step__num">8</span></div><div><p class="step__title">8 — Handover</p><p class="step__pending">Pending — full walkthrough, documentation, handover</p></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ CLIENT: QUOTE ============ -->
+        <div class="panel" id="panel-client-quote">
+          <p class="page-title">Your Detailed Quote</p>
+          <p class="page-sub">Ford Transit LWB 2021 — Agreed 8 May 2026</p>
+
+          <div class="quote-section">
+            <div class="quote-section__head"><span>Van</span><span>Ford Transit LWB 2021 — High Roof</span></div>
+            <div class="quote-line"><div><p class="quote-line__name">Van Size</p><p class="quote-line__detail">Large — High-roof long-wheelbase, full standing height</p></div><p class="quote-line__price">Client-supplied</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Pre-conversion Inspection</p><p class="quote-line__detail">Checked for rust, structural issues, and conversion suitability</p></div><p class="quote-line__price">Included</p></div>
+          </div>
+
+          <div class="quote-section">
+            <div class="quote-section__head"><span>Power &amp; Electrics</span><span>Full Off-Grid System</span></div>
+            <div class="quote-line"><div><p class="quote-line__name">200W Solar Panels × 2</p><p class="quote-line__detail">Roof mounted, wired in parallel</p></div><p class="quote-line__price">€420</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Victron 100/30 MPPT Charge Controller</p><p class="quote-line__detail">With Bluetooth monitoring</p></div><p class="quote-line__price">€210</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">LiFePO4 Battery 200Ah</p><p class="quote-line__detail">Lithium iron phosphate, 10-year cycle life</p></div><p class="quote-line__price">€680</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Victron MultiPlus 2000VA Inverter/Charger</p><p class="quote-line__detail">Pure sine wave, shore power input</p></div><p class="quote-line__price">€680</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">12V Distribution Board &amp; Fusing</p><p class="quote-line__detail">All circuits fused at source, labelled</p></div><p class="quote-line__price">€180</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">LED Lighting (6 spotlights + strip)</p><p class="quote-line__detail">Warm white, dimmable</p></div><p class="quote-line__price">€160</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Split-Charge Relay &amp; Cabling</p><p class="quote-line__detail">Charges from alternator while driving</p></div><p class="quote-line__price">€120</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Installation Labour</p><p class="quote-line__detail">Design, installation &amp; commissioning</p></div><p class="quote-line__price">€750</p></div>
+          </div>
+
+          <div class="quote-section">
+            <div class="quote-section__head"><span>Heating</span><span>Full System — Heater + Hot Water</span></div>
+            <div class="quote-line"><div><p class="quote-line__name">Full Insulation Pack</p><p class="quote-line__detail">Spray foam, rigid board, thinsulate, vapour barrier</p></div><p class="quote-line__price">€620</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Webasto Air Top Evo 40 Diesel Heater</p><p class="quote-line__detail">2kW–4kW, quiet operation, German-made</p></div><p class="quote-line__price">€1,280</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Webasto Thermo Top Evo Water Heater</p><p class="quote-line__detail">Diesel water heater, hot water on demand</p></div><p class="quote-line__price">€780</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Installation Labour</p><p class="quote-line__detail">Both units installed, commissioned, tested</p></div><p class="quote-line__price">€420</p></div>
+          </div>
+
+          <div class="quote-section">
+            <div class="quote-section__head"><span>Skylights &amp; Windows</span><span>Fan + Skylight</span></div>
+            <div class="quote-line"><div><p class="quote-line__name">MaxxAir MaxxFan Deluxe Roof Fan</p><p class="quote-line__detail">14-speed reversible fan, rain cover</p></div><p class="quote-line__price">€380</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Fiamma 40cm Skylight</p><p class="quote-line__detail">Smoked polycarbonate, interior trim ring</p></div><p class="quote-line__price">€280</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Installation Labour</p><p class="quote-line__detail">Both units cut, sealed, and finished</p></div><p class="quote-line__price">€190</p></div>
+          </div>
+
+          <div class="quote-section">
+            <div class="quote-section__head"><span>Water System</span><span>Hot &amp; Cold + Shower</span></div>
+            <div class="quote-line"><div><p class="quote-line__name">60L Fresh Water Tank</p><p class="quote-line__detail">Stainless fittings, tank-level gauge</p></div><p class="quote-line__price">€185</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Shurflo 12V Pressure Pump + Accumulator</p><p class="quote-line__detail">Quiet operation, no short-cycling</p></div><p class="quote-line__price">€195</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Kitchen Tap + Pipework</p><p class="quote-line__detail">Brushed stainless, hot &amp; cold supply</p></div><p class="quote-line__price">€145</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Shower + Wet Room Partition</p><p class="quote-line__detail">Fibreglass tray, marine ply partition, shower rail</p></div><p class="quote-line__price">€680</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">30L Grey Water Tank</p><p class="quote-line__detail">With draining tap, securely mounted</p></div><p class="quote-line__price">€95</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Installation Labour</p><p class="quote-line__detail">All plumbing, pressure testing, commissioning</p></div><p class="quote-line__price">€400</p></div>
+          </div>
+
+          <div class="quote-section">
+            <div class="quote-section__head"><span>Layout &amp; Furniture</span><span>Full Build — Bed, Kitchen, Overhead Lockers</span></div>
+            <div class="quote-line"><div><p class="quote-line__name">Fixed Double Bed Frame + Drawers</p><p class="quote-line__detail">Birch ply frame, 3x full-extension under-bed drawers</p></div><p class="quote-line__price">€980</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Foam Mattress (custom-cut) + Cover</p><p class="quote-line__detail">4" memory foam topper, removable cover</p></div><p class="quote-line__price">€340</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Kitchen Units + Solid Oak Worktop</p><p class="quote-line__detail">Custom cabinetry, 2-burner hob, 12V compressor fridge</p></div><p class="quote-line__price">€1,680</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Overhead Lockers (×2)</p><p class="quote-line__detail">Full-width, piano-hinged, gas struts, catch latches</p></div><p class="quote-line__price">€520</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Full Interior Cladding (T&amp;G Pine + Ceiling Carpet)</p><p class="quote-line__detail">Wall panels, ceiling liner, all trim pieces</p></div><p class="quote-line__price">€780</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Vinyl Plank Flooring</p><p class="quote-line__detail">Over ply sub-floor, wood-effect, waterproof</p></div><p class="quote-line__price">€280</p></div>
+            <div class="quote-line"><div><p class="quote-line__name">Furniture &amp; Fit-Out Labour</p><p class="quote-line__detail">All carpentry and installation</p></div><p class="quote-line__price">€1,800</p></div>
+          </div>
+
+          <div class="quote-total">
+            <div>
+              <p class="quote-total__label">Total — All Works Inclusive</p>
+              <p style="font-size:0.78rem;color:rgba(234,243,222,0.45);margin-top:0.2rem">All materials, labour, and VAT included</p>
+            </div>
+            <p class="quote-total__amount">€18,350</p>
+          </div>
+
+          <div style="margin-top:1rem;background:var(--white);border:1px solid var(--border);border-radius:4px;padding:1.2rem 1.4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+            <div>
+              <p style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--light);margin-bottom:0.4rem">Payment Schedule</p>
+              <p style="font-size:0.85rem;color:var(--text)">€2,000 deposit paid · €8,175 due at midpoint · €8,175 on completion</p>
+            </div>
+            <button class="uf-btn uf-btn--sm">Download PDF</button>
+          </div>
+        </div>
+
+        <!-- ============ CLIENT: PROGRESS ============ -->
+        <div class="panel" id="panel-client-progress">
+          <p class="page-title">Build Progress</p>
+          <p class="page-sub">Caolán updates this as each stage is completed</p>
+          <div class="progress-bar-wrap mb2">
+            <div class="progress-bar-meta"><span>Overall Progress</span><span>62% — Step 4 of 8</span></div>
+            <div class="progress-bar-track"><div class="progress-bar-fill" style="width:62%"></div></div>
+          </div>
+          <div class="card">
+            <div class="card__body">
+              <div class="steps">
+                <div class="step"><div class="step__dot step__dot--done"><svg><use href="#ic-check"/></svg></div><div><p class="step__title">1 — Strip &amp; Preparation</p><p class="step__note">Van fully stripped. Rust found on rear sill — treated and sealed before it could spread. Sound deadening applied to floor, wheel arches, and inner panels. Solid start.</p><p class="step__date">✓ Completed 12 May 2026</p></div></div>
+                <div class="step"><div class="step__dot step__dot--done"><svg><use href="#ic-check"/></svg></div><div><p class="step__title">2 — Insulation</p><p class="step__note">Spray foam into all the ribs, voids, and awkward corners. Rigid Celotex board on the main walls and floor. Thinsulate in the door cards and cab divider. Not a cold bridge left in the place.</p><p class="step__date">✓ Completed 19 May 2026</p></div></div>
+                <div class="step"><div class="step__dot step__dot--done"><svg><use href="#ic-check"/></svg></div><div><p class="step__title">3 — Electrical Rough-In</p><p class="step__note">All cable runs done before the cladding goes on — this is the important part. Every cable is rated to its load, routed away from heat sources, and documented. You'll get the wiring diagram at handover.</p><p class="step__date">✓ Completed 27 May 2026</p></div></div>
+                <div class="step"><div class="step__dot step__dot--active"><svg><use href="#ic-dot"/></svg></div><div><p class="step__title">4 — Framing &amp; Structure</p><p class="step__note">The bones of the layout are taking shape. Bed frame is built, overhead locker structure is in, and the kitchen unit carcasses are done. Taking the time to get everything square before the cladding goes on.</p><p class="step__date">⟳ Started 2 Jun 2026 · In progress</p></div></div>
+                <div class="step"><div class="step__dot step__dot--pending"><span class="step__num">5</span></div><div><p class="step__title">5 — Cladding &amp; Flooring</p><p class="step__pending">Coming next — oak tongue &amp; groove for the walls, vinyl plank flooring over ply sub-floor, ceiling carpet liner.</p></div></div>
+                <div class="step"><div class="step__dot step__dot--pending"><span class="step__num">6</span></div><div><p class="step__title">6 — Heating &amp; Water Systems</p><p class="step__pending">Webasto air heater and hot water unit both on-site and ready to fit. Water plumbing will follow immediately after.</p></div></div>
+                <div class="step"><div class="step__dot step__dot--pending"><span class="step__num">7</span></div><div><p class="step__title">7 — Final Fit-Out &amp; Electrical Commissioning</p><p class="step__pending">Furniture doors, fridge, hob, all lighting, battery monitor, and full system test.</p></div></div>
+                <div class="step"><div class="step__dot step__dot--pending"><span class="step__num">8</span></div><div><p class="step__title">8 — Handover</p><p class="step__pending">Full walkthrough of every system. Wiring diagram, manuals, and a proper drive before you take her home.</p></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ CLIENT: PHOTOS ============ -->
+        <div class="panel" id="panel-client-photos">
+          <p class="page-title">Build Photos</p>
+          <p class="page-sub">Caolán uploads photos as each stage is completed — 8 photos so far</p>
+          <div class="photo-grid">
+            <div class="photo-item"><svg viewBox="0 0 48 48" fill="none" stroke="#80A874" stroke-width="1.5"><rect x="4" y="8" width="40" height="32" rx="3"/><path d="M4 28l10-10 8 8 6-6 8 8"/><circle cx="34" cy="18" r="4"/></svg><div class="photo-item__stage">Strip &amp; Prep · 12 May</div></div>
+            <div class="photo-item"><svg viewBox="0 0 48 48" fill="none" stroke="#80A874" stroke-width="1.5"><rect x="4" y="8" width="40" height="32" rx="3"/><path d="M4 32l12-14 6 8 8-10 12 16"/><circle cx="34" cy="18" r="4"/></svg><div class="photo-item__stage">Strip &amp; Prep · 12 May</div></div>
+            <div class="photo-item"><svg viewBox="0 0 48 48" fill="none" stroke="#80A874" stroke-width="1.5"><rect x="4" y="8" width="40" height="32" rx="3"/><path d="M4 30l8-8 10 10 10-12 12 14"/></svg><div class="photo-item__stage">Insulation · 18 May</div></div>
+            <div class="photo-item"><svg viewBox="0 0 48 48" fill="none" stroke="#80A874" stroke-width="1.5"><rect x="4" y="8" width="40" height="32" rx="3"/><path d="M4 26l14-14 8 8 8-6 10 10"/><circle cx="38" cy="14" r="3"/></svg><div class="photo-item__stage">Insulation · 19 May</div></div>
+            <div class="photo-item"><svg viewBox="0 0 48 48" fill="none" stroke="#80A874" stroke-width="1.5"><rect x="4" y="8" width="40" height="32" rx="3"/><path d="M4 32l10-12 8 6 8-10 14 16"/></svg><div class="photo-item__stage">Electrical Rough-In · 26 May</div></div>
+            <div class="photo-item"><svg viewBox="0 0 48 48" fill="none" stroke="#80A874" stroke-width="1.5"><rect x="4" y="8" width="40" height="32" rx="3"/><path d="M4 28l12-16 6 8 10-8 12 16"/><circle cx="34" cy="16" r="3"/></svg><div class="photo-item__stage">Electrical Rough-In · 27 May</div></div>
+            <div class="photo-item"><svg viewBox="0 0 48 48" fill="none" stroke="#80A874" stroke-width="1.5"><rect x="4" y="8" width="40" height="32" rx="3"/><path d="M4 30l14-18 8 10 6-6 12 14"/></svg><div class="photo-item__stage">Framing · 3 Jun</div></div>
+            <div class="photo-item"><svg viewBox="0 0 48 48" fill="none" stroke="#80A874" stroke-width="1.5"><rect x="4" y="8" width="40" height="32" rx="3"/><path d="M4 28l10-14 10 10 8-8 12 12"/><circle cx="36" cy="18" r="4"/></svg><div class="photo-item__stage">Framing · 3 Jun</div></div>
+          </div>
+        </div>
+
+        <!-- ============ CLIENT: MESSAGES ============ -->
+        <div class="panel" id="panel-client-messages">
+          <p class="page-title">Messages</p>
+          <p class="page-sub">Direct with Caolán — no one else reads these</p>
+          <div class="card mb2">
+            <div class="card__body">
+              <div class="message-thread">
+                <div class="message message--Caolán">
+                  <div class="message__avatar">CC</div>
+                  <div><div class="message__bubble">Hi Aoife, just to confirm we've got your van booked in from Monday 12th. If you can drop her round the evening before and leave the keys, that'd be great. I'll be in touch once we're up and running.</div><p class="message__meta">Caolán · 9 May 2026</p></div>
+                </div>
+                <div class="message message--client">
+                  <div class="message__avatar">AM</div>
+                  <div><div class="message__bubble">That's brilliant, thanks Caolán. I'll drop it Sunday evening around 6 if that works? Really excited to see it all come together!</div><p class="message__meta">Aoife · 9 May 2026</p></div>
+                </div>
+                <div class="message message--Caolán">
+                  <div class="message__avatar">CC</div>
+                  <div><div class="message__bubble">Sunday at 6 is perfect. Week one update — stripping done, found a bit of rust on the rear sill which I've sorted. Insulation starts tomorrow. I've updated the progress tracker too so you can follow along.</div><p class="message__meta">Caolán · 17 May 2026</p></div>
+                </div>
+                <div class="message message--Caolán">
+                  <div class="message__avatar">CC</div>
+                  <div><div class="message__bubble">Quick update — the Webasto arrived today, slightly earlier than I expected which is brilliant. Was worried it might delay us. Going to get the electrical rough-in finished tomorrow and start framing Thursday. All looking good for the timeline we agreed.</div><p class="message__meta">Caolán · 2 Jun 2026 · Unread</p></div>
+                </div>
+                <div class="message message--Caolán">
+                  <div class="message__avatar">CC</div>
+                  <div><div class="message__bubble">One small thing — the solid oak worktop I sourced has a knot near one end. It's fine structurally and actually looks lovely, but wanted to let you know before I fit it. Let me know if you'd prefer I swap it out for a clean piece — it'll put us back 2 days.</div><p class="message__meta">Caolán · 3 Jun 2026 · Unread</p></div>
+                </div>
+              </div>
+              <div class="message-input-row">
+                <textarea rows="2" placeholder="Reply to Caolán…"></textarea>
+                <button class="send-btn">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ ADMIN: CLIENT DETAIL ============ -->
+        <div class="panel" id="panel-admin-client">
+          <div id="admin-client-content"><!-- populated by JS --></div>
+        </div>
+
+        <!-- ============ ADMIN: ORDER PARTS ============ -->
+        <div class="panel" id="panel-admin-orders">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.2rem">
+            <div>
+              <p class="page-title">Order Parts</p>
+              <p class="page-sub">Pick jobs to build your parts list, then view by job or by supplier to place orders</p>
+            </div>
+            <div style="display:flex;gap:0.6rem">
+              <button class="ord-print-btn" onclick="switchOrderTab('supplier');window.print()">Print Supplier Orders</button>
+            </div>
+          </div>
+          <div class="ord-layout">
+            <!-- LEFT: Job picker -->
+            <div class="ord-picker">
+              <div class="ord-selected-strip">
+                <p class="ord-selected-strip__label">Jobs in this order</p>
+                <div class="ord-chips" id="ord-chips"><p class="ord-empty-chips">No jobs added yet</p></div>
+              </div>
+              <div id="ord-job-cats"><!-- rendered by JS --></div>
+            </div>
+            <!-- RIGHT: Parts area -->
+            <div>
+              <div class="ord-tabs">
+                <button class="ord-tab active" id="ord-tab-list"     onclick="switchOrderTab('list')">Edit Parts List</button>
+                <button class="ord-tab"         id="ord-tab-job"      onclick="switchOrderTab('job')">By Job</button>
+                <button class="ord-tab"         id="ord-tab-supplier" onclick="switchOrderTab('supplier')">By Supplier</button>
+              </div>
+              <div id="ord-view-list"></div>
+              <div id="ord-view-job"      style="display:none"></div>
+              <div id="ord-view-supplier" style="display:none"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ ADMIN: MANAGE CLIENTS ============ -->
+        <div class="panel" id="panel-admin-clients">
+          <p class="page-title">Manage Clients</p>
+          <p class="page-sub">Add new clients, archive completed projects, or remove records</p>
+          <div class="g2 mb2">
+            <!-- Add new client form -->
+            <div class="card">
+              <div class="card__head"><svg><use href="#ic-person-add"/></svg><span class="card__title">Add New Client</span></div>
+              <div class="card__body">
+                <div class="uf-label">Client Name</div>
+                <input class="uf-input" type="text" id="mc-name" placeholder="e.g. Ciara O'Sullivan" />
+                <div class="uf-label">Email Address</div>
+                <input class="uf-input" type="email" id="mc-email" placeholder="ciara@example.ie" />
+                <div class="uf-label">Phone</div>
+                <input class="uf-input" type="tel" id="mc-phone" placeholder="+353 87 123 4567" />
+                <div class="uf-label">Van Make / Model / Year</div>
+                <input class="uf-input" type="text" id="mc-van" placeholder="e.g. Ford Transit LWB 2022" />
+                <div class="uf-label">Project Type</div>
+                <select class="uf-input" id="mc-type">
+                  <option>Full Van Conversion</option>
+                  <option>Electrical Only</option>
+                  <option>Heating Install</option>
+                  <option>Water System</option>
+                  <option>Partial Build</option>
+                  <option>Consultation Only</option>
+                  <option>Self-Build Assistance</option>
+                </select>
+                <div class="uf-label">Initial Status</div>
+                <select class="uf-input" id="mc-status">
+                  <option value="quoted">Quoted — awaiting deposit</option>
+                  <option value="deposit">Deposit paid — build pending</option>
+                  <option value="progress">In Progress</option>
+                </select>
+                <div class="uf-label">Quoted Value (€)</div>
+                <input class="uf-input" type="number" id="mc-value" placeholder="0" />
+                <div class="uf-label">Notes (internal)</div>
+                <textarea class="uf-input" id="mc-notes" rows="3" placeholder="Any relevant details — source of enquiry, specific requirements, etc." style="resize:vertical"></textarea>
+                <button class="uf-btn" onclick="mcAddClient()">Add Client</button>
+              </div>
+            </div>
+            <!-- Client list with remove/archive -->
+            <div>
+              <div class="card">
+                <div class="card__head"><svg><use href="#ic-client"/></svg><span class="card__title">All Clients</span><span class="card__badge" id="mc-count">4 clients</span></div>
+                <div id="mc-list"><!-- rendered by JS --></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ ADMIN: FINANCES ============ -->
+        <div class="panel" id="panel-admin-finances">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.4rem">
+            <div>
+              <p class="page-title">Finances</p>
+              <p class="page-sub">Income, expenses, overheads, and tax summary — for your own records</p>
+            </div>
+            <div style="display:flex;gap:0.6rem;align-items:center">
+              <button class="fin-year-btn" onclick="finYear--;renderFinances()">&#8592;</button>
+              <span class="fin-year-label" id="fin-year-label">2026</span>
+              <button class="fin-year-btn" onclick="finYear++;renderFinances()">&#8594;</button>
+            </div>
+          </div>
+          <div id="fin-content"><!-- rendered by JS --></div>
+          <!-- Tax doc modal -->
+          <div class="fin-modal-overlay" id="fin-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+            <div class="fin-modal">
+              <div class="fin-modal__head">
+                <svg style="width:18px;height:18px;color:var(--mint)"><use href="#ic-dl"/></svg>
+                <span class="fin-modal__title">Tax Return Summary</span>
+                <button class="fin-modal__close" onclick="document.getElementById('fin-modal').style.display='none'">×</button>
+              </div>
+              <div class="fin-modal__body">
+                <div class="fin-doc-area" id="fin-doc-text"></div>
+              </div>
+              <div class="fin-modal__foot">
+                <button class="uf-btn uf-btn--sm" style="background:var(--light)" onclick="document.getElementById('fin-modal').style.display='none'">Close</button>
+                <button class="uf-btn uf-btn--sm" onclick="finCopyDoc()">Copy to Clipboard</button>
+                <button class="uf-btn uf-btn--sm" onclick="finDownloadDoc()">Download .txt</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ ADMIN: CALENDAR ============ -->
+        <div class="panel" id="panel-admin-calendar">
+          <p class="page-title">Workshop Calendar</p>
+          <p class="page-sub">Meetings, deadlines, parts deliveries, planned &amp; actual work — all in one place</p>
+
+          <div class="cal-layout">
+            <!-- Left: month grid -->
+            <div>
+              <div class="cal-legend">
+                <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--teal)"></span>Meeting</span>
+                <span class="cal-legend-item"><span class="cal-legend-dot" style="background:#d04040"></span>Due Date</span>
+                <span class="cal-legend-item"><span class="cal-legend-dot" style="background:#d4a820"></span>Parts Ordered</span>
+                <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--sage)"></span>Parts Arriving</span>
+                <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--mint)"></span>Work Planned</span>
+                <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--dark)"></span>Work Done</span>
+              </div>
+              <div class="cal-nav">
+                <button class="cal-nav-btn" onclick="calPrevMonth()">&#8592;</button>
+                <span class="cal-month-title" id="cal-month-title">June 2026</span>
+                <button class="cal-nav-btn" onclick="calNextMonth()">&#8594;</button>
+              </div>
+              <div class="cal-grid" id="cal-grid">
+                <div class="cal-day-header">Mon</div>
+                <div class="cal-day-header">Tue</div>
+                <div class="cal-day-header">Wed</div>
+                <div class="cal-day-header">Thu</div>
+                <div class="cal-day-header">Fri</div>
+                <div class="cal-day-header">Sat</div>
+                <div class="cal-day-header">Sun</div>
+              </div>
+            </div>
+
+            <!-- Right: day detail + add event -->
+            <div class="cal-detail">
+              <div class="card mb15">
+                <div class="card__head"><svg><use href="#ic-cal"/></svg><span class="card__title">Day Events</span></div>
+                <div class="card__body" id="cal-day-detail">
+                  <p class="cal-no-events">Click a date to see events</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card__head"><svg><use href="#ic-cal"/></svg><span class="card__title">Add Event</span></div>
+                <div class="card__body">
+                  <div class="uf-label">Date</div>
+                  <input class="uf-input" type="date" id="cal-new-date" />
+                  <div class="uf-label">Event Type</div>
+                  <select class="uf-input" id="cal-new-type">
+                    <option value="meeting">Meeting / Consultation</option>
+                    <option value="due-date">Due Date / Deadline</option>
+                    <option value="parts-ordered">Parts Ordered</option>
+                    <option value="parts-arrive">Parts Arriving</option>
+                    <option value="work-planned">Work Planned</option>
+                    <option value="work-done">Work Done</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <div class="uf-label">Note / Title</div>
+                  <input class="uf-input" type="text" id="cal-new-title" placeholder="e.g. Aoife — cladding day 1" />
+                  <div class="uf-label">Client (optional)</div>
+                  <select class="uf-input" id="cal-new-client">
+                    <option value="">— General / no specific client —</option>
+                    <option value="Aoife Murphy">Aoife Murphy</option>
+                    <option value="Ciarán Doyle">Ciarán Doyle</option>
+                    <option value="Siobhán Kelly">Siobhán Kelly</option>
+                    <option value="Padraig Walsh">Padraig Walsh</option>
+                  </select>
+                  <button class="uf-btn" onclick="calAddEvent()">Add to Calendar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ ADMIN: OVERVIEW ============ -->
+        <div class="panel" id="panel-admin-overview">
+          <p class="page-title">Workshop Overview</p>
+          <p class="page-sub">All active projects at a glance</p>
+          <div class="stat-row mb2">
+            <div class="stat"><p class="stat__label">Active Builds</p><p class="stat__value">2</p></div>
+            <div class="stat"><p class="stat__label">Completed YTD</p><p class="stat__value">3</p></div>
+            <div class="stat"><p class="stat__label">Quoted — Pending</p><p class="stat__value">1</p></div>
+            <div class="stat"><p class="stat__label">Revenue YTD</p><p class="stat__value stat--green">€42k</p></div>
+          </div>
+          <div class="card">
+            <div class="card__head"><svg><use href="#ic-client"/></svg><span class="card__title">All Projects</span></div>
+            <div class="card__body" style="padding:0">
+              <table style="width:100%;border-collapse:collapse;font-size:0.83rem">
+                <thead><tr>
+                  <th style="padding:0.65rem 1.2rem;text-align:left;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--light);border-bottom:2px solid var(--border)">Client</th>
+                  <th style="padding:0.65rem 1.2rem;text-align:left;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--light);border-bottom:2px solid var(--border)">Van</th>
+                  <th style="padding:0.65rem 1.2rem;text-align:left;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--light);border-bottom:2px solid var(--border)">Status</th>
+                  <th style="padding:0.65rem 1.2rem;text-align:left;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--light);border-bottom:2px solid var(--border)">Value</th>
+                  <th style="padding:0.65rem 1.2rem;text-align:left;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--light);border-bottom:2px solid var(--border)">Progress</th>
+                </tr></thead>
+                <tbody>
+                  <tr onclick="selectClient(0);showPanel('admin-client')" style="cursor:pointer"><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border);font-weight:700;color:var(--dark)">Aoife Murphy</td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border);color:var(--light)">Ford Transit LWB 2021</td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border)"><span class="status-badge status-badge--progress">In Progress</span></td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border);font-weight:700">€18,350</td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border)"><div style="display:flex;align-items:center;gap:0.6rem"><div style="flex:1;height:6px;background:var(--cream);border-radius:3px"><div style="width:62%;height:100%;background:var(--sage);border-radius:3px"></div></div><span style="font-size:0.72rem;color:var(--light)">62%</span></div></td></tr>
+                  <tr onclick="selectClient(2);showPanel('admin-client')" style="cursor:pointer"><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border);font-weight:700;color:var(--dark)">Siobhán Kelly</td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border);color:var(--light)">Mercedes Sprinter 2022</td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border)"><span class="status-badge status-badge--progress">In Progress</span></td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border);font-weight:700">€11,200</td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border)"><div style="display:flex;align-items:center;gap:0.6rem"><div style="flex:1;height:6px;background:var(--cream);border-radius:3px"><div style="width:25%;height:100%;background:var(--sage);border-radius:3px"></div></div><span style="font-size:0.72rem;color:var(--light)">25%</span></div></td></tr>
+                  <tr onclick="selectClient(1);showPanel('admin-client')" style="cursor:pointer"><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border);font-weight:700;color:var(--dark)">Ciarán Doyle</td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border);color:var(--light)">VW Crafter 2019</td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border)"><span class="status-badge status-badge--complete">Complete</span></td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border);font-weight:700">€7,400</td><td style="padding:0.75rem 1.2rem;border-bottom:1px solid var(--border)"><div style="display:flex;align-items:center;gap:0.6rem"><div style="flex:1;height:6px;background:var(--cream);border-radius:3px"><div style="width:100%;height:100%;background:var(--sage);border-radius:3px"></div></div><span style="font-size:0.72rem;color:var(--light)">100%</span></div></td></tr>
+                  <tr onclick="selectClient(3);showPanel('admin-client')" style="cursor:pointer"><td style="padding:0.75rem 1.2rem;font-weight:700;color:var(--dark)">Padraig Walsh</td><td style="padding:0.75rem 1.2rem;color:var(--light)">Ford Transit 2020</td><td style="padding:0.75rem 1.2rem"><span class="status-badge status-badge--quoted">Quoted</span></td><td style="padding:0.75rem 1.2rem;font-weight:700">€9,800</td><td style="padding:0.75rem 1.2rem"><span style="font-size:0.75rem;color:var(--light);font-style:italic">Awaiting deposit</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ ADMIN: WEBSITE FAQs ============ -->
+        <div class="panel" id="panel-admin-faqs">
+          <p class="page-title">Website FAQs</p>
+          <p class="page-sub">Edit the questions and answers shown on your website. These appear on your quote page and anywhere else you add them.</p>
+          <div class="g2 mb2" style="align-items:start">
+            <!-- FAQ list -->
+            <div>
+              <div class="card mb1">
+                <div class="card__head">
+                  <svg><use href="#ic-faq"/></svg>
+                  <span class="card__title">Current FAQs</span>
+                  <span class="card__badge" id="faq-count">2 questions</span>
+                </div>
+                <div class="card__body" style="padding:1rem">
+                  <div class="faq-list" id="faq-list"><!-- rendered by JS --></div>
+                  <button class="uf-btn" onclick="faqSave()">Save All Changes</button>
+                </div>
+              </div>
+            </div>
+            <!-- Add new FAQ -->
+            <div class="card" style="position:sticky;top:0">
+              <div class="card__head">
+                <svg><use href="#ic-faq"/></svg>
+                <span class="card__title">Add New Question</span>
+              </div>
+              <div class="card__body">
+                <div class="uf-label">Question</div>
+                <input class="uf-input" type="text" id="faq-new-q" placeholder="e.g. How long does a full conversion take?" />
+                <div class="uf-label">Answer</div>
+                <textarea class="uf-input" id="faq-new-a" rows="3" placeholder="Write a clear, helpful answer..." style="resize:vertical"></textarea>
+                <div class="uf-label" style="margin-bottom:0.5rem">Show on</div>
+                <div class="faq-loc-group-label">Quote Page Sections</div>
+                <div class="faq-loc-grid">
+                  <label class="faq-loc-item"><input type="checkbox" id="faq-new-loc-q-van"    value="q-van">    Van Size</label>
+                  <label class="faq-loc-item"><input type="checkbox" id="faq-new-loc-q-power"  value="q-power">  Power &amp; Electrics</label>
+                  <label class="faq-loc-item"><input type="checkbox" id="faq-new-loc-q-heat"   value="q-heat">   Heating</label>
+                  <label class="faq-loc-item"><input type="checkbox" id="faq-new-loc-q-water"  value="q-water">  Water Solutions</label>
+                  <label class="faq-loc-item"><input type="checkbox" id="faq-new-loc-q-sky"    value="q-sky">    Skylights &amp; Windows</label>
+                  <label class="faq-loc-item"><input type="checkbox" id="faq-new-loc-q-layout" value="q-layout"> Layout &amp; Storage</label>
+                  <label class="faq-loc-item"><input type="checkbox" id="faq-new-loc-q-finish" value="q-finish"> Finishings</label>
+                </div>
+                <div class="faq-loc-group-label">Pages</div>
+                <div class="faq-loc-grid">
+                  <label class="faq-loc-item"><input type="checkbox" id="faq-new-loc-contact"  value="contact">  Contact Page FAQ</label>
+                  <label class="faq-loc-item"><input type="checkbox" id="faq-new-loc-portal"   value="portal">   Client Portal</label>
+                  <label class="faq-loc-item"><input type="checkbox" id="faq-new-loc-home"     value="home">     Home Page</label>
+                </div>
+                <button class="uf-btn" style="margin-top:1rem" onclick="faqAdd()">Add Question</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="faq-save-toast" id="faq-toast">Changes saved</div>
+
+  <script>
+    // ===== FAQ DATA =====
+    var FAQ_LOCATIONS = [
+      { group: 'Quote Page Sections', items: [
+        { key: 'q-van',     label: 'Van Size' },
+        { key: 'q-power',   label: 'Power & Electrics' },
+        { key: 'q-heat',    label: 'Heating' },
+        { key: 'q-water',   label: 'Water Solutions' },
+        { key: 'q-sky',     label: 'Skylights & Windows' },
+        { key: 'q-layout',  label: 'Layout & Storage' },
+        { key: 'q-finish',  label: 'Finishings' }
+      ]},
+      { group: 'Pages', items: [
+        { key: 'contact',   label: 'Contact Page FAQ' },
+        { key: 'portal',    label: 'Client Portal' },
+        { key: 'home',      label: 'Home Page' }
+      ]}
+    ];
+
+    var faqData = [
+      {
+        q: 'Do I need to provide my own van?',
+        a: 'Yes — Caolán converts vans that you already own or have sourced yourself. This keeps costs transparent and gives you full control over the starting vehicle. If you\'re not sure what to look for, get in touch before you buy and he can advise.',
+        locations: ['q-van', 'contact']
+      },
+      {
+        q: 'Where do I get a van?',
+        a: 'Most people buy from Done Deal, AutoTrader Ireland, or local dealers. Caolán recommends a Ford Transit, VW Crafter, or Mercedes Sprinter — all in good supply in Ireland and well-suited to conversion. Aim for a high-roof long-wheelbase if you want to stand up inside.',
+        locations: ['q-van', 'contact']
+      }
+    ];
+
+    function faqLocChecks(prefix, selected) {
+      var html = '<div class="faq-loc-section"><div class="uf-label" style="margin-bottom:0.5rem">Show on</div>';
+      FAQ_LOCATIONS.forEach(function(group) {
+        html += '<div class="faq-loc-group-label">' + group.group + '</div>';
+        html += '<div class="faq-loc-grid">';
+        group.items.forEach(function(loc) {
+          var checked = selected && selected.indexOf(loc.key) > -1 ? ' checked' : '';
+          html += '<label class="faq-loc-item"><input type="checkbox" id="' + prefix + loc.key + '" value="' + loc.key + '"' + checked + '> ' + loc.label + '</label>';
+        });
+        html += '</div>';
+      });
+      html += '</div>';
+      return html;
+    }
+
+    function faqReadLocs(prefix) {
+      var locs = [];
+      FAQ_LOCATIONS.forEach(function(group) {
+        group.items.forEach(function(loc) {
+          var el = document.getElementById(prefix + loc.key);
+          if (el && el.checked) locs.push(loc.key);
+        });
+      });
+      return locs;
+    }
+
+    function faqLocLabel(key) {
+      var label = key;
+      FAQ_LOCATIONS.forEach(function(g) { g.items.forEach(function(l) { if (l.key === key) label = l.label; }); });
+      return label;
+    }
+
+    function renderFaqs() {
+      var list = document.getElementById('faq-list');
+      var count = document.getElementById('faq-count');
+      if (!list) return;
+      list.innerHTML = '';
+      faqData.forEach(function(faq, i) {
+        var tags = (faq.locations || []).map(function(k) { return '<span class="faq-loc-tag">' + faqLocLabel(k) + '</span>'; }).join('');
+        list.innerHTML += '<div class="faq-item">' +
+          '<div class="faq-item__head">' +
+            '<span class="faq-item__num">Q' + (i + 1) + '</span>' +
+            (tags ? '<div class="faq-loc-tags" style="margin:0;flex:1;padding:0 0.5rem">' + tags + '</div>' : '') +
+            '<button class="faq-item__del" onclick="faqDelete(' + i + ')" title="Delete">&#x2715;</button>' +
+          '</div>' +
+          '<div class="faq-item__body">' +
+            '<div><div class="uf-label">Question</div>' +
+              '<input class="uf-input" id="faq-q-' + i + '" type="text" value="' + escHtml(faq.q) + '" style="margin-bottom:0"/></div>' +
+            '<div><div class="uf-label">Answer</div>' +
+              '<textarea class="uf-input" id="faq-a-' + i + '" rows="3" style="resize:vertical;margin-bottom:0">' + escHtml(faq.a) + '</textarea></div>' +
+            faqLocChecks('faq-loc-' + i + '-', faq.locations) +
+          '</div>' +
+        '</div>';
+      });
+      if (count) count.textContent = faqData.length + ' question' + (faqData.length !== 1 ? 's' : '');
+    }
+
+    function faqAdd() {
+      var q = document.getElementById('faq-new-q');
+      var a = document.getElementById('faq-new-a');
+      if (!q.value.trim() || !a.value.trim()) return;
+      var locs = faqReadLocs('faq-new-loc-');
+      faqData.push({ q: q.value.trim(), a: a.value.trim(), locations: locs });
+      q.value = '';
+      a.value = '';
+      FAQ_LOCATIONS.forEach(function(g) { g.items.forEach(function(l) {
+        var el = document.getElementById('faq-new-loc-' + l.key);
+        if (el) el.checked = false;
+      }); });
+      renderFaqs();
+      showFaqToast();
+    }
+
+    function faqDelete(i) {
+      faqData.splice(i, 1);
+      renderFaqs();
+    }
+
+    function faqSave() {
+      faqData.forEach(function(faq, i) {
+        var q = document.getElementById('faq-q-' + i);
+        var a = document.getElementById('faq-a-' + i);
+        if (q) faq.q = q.value;
+        if (a) faq.a = a.value;
+        faq.locations = faqReadLocs('faq-loc-' + i + '-');
+      });
+      renderFaqs();
+      showFaqToast();
+    }
+
+    function showFaqToast() {
+      var t = document.getElementById('faq-toast');
+      if (!t) return;
+      t.classList.add('show');
+      setTimeout(function() { t.classList.remove('show'); }, 2200);
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ===== STATE =====
+    let currentView = 'client';
+    let selectedClient = 0;
+
+    const clients = [
+      {
+        name: 'Aoife Murphy', initials: 'AM', van: 'Ford Transit LWB 2021',
+        status: 'In Progress', progress: 62, value: '€18,350', step: 4,
+        costBreakdown: { materials: 9820, labour: 4280, overhead: 820, quoted: 18350 },
+        parts: [
+          { name: '200W Solar Panels ×2', supplier: 'Bimble Solar', status: 'fitted', cost: 320, charged: 420 },
+          { name: 'Victron 100/30 MPPT', supplier: 'Bimble Solar', status: 'fitted', cost: 148, charged: 210 },
+          { name: 'LiFePO4 Battery 200Ah', supplier: 'LTEK Batteries', status: 'fitted', cost: 510, charged: 680 },
+          { name: 'Victron MultiPlus 2000VA', supplier: 'Bimble Solar', status: 'received', cost: 490, charged: 680 },
+          { name: 'Webasto Air Top Evo 40', supplier: 'Webasto Direct', status: 'received', cost: 890, charged: 1280 },
+          { name: 'Webasto Thermo Top Evo', supplier: 'Webasto Direct', status: 'ordered', cost: 540, charged: 780 },
+          { name: 'MaxxAir MaxxFan Deluxe', supplier: 'Van Demon', status: 'fitted', cost: 265, charged: 380 },
+          { name: 'Fiamma 40cm Skylight', supplier: 'Van Demon', status: 'fitted', cost: 185, charged: 280 },
+          { name: '60L Fresh Water Tank', supplier: 'Canal & River', status: 'received', cost: 120, charged: 185 },
+          { name: 'Shurflo Pressure Pump', supplier: 'Canal & River', status: 'received', cost: 130, charged: 195 },
+          { name: 'Celotex Rigid Board (8 sheets)', supplier: 'Chadwicks', status: 'fitted', cost: 280, charged: 0 },
+          { name: 'Birch Ply 18mm (6 sheets)', supplier: 'Chadwicks', status: 'fitted', cost: 210, charged: 0 },
+          { name: 'Oak T&G Cladding', supplier: 'McNeils Timber', status: 'ordered', cost: 380, charged: 0 },
+          { name: 'Solid Oak Worktop 2.4m', supplier: 'McNeils Timber', status: 'ordered', cost: 190, charged: 0 },
+        ]
+      },
+      {
+        name: 'Ciarán Doyle', initials: 'CD', van: 'VW Crafter 2019',
+        status: 'Complete', progress: 100, value: '€7,400', step: 8,
+        costBreakdown: { materials: 3200, labour: 2100, overhead: 380, quoted: 7400 },
+        parts: [
+          { name: '150W Solar Panel', supplier: 'Bimble Solar', status: 'fitted', cost: 165, charged: 220 },
+          { name: 'Battle Born 100Ah LiFePO4', supplier: 'LTEK', status: 'fitted', cost: 380, charged: 520 },
+          { name: 'Renogy PWM Controller', supplier: 'Bimble Solar', status: 'fitted', cost: 55, charged: 95 },
+          { name: 'MaxxAir Roof Fan', supplier: 'Van Demon', status: 'fitted', cost: 265, charged: 380 },
+          { name: 'Chinese Diesel Heater 5kW', supplier: 'Amazon', status: 'fitted', cost: 185, charged: 380 },
+        ]
+      },
+      {
+        name: 'Siobhán Kelly', initials: 'SK', van: 'Mercedes Sprinter 2022',
+        status: 'In Progress', progress: 25, value: '€11,200', step: 2,
+        costBreakdown: { materials: 4800, labour: 2800, overhead: 520, quoted: 11200 },
+        parts: [
+          { name: 'Spray Foam Insulation Kit', supplier: 'Chadwicks', status: 'fitted', cost: 145, charged: 0 },
+          { name: 'Celotex 50mm (10 sheets)', supplier: 'Chadwicks', status: 'fitted', cost: 350, charged: 0 },
+          { name: 'Victron SmartSolar 100/50', supplier: 'Bimble Solar', status: 'ordered', cost: 195, charged: 0 },
+          { name: '300W Solar Panels ×2', supplier: 'Bimble Solar', status: 'ordered', cost: 480, charged: 0 },
+        ]
+      },
+      {
+        name: 'Padraig Walsh', initials: 'PW', van: 'Ford Transit 2020',
+        status: 'Quoted', progress: 0, value: '€9,800', step: 0,
+        costBreakdown: { materials: 4200, labour: 2800, overhead: 480, quoted: 9800 },
+        parts: []
+      }
+    ];
+
+    // ===== LOGIN =====
+    function login(type) {
+      if (type === 'client' || type === 'manual') {
+        currentView = 'client';
+        document.getElementById('header-badge').textContent = 'Client Portal';
+        document.getElementById('header-badge').className = 'app-header__badge';
+        document.getElementById('header-avatar').textContent = 'AM';
+        document.getElementById('header-name').textContent = 'Aoife Murphy';
+        document.getElementById('sidebar-client').style.display = '';
+        document.getElementById('sidebar-Caolán').style.display = 'none';
+        showPanel('client-overview');
+      } else {
+        currentView = 'Caolán';
+        document.getElementById('header-badge').textContent = 'Workshop Admin';
+        document.getElementById('header-badge').className = 'app-header__badge app-header__badge--admin';
+        document.getElementById('header-avatar').textContent = 'CC';
+        document.getElementById('header-name').textContent = 'Caolán';
+        document.getElementById('sidebar-client').style.display = 'none';
+        document.getElementById('sidebar-Caolán').style.display = '';
+        selectClient(0);
+        showPanel('admin-client');
+      }
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+    }
+
+    function logout() {
+      document.getElementById('login-screen').classList.remove('hidden');
+      document.getElementById('app').classList.add('hidden');
+      document.getElementById('login-email').value = '';
+      document.getElementById('login-pass').value = '';
+    }
+
+    // ===== PANEL SWITCHING =====
+    function showPanel(id) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      const el = document.getElementById('panel-' + id);
+      if (el) el.classList.add('active');
+      // Update sidebar active state
+      document.querySelectorAll('.sidebar-link').forEach(l => {
+        l.classList.toggle('active', l.getAttribute('onclick') === `showPanel('${id}')`);
+      });
+    }
+
+    // ===== ADMIN: SELECT CLIENT =====
+    function selectClient(idx) {
+      selectedClient = idx;
+      const c = clients[idx];
+      document.querySelectorAll('.client-list-item').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+      renderAdminClient(c);
+      showPanel('admin-client');
+    }
+
+    function renderAdminClient(c) {
+      const matCost = c.parts.reduce((s, p) => s + p.cost, 0);
+      const gross = c.costBreakdown.quoted;
+      const profit = gross - c.costBreakdown.materials - c.costBreakdown.labour - c.costBreakdown.overhead;
+      const margin = gross > 0 ? Math.round((profit / gross) * 100) : 0;
+
+      const partsRows = c.parts.length
+        ? c.parts.map(p => `
+          <tr>
+            <td>${p.name}</td>
+            <td style="color:var(--light)">${p.supplier}</td>
+            <td><span class="part-status part-status--${p.status}">${p.status}</span></td>
+            <td style="font-weight:700">€${p.cost.toLocaleString('en-IE')}</td>
+            <td style="color:var(--light)">${p.charged > 0 ? '€' + p.charged.toLocaleString('en-IE') : '—'}</td>
+          </tr>`).join('')
+        : '<tr><td colspan="5" style="text-align:center;color:var(--light);font-style:italic;padding:1.5rem">No parts logged yet</td></tr>';
+
+      document.getElementById('admin-client-content').innerHTML = `
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.4rem;flex-wrap:wrap;gap:1rem">
+          <div>
+            <p class="page-title">${c.name}</p>
+            <p class="page-sub">${c.van} &nbsp;·&nbsp; <span class="status-badge status-badge--${c.status === 'In Progress' ? 'progress' : c.status === 'Complete' ? 'complete' : 'quoted'}">${c.status}</span></p>
+          </div>
+          <div style="display:flex;gap:0.6rem">
+            <button class="uf-btn uf-btn--sm" onclick="alert('Message client — integrate with real email in live version')">Message Client</button>
+            <button class="uf-btn uf-btn--sm" style="background:var(--dark)" onclick="alert('Add photo upload in live version')">+ Upload Photo</button>
+          </div>
+        </div>
+
+        <div class="stat-row mb2">
+          <div class="stat"><p class="stat__label">Quoted Value</p><p class="stat__value">${c.value}</p></div>
+          <div class="stat"><p class="stat__label">Est. Materials</p><p class="stat__value">€${c.costBreakdown.materials.toLocaleString('en-IE')}</p></div>
+          <div class="stat"><p class="stat__label">Labour</p><p class="stat__value">€${c.costBreakdown.labour.toLocaleString('en-IE')}</p></div>
+          <div class="stat"><p class="stat__label">Progress</p><p class="stat__value">${c.progress}%</p><p class="stat__sub">Step ${c.step} of 8</p></div>
+        </div>
+
+        <div class="g2 mb15">
+          <!-- Update Progress -->
+          <div class="card">
+            <div class="card__head"><svg><use href="#ic-progress"/></svg><span class="card__title">Update Progress</span></div>
+            <div class="card__body">
+              <div class="uf-label">Current Step</div>
+              <select class="uf-input">
+                <option ${c.step===0?'selected':''}>Not Started</option>
+                <option ${c.step===1?'selected':''}>1 — Strip &amp; Preparation</option>
+                <option ${c.step===2?'selected':''}>2 — Insulation</option>
+                <option ${c.step===3?'selected':''}>3 — Electrical Rough-In</option>
+                <option ${c.step===4?'selected':''}>4 — Framing &amp; Structure</option>
+                <option ${c.step===5?'selected':''}>5 — Cladding &amp; Flooring</option>
+                <option ${c.step===6?'selected':''}>6 — Heating &amp; Water</option>
+                <option ${c.step===7?'selected':''}>7 — Final Fit-Out &amp; Electrics</option>
+                <option ${c.step===8?'selected':''}>8 — Handover (Complete)</option>
+              </select>
+              <div class="uf-label">Progress Note (shown to client)</div>
+              <textarea class="uf-input" rows="3" placeholder="Write an update for ${c.name.split(' ')[0]}…" style="resize:vertical"></textarea>
+              <button class="uf-btn">Save Update</button>
+            </div>
+          </div>
+          <!-- Cost Summary -->
+          <div class="card">
+            <div class="card__head"><svg><use href="#ic-pound"/></svg><span class="card__title">Cost Breakdown</span></div>
+            <div class="card__body">
+              ${[
+                ['Quoted to Client', c.costBreakdown.quoted],
+                ['Est. Materials', c.costBreakdown.materials],
+                ['Labour', c.costBreakdown.labour],
+                ['Overhead / Misc', c.costBreakdown.overhead]
+              ].map(([label, val]) => `
+                <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.84rem">
+                  <span style="color:var(--light)">${label}</span>
+                  <span style="font-weight:700;color:var(--dark)">€${val.toLocaleString('en-IE')}</span>
+                </div>`).join('')}
+              <div class="profit-summary">
+                <div class="profit-item"><p class="profit-item__label">Gross Profit</p><p class="profit-item__value profit-item__value--green">€${profit.toLocaleString('en-IE')}</p></div>
+                <div class="profit-item"><p class="profit-item__label">Margin</p><p class="profit-item__value profit-item__value--green">${margin}%</p></div>
+                <div class="profit-item"><p class="profit-item__label">Parts Logged</p><p class="profit-item__value">€${matCost.toLocaleString('en-IE')}</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Parts & Materials -->
+        <div class="card mb15">
+          <div class="card__head">
+            <svg><use href="#ic-parts"/></svg>
+            <span class="card__title">Parts &amp; Materials Log</span>
+            <span class="card__badge">${c.parts.length} items</span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="parts-table">
+              <thead><tr>
+                <th>Part / Material</th><th>Supplier</th><th>Status</th><th>Your Cost</th><th>Charged</th>
+              </tr></thead>
+              <tbody>${partsRows}</tbody>
+            </table>
+            ${c.parts.length ? `<div class="parts-foot">
+              <span>Total Parts Cost: <strong>€${matCost.toLocaleString('en-IE')}</strong></span>
+            </div>` : ''}
+          </div>
+        </div>
+
+        <!-- Add Part -->
+        <div class="card">
+          <div class="card__head"><svg><use href="#ic-parts"/></svg><span class="card__title">Log a Part / Material</span></div>
+          <div class="card__body">
+            <div class="g3">
+              <div><div class="uf-label">Part Name</div><input class="uf-input" type="text" placeholder="e.g. Victron MPPT 100/30" /></div>
+              <div><div class="uf-label">Supplier</div><input class="uf-input" type="text" placeholder="e.g. Bimble Solar" /></div>
+              <div><div class="uf-label">Your Cost (€)</div><input class="uf-input" type="number" placeholder="0.00" /></div>
+            </div>
+            <div class="g2" style="margin-top:0">
+              <div><div class="uf-label">Status</div>
+              <select class="uf-input"><option>ordered</option><option>received</option><option>fitted</option></select></div>
+              <div><div class="uf-label">Charged to Client (€)</div><input class="uf-input" type="number" placeholder="0.00 (leave blank if included in labour)" /></div>
+            </div>
+            <button class="uf-btn">Add Part</button>
+          </div>
+        </div>
+      `;
+    }
+    // ===== ORDER PARTS =====
+    const ordTemplates = [
+      { id:'elec-full', cat:'Power & Electrics', name:'Full Off-Grid System', desc:'Solar, lithium, MPPT, inverter, distribution, split-charge',
+        parts:[
+          { name:'200W Solar Panel',                    qty:2,  unit:'panel',  supplier:'Bimble Solar',  unitCost:160  },
+          { name:'Victron 100/30 MPPT Controller',      qty:1,  unit:'unit',   supplier:'Bimble Solar',  unitCost:148  },
+          { name:'LiFePO4 Battery 200Ah',               qty:1,  unit:'unit',   supplier:'LTEK Batteries',unitCost:510  },
+          { name:'Victron MultiPlus 2000VA Inv/Charger',qty:1,  unit:'unit',   supplier:'Bimble Solar',  unitCost:490  },
+          { name:'12V Distribution Board + Fuses',      qty:1,  unit:'kit',    supplier:'Bimble Solar',  unitCost:85   },
+          { name:'Victron BMV-712 Battery Monitor',     qty:1,  unit:'unit',   supplier:'Bimble Solar',  unitCost:95   },
+          { name:'Split-Charge Relay (VSR)',             qty:1,  unit:'unit',   supplier:'Bimble Solar',  unitCost:42   },
+          { name:'Shore Power Inlet 16A (caravan)',      qty:1,  unit:'unit',   supplier:'Van Demon',     unitCost:35   },
+          { name:'Cable 10mm² Red/Black',               qty:6,  unit:'metre',  supplier:'Bimble Solar',  unitCost:4.5  },
+          { name:'Cable 4mm²',                          qty:20, unit:'metre',  supplier:'Bimble Solar',  unitCost:1.8  },
+          { name:'Cable 2.5mm²',                        qty:30, unit:'metre',  supplier:'Bimble Solar',  unitCost:1.2  },
+          { name:'LED Spotlight 12V warm white',         qty:6,  unit:'unit',   supplier:'Van Demon',     unitCost:8.5  },
+          { name:'LED Strip Light',                     qty:3,  unit:'metre',  supplier:'Van Demon',     unitCost:6.5  },
+          { name:'Solar Panel Mounting Feet ×4',        qty:2,  unit:'set',    supplier:'Bimble Solar',  unitCost:22   },
+          { name:'MC4 Connectors',                      qty:4,  unit:'pair',   supplier:'Bimble Solar',  unitCost:4    },
+          { name:'Crimp Terminals + Heat Shrink Kit',   qty:1,  unit:'kit',    supplier:'Bimble Solar',  unitCost:18   },
+          { name:'Cable Conduit + Clips',               qty:1,  unit:'kit',    supplier:'Screwfix IE',   unitCost:28   },
+        ]
+      },
+      { id:'elec-basic', cat:'Power & Electrics', name:'Basic 12V (Lights + Split Charge)', desc:'AGM leisure battery, VSR, fuse box, LED lighting',
+        parts:[
+          { name:'AGM Leisure Battery 110Ah',           qty:1,  unit:'unit',   supplier:'Bimble Solar',  unitCost:120  },
+          { name:'Split-Charge Relay (VSR)',             qty:1,  unit:'unit',   supplier:'Bimble Solar',  unitCost:42   },
+          { name:'12V Fuse Box 6-way',                  qty:1,  unit:'unit',   supplier:'Bimble Solar',  unitCost:28   },
+          { name:'LED Spotlight 12V warm white',         qty:4,  unit:'unit',   supplier:'Van Demon',     unitCost:8.5  },
+          { name:'Cable 4mm²',                          qty:10, unit:'metre',  supplier:'Bimble Solar',  unitCost:1.8  },
+          { name:'Cable 2.5mm²',                        qty:20, unit:'metre',  supplier:'Bimble Solar',  unitCost:1.2  },
+          { name:'Crimp Terminals + Heat Shrink Kit',   qty:1,  unit:'kit',    supplier:'Bimble Solar',  unitCost:18   },
+        ]
+      },
+      { id:'elec-solar', cat:'Power & Electrics', name:'Solar Add-On (Panel + MPPT)', desc:'200W panel + Victron 75/15 MPPT — add to existing battery',
+        parts:[
+          { name:'200W Solar Panel',                    qty:1,  unit:'panel',  supplier:'Bimble Solar',  unitCost:160  },
+          { name:'Victron 75/15 MPPT Controller',       qty:1,  unit:'unit',   supplier:'Bimble Solar',  unitCost:88   },
+          { name:'Solar Panel Mounting Feet ×4',        qty:1,  unit:'set',    supplier:'Bimble Solar',  unitCost:22   },
+          { name:'MC4 Connectors',                      qty:2,  unit:'pair',   supplier:'Bimble Solar',  unitCost:4    },
+          { name:'Cable 4mm²',                          qty:6,  unit:'metre',  supplier:'Bimble Solar',  unitCost:1.8  },
+        ]
+      },
+      { id:'heat-webasto-combo', cat:'Heating & Insulation', name:'Webasto Air + Hot Water Combo', desc:'Air Top Evo 40 + Thermo Top Evo — full heating system',
+        parts:[
+          { name:'Webasto Air Top Evo 40 (2kW–4kW)',    qty:1,  unit:'unit',   supplier:'Webasto Direct',unitCost:890  },
+          { name:'Webasto Thermo Top Evo 5',            qty:1,  unit:'unit',   supplier:'Webasto Direct',unitCost:540  },
+          { name:'Diesel Fuel Tank 10L',                qty:1,  unit:'unit',   supplier:'Van Demon',     unitCost:48   },
+          { name:'Fuel Pickup + T-Piece (diesel)',       qty:1,  unit:'kit',    supplier:'Van Demon',     unitCost:32   },
+          { name:'Exhaust Flue + Silencer Kit',         qty:1,  unit:'kit',    supplier:'Webasto Direct',unitCost:55   },
+          { name:'Ducting 60mm',                        qty:4,  unit:'metre',  supplier:'Van Demon',     unitCost:8    },
+          { name:'Outlet Vents',                        qty:2,  unit:'unit',   supplier:'Van Demon',     unitCost:12   },
+          { name:'Glow Pin / Service Kit',              qty:1,  unit:'kit',    supplier:'Webasto Direct',unitCost:38   },
+        ]
+      },
+      { id:'heat-webasto-air', cat:'Heating & Insulation', name:'Webasto Air Heater Only', desc:'Air Top Evo 40 — air heating only, no hot water',
+        parts:[
+          { name:'Webasto Air Top Evo 40 (2kW–4kW)',    qty:1,  unit:'unit',   supplier:'Webasto Direct',unitCost:890  },
+          { name:'Diesel Fuel Tank 10L',                qty:1,  unit:'unit',   supplier:'Van Demon',     unitCost:48   },
+          { name:'Fuel Pickup + T-Piece (diesel)',       qty:1,  unit:'kit',    supplier:'Van Demon',     unitCost:32   },
+          { name:'Exhaust Flue + Silencer Kit',         qty:1,  unit:'kit',    supplier:'Webasto Direct',unitCost:55   },
+          { name:'Ducting 60mm',                        qty:4,  unit:'metre',  supplier:'Van Demon',     unitCost:8    },
+          { name:'Outlet Vents',                        qty:2,  unit:'unit',   supplier:'Van Demon',     unitCost:12   },
+        ]
+      },
+      { id:'heat-insulation', cat:'Heating & Insulation', name:'Full Insulation Pack', desc:'Spray foam, Celotex, Thinsulate, vapour control, sound deadening',
+        parts:[
+          { name:'Spray Foam Kit 600ml',                qty:4,  unit:'can',    supplier:'Chadwicks',     unitCost:24   },
+          { name:'Celotex GA4000 50mm (1200×2400)',     qty:8,  unit:'sheet',  supplier:'Chadwicks',     unitCost:38   },
+          { name:'Thinsulate SM600L (1.5m wide)',       qty:5,  unit:'metre',  supplier:'Van Demon',     unitCost:22   },
+          { name:'Vapour Control Layer',                qty:1,  unit:'roll',   supplier:'Chadwicks',     unitCost:35   },
+          { name:'Sound Deadening STP Gold 4m²',        qty:3,  unit:'pack',   supplier:'Van Demon',     unitCost:48   },
+          { name:'Expanding Foam Adhesive 750ml',       qty:2,  unit:'can',    supplier:'Chadwicks',     unitCost:14   },
+          { name:'Foil Tape 50m roll',                  qty:2,  unit:'roll',   supplier:'Chadwicks',     unitCost:9    },
+        ]
+      },
+      { id:'vent-maxxair', cat:'Skylights & Ventilation', name:'MaxxAir Fan Install', desc:'MaxxFan Deluxe + trim ring + sealing',
+        parts:[
+          { name:'MaxxAir MaxxFan Deluxe (14-speed)',   qty:1,  unit:'unit',   supplier:'Van Demon',     unitCost:265  },
+          { name:'Birch Ply 18mm (trim ring blank)',    qty:1,  unit:'piece',  supplier:'Chadwicks',     unitCost:18   },
+          { name:'Dicor Lap Sealant (self-levelling)',  qty:1,  unit:'tube',   supplier:'Van Demon',     unitCost:14   },
+          { name:'Butyl Tape 19mm',                    qty:1,  unit:'roll',   supplier:'Van Demon',     unitCost:8    },
+        ]
+      },
+      { id:'vent-skylight', cat:'Skylights & Ventilation', name:'Fixed Skylight', desc:'Fiamma 40cm smoked skylight with interior trim ring',
+        parts:[
+          { name:'Fiamma 40cm Skylight (smoked)',       qty:1,  unit:'unit',   supplier:'Van Demon',     unitCost:185  },
+          { name:'Dicor Lap Sealant (self-levelling)',  qty:1,  unit:'tube',   supplier:'Van Demon',     unitCost:14   },
+          { name:'Butyl Tape 19mm',                    qty:1,  unit:'roll',   supplier:'Van Demon',     unitCost:8    },
+        ]
+      },
+      { id:'water-full', cat:'Water System', name:'Full Water (Hot + Cold + Shower)', desc:'60L tank, pressure pump, hot water, shower tray',
+        parts:[
+          { name:'Fresh Water Tank 60L (stainless fittings)',qty:1,unit:'unit',supplier:'Canal & River', unitCost:120  },
+          { name:'Shurflo Trail King 12V Pressure Pump', qty:1,  unit:'unit',   supplier:'Canal & River', unitCost:95   },
+          { name:'Accumulator Tank 0.75L',              qty:1,  unit:'unit',   supplier:'Canal & River', unitCost:28   },
+          { name:'Webasto Thermo Top Evo 5 (hot water)',qty:1,  unit:'unit',   supplier:'Webasto Direct',unitCost:540  },
+          { name:'Whale Mixer Tap brushed s/s',         qty:1,  unit:'unit',   supplier:'Canal & River', unitCost:65   },
+          { name:'Grey Water Tank 30L',                qty:1,  unit:'unit',   supplier:'Canal & River', unitCost:65   },
+          { name:'Stainless Sink 400mm inset',          qty:1,  unit:'unit',   supplier:'Screwfix IE',   unitCost:48   },
+          { name:'Shower Tray 800×800 low profile',     qty:1,  unit:'unit',   supplier:'Screwfix IE',   unitCost:85   },
+          { name:'Shower Rail + Curtain',               qty:1,  unit:'set',    supplier:'Screwfix IE',   unitCost:32   },
+          { name:'JG Push-Fit 15mm Pipe',              qty:8,  unit:'metre',  supplier:'Screwfix IE',   unitCost:2.2  },
+          { name:'JG Fittings Pack (elbows, tees, clips)',qty:1,unit:'kit',   supplier:'Screwfix IE',   unitCost:28   },
+          { name:'Inline Water Filter',                qty:1,  unit:'unit',   supplier:'Canal & River', unitCost:22   },
+          { name:'Tank Level Gauge (LED)',              qty:1,  unit:'unit',   supplier:'Canal & River', unitCost:18   },
+        ]
+      },
+      { id:'water-basic', cat:'Water System', name:'Basic Water (Cold Only, Sink)', desc:'30L tank, 12V pump, cold tap, grey waste container',
+        parts:[
+          { name:'Fresh Water Tank 30L',               qty:1,  unit:'unit',   supplier:'Canal & River', unitCost:65   },
+          { name:'Shurflo Trail King 12V Pressure Pump',qty:1,  unit:'unit',   supplier:'Canal & River', unitCost:95   },
+          { name:'Single Cold Tap',                    qty:1,  unit:'unit',   supplier:'Screwfix IE',   unitCost:22   },
+          { name:'Stainless Sink 400mm inset',          qty:1,  unit:'unit',   supplier:'Screwfix IE',   unitCost:48   },
+          { name:'Grey Water Container 20L',           qty:1,  unit:'unit',   supplier:'Canal & River', unitCost:32   },
+          { name:'JG Push-Fit 15mm Pipe',              qty:4,  unit:'metre',  supplier:'Screwfix IE',   unitCost:2.2  },
+          { name:'JG Fittings Pack',                   qty:1,  unit:'kit',    supplier:'Screwfix IE',   unitCost:18   },
+        ]
+      },
+      { id:'layout-bed', cat:'Layout & Furniture', name:'Fixed Double Bed + Under-Bed Drawers', desc:'Birch ply frame, 3x full-extension drawers, memory foam mattress',
+        parts:[
+          { name:'Birch Ply 18mm (1200×2400)',          qty:4,  unit:'sheet',  supplier:'Chadwicks',     unitCost:55   },
+          { name:'Birch Ply 12mm (1200×2400)',          qty:2,  unit:'sheet',  supplier:'Chadwicks',     unitCost:42   },
+          { name:'Full-Extension Drawer Runner 500mm',  qty:3,  unit:'pair',   supplier:'Screwfix IE',   unitCost:18   },
+          { name:'Memory Foam Mattress (custom cut)',   qty:1,  unit:'unit',   supplier:'Irish Foam',    unitCost:180  },
+          { name:'Pocket Hole Screws 32mm (500 pack)',  qty:1,  unit:'pack',   supplier:'Screwfix IE',   unitCost:8    },
+          { name:'Cabinet Screws 4×40mm (200 pack)',    qty:1,  unit:'pack',   supplier:'Screwfix IE',   unitCost:6    },
+          { name:'Wood Glue PVA 1L',                   qty:1,  unit:'bottle', supplier:'Chadwicks',     unitCost:9    },
+        ]
+      },
+      { id:'layout-kitchen', cat:'Layout & Furniture', name:'Kitchen Unit Build', desc:'Custom carcasses, oak worktop, hob, compressor fridge',
+        parts:[
+          { name:'Birch Ply 18mm (1200×2400)',          qty:5,  unit:'sheet',  supplier:'Chadwicks',     unitCost:55   },
+          { name:'Solid Oak Worktop 2.4m × 620mm',     qty:1,  unit:'unit',   supplier:'McNeils Timber',unitCost:190  },
+          { name:'Dometic 2-Burner Gas Hob',            qty:1,  unit:'unit',   supplier:'Van Demon',     unitCost:145  },
+          { name:'Dometic CF-25 Compressor Fridge 25L', qty:1,  unit:'unit',   supplier:'Van Demon',     unitCost:380  },
+          { name:'Soft-Close Hinges (10 pack)',         qty:1,  unit:'pack',   supplier:'Screwfix IE',   unitCost:14   },
+          { name:'Cabinet Screws 4×40mm (200 pack)',    qty:2,  unit:'pack',   supplier:'Screwfix IE',   unitCost:6    },
+          { name:'Piano Hinge 1.8m',                   qty:1,  unit:'unit',   supplier:'Screwfix IE',   unitCost:22   },
+          { name:'Gas Strut 80N',                      qty:2,  unit:'pair',   supplier:'Screwfix IE',   unitCost:16   },
+          { name:'Bar Handle (10 pack)',                qty:1,  unit:'pack',   supplier:'Screwfix IE',   unitCost:24   },
+          { name:'Wood Glue PVA 1L',                   qty:1,  unit:'bottle', supplier:'Chadwicks',     unitCost:9    },
+          { name:'Pocket Hole Screws 32mm (500 pack)',  qty:1,  unit:'pack',   supplier:'Screwfix IE',   unitCost:8    },
+        ]
+      },
+      { id:'layout-lockers', cat:'Layout & Furniture', name:'Overhead Lockers (×2)', desc:'Full-width, piano-hinged, gas struts, push-to-open latches',
+        parts:[
+          { name:'Birch Ply 18mm (1200×2400)',          qty:2,  unit:'sheet',  supplier:'Chadwicks',     unitCost:55   },
+          { name:'Birch Ply 12mm (1200×2400)',          qty:1,  unit:'sheet',  supplier:'Chadwicks',     unitCost:42   },
+          { name:'Piano Hinge 1.8m',                   qty:2,  unit:'unit',   supplier:'Screwfix IE',   unitCost:22   },
+          { name:'Gas Strut 80N',                      qty:2,  unit:'pair',   supplier:'Screwfix IE',   unitCost:16   },
+          { name:'Push-to-Open Latch (pack of 4)',      qty:1,  unit:'pack',   supplier:'Screwfix IE',   unitCost:12   },
+          { name:'Cabinet Screws 4×40mm (200 pack)',    qty:1,  unit:'pack',   supplier:'Screwfix IE',   unitCost:6    },
+        ]
+      },
+      { id:'clad-full', cat:'Cladding & Flooring', name:'Full Interior Cladding (T&G + Ceiling)', desc:'Pine T&G wall panels, ceiling carpet liner, oil finish',
+        parts:[
+          { name:'Pine T&G Cladding 90×9mm',           qty:80, unit:'metre',  supplier:'McNeils Timber',unitCost:3.2  },
+          { name:'Ceiling Carpet Liner (1.4m wide)',    qty:4,  unit:'metre',  supplier:'Van Demon',     unitCost:14   },
+          { name:'Architrave Trim 44×18mm',             qty:12, unit:'metre',  supplier:'McNeils Timber',unitCost:2.8  },
+          { name:'Clout Nails 40mm (500g box)',         qty:1,  unit:'box',    supplier:'Chadwicks',     unitCost:5    },
+          { name:'Construction Adhesive 380ml',         qty:4,  unit:'tube',   supplier:'Chadwicks',     unitCost:7    },
+          { name:'Cladding Oil/Stain 1L',              qty:2,  unit:'tin',    supplier:'McNeils Timber',unitCost:18   },
+        ]
+      },
+      { id:'clad-floor', cat:'Cladding & Flooring', name:'Vinyl Plank Flooring', desc:'Structural ply sub-floor + LVP vinyl planks',
+        parts:[
+          { name:'Structural Ply 12mm (1200×2400)',     qty:2,  unit:'sheet',  supplier:'Chadwicks',     unitCost:38   },
+          { name:'LVP Vinyl Plank (2.5m² per pack)',    qty:6,  unit:'pack',   supplier:'Screwfix IE',   unitCost:32   },
+          { name:'Damp Proof Membrane',                qty:1,  unit:'roll',   supplier:'Chadwicks',     unitCost:24   },
+          { name:'Threshold Strip 0.9m',               qty:2,  unit:'unit',   supplier:'Screwfix IE',   unitCost:8    },
+          { name:'Floor Adhesive 5L',                  qty:1,  unit:'tub',    supplier:'Chadwicks',     unitCost:28   },
+          { name:'Screws Torx 5×80mm (200 pack)',       qty:1,  unit:'pack',   supplier:'Screwfix IE',   unitCost:9    },
+        ]
+      },
+    ];
+
+    // Order state — array of { jobId, jobName, clientRef, parts: [{name,qty,unit,supplier,unitCost},...] }
+    let ordJobs = [];
+    let ordCurrentTab = 'list';
+
+    function ordJobInOrder(jobId) { return ordJobs.some(j => j.jobId === jobId); }
+
+    function renderOrderPicker() {
+      // Build category accordion
+      const cats = [...new Set(ordTemplates.map(t => t.cat))];
+      document.getElementById('ord-job-cats').innerHTML = cats.map(cat => {
+        const jobs = ordTemplates.filter(t => t.cat === cat);
+        return `<div class="ord-cat open">
+          <div class="ord-cat__head" onclick="this.parentElement.classList.toggle('open')">
+            <span class="ord-cat__name">${cat}</span>
+            <span class="ord-cat__arrow">&#9656;</span>
+          </div>
+          <div class="ord-cat__jobs">
+            ${jobs.map(j => {
+              const inOrder = ordJobInOrder(j.id);
+              return `<div class="ord-job-row">
+                <div class="ord-job-row__text">
+                  <p class="ord-job-row__name">${j.name}</p>
+                  <p class="ord-job-row__desc">${j.desc}</p>
+                </div>
+                <button class="ord-add-btn" onclick="ordToggleJob('${j.id}')" ${inOrder?'disabled':''}>
+                  ${inOrder ? '✓ Added' : '+ Add'}
+                </button>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+      }).join('');
+      renderOrderChips();
+      renderOrderView();
+    }
+
+    function ordToggleJob(jobId) {
+      if (ordJobInOrder(jobId)) { ordRemoveJob(jobId); return; }
+      const tmpl = ordTemplates.find(t => t.id === jobId);
+      if (!tmpl) return;
+      // Deep-copy parts so they're independently editable
+      ordJobs.push({
+        jobId: tmpl.id,
+        jobName: tmpl.name,
+        clientRef: '',
+        parts: tmpl.parts.map(p => ({ ...p }))
+      });
+      renderOrderPicker();
+    }
+
+    function ordRemoveJob(jobId) {
+      ordJobs = ordJobs.filter(j => j.jobId !== jobId);
+      renderOrderPicker();
+    }
+
+    function renderOrderChips() {
+      const el = document.getElementById('ord-chips');
+      if (!ordJobs.length) { el.innerHTML = '<p class="ord-empty-chips">No jobs added yet</p>'; return; }
+      el.innerHTML = ordJobs.map(j => `
+        <div class="ord-chip">
+          <span class="ord-chip__name">${j.jobName}</span>
+          <button class="ord-chip__remove" onclick="ordRemoveJob('${j.jobId}')" title="Remove">×</button>
+        </div>`).join('');
+    }
+
+    function renderOrderView() {
+      switchOrderTab(ordCurrentTab);
+    }
+
+    function switchOrderTab(tab) {
+      ordCurrentTab = tab;
+      ['list','job','supplier'].forEach(t => {
+        document.getElementById('ord-view-'+t).style.display = t===tab ? '' : 'none';
+        document.getElementById('ord-tab-'+t).classList.toggle('active', t===tab);
+      });
+      if (tab === 'list')     renderOrdList();
+      if (tab === 'job')      renderOrdByJob();
+      if (tab === 'supplier') renderOrdBySupplier();
+    }
+
+    function ordFmt(n) { return '€' + (Math.round(n*100)/100).toLocaleString('en-IE', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+    function renderOrdList() {
+      const el = document.getElementById('ord-view-list');
+      if (!ordJobs.length) {
+        el.innerHTML = '<div class="ord-empty-state">Add jobs from the left panel to build your parts list</div>'; return;
+      }
+      const allTotal = ordJobs.reduce((s,j) => s + j.parts.reduce((ps,p) => ps + p.qty*p.unitCost, 0), 0);
+      let rows = '';
+      ordJobs.forEach((job, ji) => {
+        job.parts.forEach((p, pi) => {
+          rows += `<tr>
+            <td><input class="ord-text-input" value="${p.name}" onchange="ordUpdatePart(${ji},${pi},'name',this.value)" style="min-width:160px"/></td>
+            <td><input class="ord-qty-input" type="number" min="0.1" step="0.1" value="${p.qty}" onchange="ordUpdatePart(${ji},${pi},'qty',parseFloat(this.value)||1)"/></td>
+            <td><input class="ord-text-input" value="${p.unit}" onchange="ordUpdatePart(${ji},${pi},'unit',this.value)" style="width:60px"/></td>
+            <td><input class="ord-text-input" value="${p.supplier}" onchange="ordUpdatePart(${ji},${pi},'supplier',this.value)" style="min-width:120px"/></td>
+            <td style="text-align:right"><input class="ord-text-input" type="number" min="0" step="0.01" value="${p.unitCost}" onchange="ordUpdatePart(${ji},${pi},'unitCost',parseFloat(this.value)||0)" style="width:72px;text-align:right"/></td>
+            <td style="text-align:right;font-weight:700;color:var(--dark)">${ordFmt(p.qty*p.unitCost)}</td>
+            <td><span class="ord-job-label">${job.jobName.split('(')[0].trim()}</span></td>
+            <td><button class="ord-del-btn" onclick="ordDeletePart(${ji},${pi})">×</button></td>
+          </tr>`;
+        });
+      });
+      // Add custom part row
+      rows += `<tr class="ord-add-custom-row">
+        <td><input class="ord-text-input" id="ord-cp-name" placeholder="Custom part name…" /></td>
+        <td><input class="ord-qty-input" id="ord-cp-qty" type="number" value="1" min="1" /></td>
+        <td><input class="ord-text-input" id="ord-cp-unit" placeholder="unit" style="width:60px"/></td>
+        <td><input class="ord-text-input" id="ord-cp-supplier" placeholder="Supplier" /></td>
+        <td><input class="ord-text-input" id="ord-cp-cost" type="number" value="0" style="width:72px;text-align:right"/></td>
+        <td></td>
+        <td>
+          <select class="ord-text-input" id="ord-cp-job" style="min-width:100px">
+            ${ordJobs.map((j,i) => `<option value="${i}">${j.jobName.split('(')[0].trim()}</option>`).join('')}
+          </select>
+        </td>
+        <td><button class="uf-btn uf-btn--sm" onclick="ordAddCustomPart()" style="white-space:nowrap">+ Add</button></td>
+      </tr>`;
+
+      el.innerHTML = `
+        <div class="card">
+          <div style="overflow-x:auto">
+            <table class="ord-parts-table">
+              <thead><tr><th>Part / Material</th><th>Qty</th><th>Unit</th><th>Supplier</th><th style="text-align:right">Unit Cost</th><th style="text-align:right">Total</th><th>Job</th><th></th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+          <div class="ord-total-bar">
+            <span class="ord-total-bar__label">Total Parts Cost (All Jobs)</span>
+            <span class="ord-total-bar__val">${ordFmt(allTotal)}</span>
+          </div>
+        </div>`;
+    }
+
+    function ordUpdatePart(ji, pi, field, val) {
+      ordJobs[ji].parts[pi][field] = val;
+      // Don't re-render, just let user keep typing — totals will update on next tab switch
+    }
+
+    function ordDeletePart(ji, pi) {
+      ordJobs[ji].parts.splice(pi, 1);
+      if (!ordJobs[ji].parts.length) { ordJobs.splice(ji, 1); renderOrderPicker(); return; }
+      renderOrdList();
+    }
+
+    function ordAddCustomPart() {
+      const name     = document.getElementById('ord-cp-name').value.trim();
+      const qty      = parseFloat(document.getElementById('ord-cp-qty').value) || 1;
+      const unit     = document.getElementById('ord-cp-unit').value.trim() || 'unit';
+      const supplier = document.getElementById('ord-cp-supplier').value.trim() || 'TBC';
+      const unitCost = parseFloat(document.getElementById('ord-cp-cost').value) || 0;
+      const ji       = parseInt(document.getElementById('ord-cp-job').value);
+      if (!name) { alert('Please enter a part name'); return; }
+      if (!ordJobs[ji]) { alert('Please add a job first'); return; }
+      ordJobs[ji].parts.push({ name, qty, unit, supplier, unitCost });
+      renderOrdList();
+    }
+
+    function renderOrdByJob() {
+      const el = document.getElementById('ord-view-job');
+      if (!ordJobs.length) {
+        el.innerHTML = '<div class="ord-empty-state">Add jobs from the left panel to see this view</div>'; return;
+      }
+      el.innerHTML = ordJobs.map(job => {
+        const total = job.parts.reduce((s,p) => s + p.qty*p.unitCost, 0);
+        const rows = job.parts.map(p => `<tr>
+          <td>${p.name}</td>
+          <td style="text-align:center">${p.qty}</td>
+          <td style="color:var(--light)">${p.unit}</td>
+          <td><span class="ord-supplier-badge">${p.supplier}</span></td>
+          <td style="text-align:right">${ordFmt(p.unitCost)}</td>
+          <td style="text-align:right;font-weight:700">${ordFmt(p.qty*p.unitCost)}</td>
+        </tr>`).join('');
+        return `<div class="ord-group-wrap">
+          <div class="ord-group-head">
+            <span class="ord-group-head__name">${job.jobName}</span>
+            <span class="ord-group-head__count">${job.parts.length} parts</span>
+            <span class="ord-group-head__total">${ordFmt(total)}</span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="ord-parts-table">
+              <thead><tr><th>Part</th><th style="text-align:center">Qty</th><th>Unit</th><th>Supplier</th><th style="text-align:right">Unit Cost</th><th style="text-align:right">Total</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderOrdBySupplier() {
+      const el = document.getElementById('ord-view-supplier');
+      if (!ordJobs.length) {
+        el.innerHTML = '<div class="ord-empty-state">Add jobs from the left panel to see this view</div>'; return;
+      }
+      // Flatten all parts, tagging each with job name
+      const flat = [];
+      ordJobs.forEach(job => {
+        job.parts.forEach(p => flat.push({ ...p, _job: job.jobName }));
+      });
+      // Group by supplier
+      const bySupplier = {};
+      flat.forEach(p => { (bySupplier[p.supplier] = bySupplier[p.supplier]||[]).push(p); });
+
+      const grandTotal = flat.reduce((s,p) => s + p.qty*p.unitCost, 0);
+
+      el.innerHTML = Object.entries(bySupplier).sort((a,b)=>a[0].localeCompare(b[0])).map(([supplier, parts]) => {
+        // Combine identical parts (same name) from different jobs
+        const combined = [];
+        parts.forEach(p => {
+          const existing = combined.find(c => c.name === p.name && c.unitCost === p.unitCost);
+          if (existing) {
+            existing.qty += p.qty;
+            existing._jobs.push(p._job);
+          } else {
+            combined.push({ ...p, _jobs: [p._job] });
+          }
+        });
+        const supplierTotal = combined.reduce((s,p) => s + p.qty*p.unitCost, 0);
+        const rows = combined.map(p => `<tr>
+          <td>
+            <p style="font-weight:700;font-size:0.82rem">${p.name}</p>
+            <p style="font-size:0.68rem;color:var(--light)">${[...new Set(p._jobs)].join(' · ')}</p>
+          </td>
+          <td style="text-align:center;font-weight:700">${p.qty}</td>
+          <td style="color:var(--light)">${p.unit}</td>
+          <td style="text-align:right">${ordFmt(p.unitCost)}</td>
+          <td style="text-align:right;font-weight:700;color:var(--dark)">${ordFmt(p.qty*p.unitCost)}</td>
+        </tr>`).join('');
+        return `<div class="ord-group-wrap">
+          <div class="ord-group-head">
+            <span class="ord-group-head__name">${supplier}</span>
+            <span class="ord-group-head__count">${combined.length} line items</span>
+            <span class="ord-group-head__total">${ordFmt(supplierTotal)}</span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="ord-parts-table">
+              <thead><tr><th>Part / Material</th><th style="text-align:center">Qty</th><th>Unit</th><th style="text-align:right">Unit Cost</th><th style="text-align:right">Total</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>`;
+      }).join('') + `<div class="ord-total-bar" style="border-radius:4px">
+        <span class="ord-total-bar__label">Grand Total — All Suppliers</span>
+        <span class="ord-total-bar__val">${ordFmt(grandTotal)}</span>
+      </div>`;
+    }
+
+    // ===== MANAGE CLIENTS =====
+    // clientList mirrors the sidebar clients array so changes stay in sync
+    let clientList = [
+      { name:'Aoife Murphy',  van:'Ford Transit LWB 2021',    status:'progress', value:'18350', type:'Full Van Conversion',    email:'aoife@example.ie',   phone:'+353 87 111 2222', notes:'' },
+      { name:'Ciarán Doyle',  van:'VW Crafter 2019',          status:'complete', value:'7400',  type:'Electrical Only',        email:'ciaran@example.ie',  phone:'+353 86 333 4444', notes:'Completed April 2026.' },
+      { name:'Siobhán Kelly', van:'Mercedes Sprinter 2022',   status:'progress', value:'11200', type:'Full Van Conversion',    email:'siobhan@example.ie', phone:'+353 85 555 6666', notes:'' },
+      { name:'Padraig Walsh',  van:'Ford Transit 2020',        status:'quoted',   value:'9800',  type:'Partial Build',          email:'padraig@example.ie', phone:'+353 87 777 8888', notes:'Awaiting deposit.' },
+    ];
+
+    function renderMcList() {
+      document.getElementById('mc-count').textContent = clientList.length + ' clients';
+      document.getElementById('mc-list').innerHTML = clientList.length
+        ? clientList.map((c, i) => `
+          <div style="padding:0.9rem 1.2rem;border-bottom:1px solid var(--border);${i===clientList.length-1?'border-bottom:none':''}">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.8rem">
+              <div>
+                <p style="font-weight:700;color:var(--dark);font-size:0.88rem">${c.name}</p>
+                <p style="font-size:0.74rem;color:var(--light);margin-top:0.15rem">${c.van} &nbsp;·&nbsp; ${c.type}</p>
+                <p style="font-size:0.72rem;color:var(--light);margin-top:0.1rem">${c.email} &nbsp;·&nbsp; ${c.phone}</p>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;flex-shrink:0">
+                <span class="status-badge status-badge--${c.status}">${c.status==='progress'?'In Progress':c.status==='complete'?'Complete':c.status==='quoted'?'Quoted':'Deposit'}</span>
+                <p style="font-size:0.78rem;font-weight:700;color:var(--dark)">€${parseInt(c.value).toLocaleString('en-IE')}</p>
+              </div>
+            </div>
+            <div style="display:flex;gap:0.5rem;margin-top:0.7rem">
+              <button class="uf-btn uf-btn--sm" style="background:var(--dark)" onclick="selectClient(${i});showPanel('admin-client')">Open Project</button>
+              <button class="uf-btn uf-btn--sm" style="background:rgba(180,60,60,0.85)" onclick="mcArchiveClient(${i})">Archive</button>
+              <button class="uf-btn uf-btn--sm" style="background:rgba(180,60,60,0.5)" onclick="if(confirm('Remove ${c.name}? This cannot be undone.'))mcRemoveClient(${i})">Remove</button>
+            </div>
+          </div>`).join('')
+        : '<p style="text-align:center;padding:1.5rem;color:var(--light);font-style:italic">No clients yet</p>';
+    }
+
+    function mcAddClient() {
+      const name   = document.getElementById('mc-name').value.trim();
+      const email  = document.getElementById('mc-email').value.trim();
+      const phone  = document.getElementById('mc-phone').value.trim();
+      const van    = document.getElementById('mc-van').value.trim();
+      const type   = document.getElementById('mc-type').value;
+      const status = document.getElementById('mc-status').value;
+      const value  = document.getElementById('mc-value').value;
+      const notes  = document.getElementById('mc-notes').value.trim();
+      if (!name || !van) { alert('Please enter at least the client name and van details.'); return; }
+      clientList.push({ name, email, phone, van, type, status, value: value||'0', notes });
+      // Also add to sidebar list (mirrored)
+      clients.push({
+        name, initials: name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2),
+        van, status: status==='progress'?'In Progress':status==='complete'?'Complete':'Quoted',
+        progress:0, value:'€'+(parseInt(value)||0).toLocaleString('en-IE'), step:0,
+        costBreakdown:{materials:0,labour:0,overhead:0,quoted:parseInt(value)||0},
+        parts:[]
+      });
+      // Update sidebar HTML
+      refreshClientSidebar();
+      // Clear form
+      ['mc-name','mc-email','mc-phone','mc-van','mc-value','mc-notes'].forEach(id => document.getElementById(id).value='');
+      renderMcList();
+    }
+
+    function mcRemoveClient(i) {
+      clientList.splice(i, 1);
+      clients.splice(i, 1);
+      refreshClientSidebar();
+      renderMcList();
+    }
+
+    function mcArchiveClient(i) {
+      clientList[i].status = 'complete';
+      clients[i].status = 'Complete';
+      clients[i].progress = 100;
+      refreshClientSidebar();
+      renderMcList();
+    }
+
+    function refreshClientSidebar() {
+      const sidebarEl = document.getElementById('sidebar-Caolán').querySelector('.sidebar-section');
+      // Rebuild client list items only — keep the rest of sidebar intact
+      const clientItems = clients.map((c,i) => `
+        <div class="client-list-item" onclick="selectClient(${i})">
+          <div class="client-list-item__name">${c.name}</div>
+          <div class="client-list-item__van">${c.van}</div>
+          <span class="status-badge status-badge--${c.status==='In Progress'?'progress':c.status==='Complete'?'complete':'quoted'}">${c.status}</span>
+        </div>`).join('');
+      const firstSection = document.getElementById('sidebar-Caolán').querySelector('.sidebar-section');
+      const label = firstSection.querySelector('.sidebar-section__label');
+      firstSection.innerHTML = label.outerHTML + clientItems;
+    }
+
+    // ===== FINANCES =====
+    let finYear = 2026;
+
+    const finJobs = [
+      { year:2026, client:'Ciarán Doyle',   van:'VW Crafter 2019',          quoted:7400,  received:7400,  matCost:3200, labour:2100 },
+      { year:2026, client:'Aoife Murphy',   van:'Ford Transit LWB 2021',    quoted:18350, received:2000,  matCost:9820, labour:4280 },
+      { year:2026, client:'Siobhán Kelly',  van:'Mercedes Sprinter 2022',   quoted:11200, received:2800,  matCost:4800, labour:2800 },
+      { year:2026, client:'Declan Brennan', van:'Ford Transit 2022',        quoted:9600,  received:9600,  matCost:4100, labour:2900 },
+      { year:2026, client:'Roisín Fahy',    van:'VW Crafter LWB 2020',      quoted:14200, received:14200, matCost:6400, labour:3800 },
+      { year:2025, client:'Séan O\'Brien',  van:'Mercedes Sprinter 2019',   quoted:8200,  received:8200,  matCost:3600, labour:2400 },
+      { year:2025, client:'Laura Nolan',    van:'Ford Transit Custom 2021',  quoted:6800,  received:6800,  matCost:2900, labour:2200 },
+      { year:2025, client:'Tom Gallagher',  van:'VW Crafter 2018',          quoted:11400, received:11400, matCost:5100, labour:3200 },
+    ];
+
+    const finExpenses = [
+      // 2026
+      { year:2026, month:1, cat:'Insurance',    desc:'Annual workshop & tools insurance',         amount:1200 },
+      { year:2026, month:1, cat:'Accountancy',  desc:'Annual accountancy fee',                   amount:750  },
+      { year:2026, month:1, cat:'Workshop',     desc:'Workshop rent — Jan',                      amount:400  },
+      { year:2026, month:2, cat:'Workshop',     desc:'Workshop rent — Feb',                      amount:400  },
+      { year:2026, month:2, cat:'Tools',        desc:'Festool OF1400 router',                    amount:480  },
+      { year:2026, month:3, cat:'Workshop',     desc:'Workshop rent — Mar',                      amount:400  },
+      { year:2026, month:3, cat:'Fuel',         desc:'Van fuel — Q1',                            amount:190  },
+      { year:2026, month:3, cat:'Consumables',  desc:'PPE, abrasives, adhesives — Q1',           amount:145  },
+      { year:2026, month:4, cat:'Workshop',     desc:'Workshop rent — Apr',                      amount:400  },
+      { year:2026, month:4, cat:'Phone',        desc:'Phone & broadband — Q2',                   amount:150  },
+      { year:2026, month:5, cat:'Workshop',     desc:'Workshop rent — May',                      amount:400  },
+      { year:2026, month:5, cat:'Tools',        desc:'Dewalt drill set + bits',                  amount:160  },
+      { year:2026, month:5, cat:'Fuel',         desc:'Van fuel — Apr/May',                       amount:145  },
+      { year:2026, month:6, cat:'Workshop',     desc:'Workshop rent — Jun',                      amount:400  },
+      { year:2026, month:6, cat:'Consumables',  desc:'PPE, tape, filler — Q2',                  amount:110  },
+      { year:2026, month:6, cat:'Training',     desc:'12V electrical safety refresher course',   amount:220  },
+      // 2025
+      { year:2025, month:1, cat:'Insurance',    desc:'Annual workshop & tools insurance',         amount:1100 },
+      { year:2025, month:1, cat:'Accountancy',  desc:'Annual accountancy fee',                   amount:700  },
+      { year:2025, month:1, cat:'Workshop',     desc:'Workshop rent — Jan',                      amount:380  },
+      { year:2025, month:2, cat:'Workshop',     desc:'Workshop rent — Feb',                      amount:380  },
+      { year:2025, month:3, cat:'Workshop',     desc:'Workshop rent — Mar',                      amount:380  },
+      { year:2025, month:4, cat:'Workshop',     desc:'Workshop rent — Apr',                      amount:380  },
+      { year:2025, month:5, cat:'Workshop',     desc:'Workshop rent — May',                      amount:380  },
+      { year:2025, month:6, cat:'Workshop',     desc:'Workshop rent — Jun',                      amount:380  },
+      { year:2025, month:7, cat:'Workshop',     desc:'Workshop rent — Jul',                      amount:380  },
+      { year:2025, month:8, cat:'Workshop',     desc:'Workshop rent — Aug',                      amount:380  },
+      { year:2025, month:9, cat:'Workshop',     desc:'Workshop rent — Sep',                      amount:380  },
+      { year:2025, month:10,cat:'Workshop',     desc:'Workshop rent — Oct',                      amount:380  },
+      { year:2025, month:11,cat:'Workshop',     desc:'Workshop rent — Nov',                      amount:380  },
+      { year:2025, month:12,cat:'Workshop',     desc:'Workshop rent — Dec',                      amount:380  },
+      { year:2025, month:3, cat:'Tools',        desc:'Makita circular saw + guide rail',         amount:340  },
+      { year:2025, month:6, cat:'Fuel',         desc:'Van fuel H1',                              amount:280  },
+      { year:2025, month:9, cat:'Fuel',         desc:'Van fuel H2',                              amount:260  },
+      { year:2025, month:4, cat:'Phone',        desc:'Phone & broadband annual',                 amount:600  },
+      { year:2025, month:2, cat:'Consumables',  desc:'PPE, abrasives, adhesives annual',         amount:320  },
+    ];
+
+    function renderFinances() {
+      document.getElementById('fin-year-label').textContent = finYear;
+      const jobs = finJobs.filter(j => j.year === finYear);
+      const exps = finExpenses.filter(e => e.year === finYear);
+
+      const totalReceived = jobs.reduce((s,j) => s+j.received, 0);
+      const totalQuoted   = jobs.reduce((s,j) => s+j.quoted, 0);
+      const totalMatCost  = jobs.reduce((s,j) => s+j.matCost, 0);
+      const totalLabour   = jobs.reduce((s,j) => s+j.labour, 0);
+      const totalExpenses = exps.reduce((s,e) => s+e.amount, 0);
+      const grossProfit   = totalReceived - totalMatCost;
+      const netProfit     = grossProfit - totalExpenses;
+
+      // Irish income tax estimate (rough self-assessment)
+      const taxableIncome = Math.max(0, netProfit);
+      const stdBandLimit  = 42000;
+      const inStdBand     = Math.min(taxableIncome, stdBandLimit);
+      const inHighBand    = Math.max(0, taxableIncome - stdBandLimit);
+      const taxBeforeCredits = (inStdBand * 0.20) + (inHighBand * 0.40);
+      const personalCredit = 1875;
+      const earnedIncomeCredit = Math.min(1875, taxableIncome * 0.20);
+      const incomeTax = Math.max(0, taxBeforeCredits - personalCredit - earnedIncomeCredit);
+      const prsi = taxableIncome * 0.04;
+      const usc = taxableIncome <= 12012 ? taxableIncome * 0.005
+                : taxableIncome <= 25760 ? 60.06 + (taxableIncome - 12012) * 0.02
+                : taxableIncome <= 70044 ? 60.06 + 275.00 + (taxableIncome - 25760) * 0.045
+                : 60.06 + 275.00 + 1992.78 + (taxableIncome - 70044) * 0.08;
+      const totalTax = incomeTax + prsi + usc;
+      const takeHome = Math.max(0, netProfit - totalTax);
+
+      // Expense by category
+      const catTotals = {};
+      exps.forEach(e => { catTotals[e.cat] = (catTotals[e.cat]||0) + e.amount; });
+
+      const fmt = n => '€' + Math.round(n).toLocaleString('en-IE');
+      const outstanding = totalQuoted - totalReceived;
+
+      document.getElementById('fin-content').innerHTML = `
+        <!-- Stats -->
+        <div class="stat-row mb2">
+          <div class="stat"><p class="stat__label">Revenue Received</p><p class="stat__value">${fmt(totalReceived)}</p><p class="stat__sub">Outstanding: ${fmt(outstanding)}</p></div>
+          <div class="stat"><p class="stat__label">Materials Cost</p><p class="stat__value">${fmt(totalMatCost)}</p><p class="stat__sub">Direct job costs</p></div>
+          <div class="stat"><p class="stat__label">Overheads</p><p class="stat__value">${fmt(totalExpenses)}</p><p class="stat__sub">Running costs</p></div>
+          <div class="stat"><p class="stat__label">Net Profit</p><p class="stat__value ${netProfit>=0?'stat--green':''}">${fmt(netProfit)}</p><p class="stat__sub">Before tax</p></div>
+          <div class="stat"><p class="stat__label">Est. Take-Home</p><p class="stat__value stat--green">${fmt(takeHome)}</p><p class="stat__sub">After all tax</p></div>
+        </div>
+
+        <!-- Income + Expenses tables -->
+        <div class="fin-cols mb2">
+          <div class="card">
+            <div class="card__head"><svg><use href="#ic-euro"/></svg><span class="card__title">Income by Job</span><span class="card__badge">${jobs.length} jobs</span></div>
+            <div style="overflow-x:auto">
+              <table class="fin-table">
+                <thead><tr><th>Client</th><th>Quoted</th><th>Received</th></tr></thead>
+                <tbody>
+                  ${jobs.map(j => `<tr>
+                    <td>
+                      <p style="font-weight:700;color:var(--dark);font-size:0.82rem">${j.client}</p>
+                      <p class="muted" style="font-size:0.7rem">${j.van}</p>
+                    </td>
+                    <td class="right">${fmt(j.quoted)}</td>
+                    <td class="right">${fmt(j.received)}${j.received < j.quoted ? `<br><span style="font-size:0.65rem;color:#d04040;font-weight:400">${fmt(j.quoted-j.received)} o/s</span>` : ''}</td>
+                  </tr>`).join('')}
+                </tbody>
+              </table>
+              <div class="fin-foot"><span>Total Received</span><span>${fmt(totalReceived)}</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__head"><svg><use href="#ic-parts"/></svg><span class="card__title">Expenses by Category</span></div>
+            <div style="overflow-x:auto">
+              <table class="fin-table">
+                <thead><tr><th>Category</th><th>Total</th></tr></thead>
+                <tbody>
+                  ${Object.entries(catTotals).sort((a,b)=>b[1]-a[1]).map(([cat,amt]) => `
+                    <tr><td><span class="fin-cat-badge">${cat}</span></td><td class="right">${fmt(amt)}</td></tr>`).join('')}
+                </tbody>
+              </table>
+              <div class="fin-foot"><span>Total Overheads</span><span>${fmt(totalExpenses)}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tax summary box -->
+        <div class="fin-tax-box mb2">
+          <p class="fin-tax-box__title">Estimated Self-Assessment (Irish Revenue)</p>
+          <p style="font-size:0.75rem;color:rgba(234,243,222,0.4);margin-bottom:0.8rem">Estimates only — based on standard rate band, personal tax credit, and earned income credit. Consult your accountant for the final return.</p>
+          <div class="fin-tax-row"><span class="fin-tax-row__label">Gross Income Received</span><span class="fin-tax-row__val">${fmt(totalReceived)}</span></div>
+          <div class="fin-tax-row"><span class="fin-tax-row__label">Less: Materials (Cost of Sales)</span><span class="fin-tax-row__val">– ${fmt(totalMatCost)}</span></div>
+          <div class="fin-tax-row"><span class="fin-tax-row__label">Less: Overhead Expenses</span><span class="fin-tax-row__val">– ${fmt(totalExpenses)}</span></div>
+          <div class="fin-tax-row" style="border-top:1px solid rgba(255,255,255,0.12);margin-top:0.3rem;padding-top:0.7rem"><span class="fin-tax-row__label">Net Taxable Profit</span><span class="fin-tax-row__val">${fmt(netProfit)}</span></div>
+          <div class="fin-tax-row"><span class="fin-tax-row__label">Income Tax (est.)</span><span class="fin-tax-row__val fin-tax-row__val--red">– ${fmt(incomeTax)}</span></div>
+          <div class="fin-tax-row"><span class="fin-tax-row__label">PRSI @ 4%</span><span class="fin-tax-row__val fin-tax-row__val--red">– ${fmt(prsi)}</span></div>
+          <div class="fin-tax-row"><span class="fin-tax-row__label">USC</span><span class="fin-tax-row__val fin-tax-row__val--red">– ${fmt(usc)}</span></div>
+          <div class="fin-tax-row" style="border-top:1px solid rgba(255,255,255,0.12);margin-top:0.3rem;padding-top:0.7rem"><span class="fin-tax-row__label">Estimated Take-Home Pay</span><span class="fin-tax-row__val fin-tax-row__val--green">${fmt(takeHome)}</span></div>
+        </div>
+
+        <!-- Expense log + add form -->
+        <div class="g2 mb2">
+          <div class="card">
+            <div class="card__head"><svg><use href="#ic-parts"/></svg><span class="card__title">Expense Log</span><span class="card__badge">${exps.length} entries</span></div>
+            <div style="overflow-x:auto;max-height:320px;overflow-y:auto">
+              <table class="fin-table">
+                <thead><tr><th>Month</th><th>Category</th><th>Description</th><th>Amount</th></tr></thead>
+                <tbody>
+                  ${exps.map(e => `<tr>
+                    <td class="muted">${new Date(finYear,e.month-1,1).toLocaleDateString('en-IE',{month:'short'})}</td>
+                    <td><span class="fin-cat-badge">${e.cat}</span></td>
+                    <td>${e.desc}</td>
+                    <td class="right">${fmt(e.amount)}</td>
+                  </tr>`).join('')}
+                </tbody>
+              </table>
+              <div class="fin-foot"><span>Total</span><span>${fmt(totalExpenses)}</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__head"><svg><use href="#ic-parts"/></svg><span class="card__title">Log an Expense</span></div>
+            <div class="card__body">
+              <div class="uf-label">Date</div>
+              <input class="uf-input" type="month" id="fin-new-month" value="${finYear}-01" />
+              <div class="uf-label">Category</div>
+              <select class="uf-input" id="fin-new-cat">
+                <option>Workshop</option>
+                <option>Insurance</option>
+                <option>Tools</option>
+                <option>Fuel</option>
+                <option>Phone</option>
+                <option>Consumables</option>
+                <option>Accountancy</option>
+                <option>Training</option>
+                <option>Other</option>
+              </select>
+              <div class="uf-label">Description</div>
+              <input class="uf-input" type="text" id="fin-new-desc" placeholder="e.g. Workshop rent — July" />
+              <div class="uf-label">Amount (€)</div>
+              <input class="uf-input" type="number" id="fin-new-amount" placeholder="0.00" />
+              <button class="uf-btn" onclick="finAddExpense()">Add Expense</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Generate doc button -->
+        <div style="text-align:center;padding:1.2rem 0">
+          <button class="uf-btn" style="padding:0.8rem 2rem;font-size:0.85rem" onclick="finGenerateDoc(${totalReceived},${totalMatCost},${totalExpenses},${netProfit},${incomeTax},${prsi},${usc},${takeHome})">
+            Generate Tax Return Summary Document
+          </button>
+          <p style="font-size:0.75rem;color:var(--light);margin-top:0.5rem">Creates a formatted summary you can share with your accountant</p>
+        </div>
+      `;
+    }
+
+    function finAddExpense() {
+      const monthVal = document.getElementById('fin-new-month').value;
+      const cat      = document.getElementById('fin-new-cat').value;
+      const desc     = document.getElementById('fin-new-desc').value.trim();
+      const amount   = parseFloat(document.getElementById('fin-new-amount').value);
+      if (!desc || !amount || isNaN(amount)) { alert('Please fill in description and amount.'); return; }
+      const [y, m] = monthVal.split('-').map(Number);
+      finExpenses.push({ year:y, month:m, cat, desc, amount });
+      document.getElementById('fin-new-desc').value = '';
+      document.getElementById('fin-new-amount').value = '';
+      renderFinances();
+    }
+
+    function finGenerateDoc(received, matCost, overheads, netProfit, incomeTax, prsi, usc, takeHome) {
+      const fmt2 = n => '€' + Math.round(n).toLocaleString('en-IE');
+      const jobs = finJobs.filter(j => j.year === finYear);
+      const exps = finExpenses.filter(e => e.year === finYear);
+      const catTotals = {};
+      exps.forEach(e => { catTotals[e.cat] = (catTotals[e.cat]||0) + e.amount; });
+
+      const doc = [
+        `Caolán'S CAMPERS — SELF-ASSESSMENT TAX SUMMARY`,
+        `Sole Trader — Revenue Form 11 / Form 12 Supporting Document`,
+        `Tax Year: ${finYear}`,
+        `Generated: ${new Date().toLocaleDateString('en-IE', {day:'numeric',month:'long',year:'numeric'})}`,
+        `${'─'.repeat(58)}`,
+        ``,
+        `INCOME`,
+        `${'─'.repeat(58)}`,
+        ...jobs.map(j => `  ${j.client.padEnd(32)} ${fmt2(j.received).padStart(10)}  (quoted ${fmt2(j.quoted)})`),
+        ``,
+        `  TOTAL INCOME RECEIVED               ${fmt2(received).padStart(10)}`,
+        ``,
+        `COST OF SALES (MATERIALS)`,
+        `${'─'.repeat(58)}`,
+        ...jobs.map(j => `  ${j.client.padEnd(32)} ${fmt2(j.matCost).padStart(10)}`),
+        ``,
+        `  TOTAL MATERIALS                      ${fmt2(matCost).padStart(10)}`,
+        ``,
+        `  GROSS PROFIT                         ${fmt2(received - matCost).padStart(10)}`,
+        ``,
+        `OVERHEAD EXPENSES`,
+        `${'─'.repeat(58)}`,
+        ...Object.entries(catTotals).sort((a,b)=>b[1]-a[1]).map(
+          ([cat,amt]) => `  ${cat.padEnd(32)} ${fmt2(amt).padStart(10)}`),
+        ``,
+        `  TOTAL OVERHEADS                      ${fmt2(overheads).padStart(10)}`,
+        ``,
+        `${'═'.repeat(58)}`,
+        `  NET TAXABLE PROFIT                   ${fmt2(netProfit).padStart(10)}`,
+        `${'═'.repeat(58)}`,
+        ``,
+        `ESTIMATED TAX LIABILITY`,
+        `${'─'.repeat(58)}`,
+        `  Income Tax (after credits, est.)     ${fmt2(incomeTax).padStart(10)}`,
+        `  PRSI @ 4%                            ${fmt2(prsi).padStart(10)}`,
+        `  USC                                  ${fmt2(usc).padStart(10)}`,
+        ``,
+        `  TOTAL ESTIMATED TAX                  ${fmt2(incomeTax+prsi+usc).padStart(10)}`,
+        ``,
+        `${'═'.repeat(58)}`,
+        `  ESTIMATED TAKE-HOME                  ${fmt2(takeHome).padStart(10)}`,
+        `${'═'.repeat(58)}`,
+        ``,
+        `NOTES`,
+        `${'─'.repeat(58)}`,
+        `  This document is for reference only. Figures are estimates`,
+        `  based on standard rate band (${finYear}), personal tax credit`,
+        `  (€1,875), and earned income credit. Consult your accountant`,
+        `  before submitting your Form 11 to Revenue.`,
+        ``,
+        `  Revenue MyAccount: www.revenue.ie`,
+        `  Preliminary Tax Deadline: 31 October ${finYear}`,
+        ``,
+      ].join('\n');
+
+      document.getElementById('fin-doc-text').textContent = doc;
+      document.getElementById('fin-modal').style.display = 'flex';
+    }
+
+    function finCopyDoc() {
+      navigator.clipboard.writeText(document.getElementById('fin-doc-text').textContent)
+        .then(() => alert('Copied to clipboard!'));
+    }
+
+    function finDownloadDoc() {
+      const text = document.getElementById('fin-doc-text').textContent;
+      const blob = new Blob([text], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Caoláns-campers-tax-summary-${finYear}.txt`;
+      a.click();
+    }
+
+    // ===== CALENDAR =====
+    let calYear = 2026, calMonth = 5, calSelectedDay = null;
+
+    const calEventTypes = {
+      'meeting':        'Meeting',
+      'due-date':       'Due Date',
+      'parts-ordered':  'Parts Ordered',
+      'parts-arrive':   'Parts Arriving',
+      'work-planned':   'Work Planned',
+      'work-done':      'Work Done',
+      'other':          'Other',
+    };
+
+    const calEvents = [
+      // Past
+      { date:'2026-05-08', type:'parts-ordered',  title:'Ordered: Webasto Air Top + Thermo Top',        client:'Aoife Murphy' },
+      { date:'2026-05-11', type:'meeting',         title:'Consultation — Aoife Murphy (initial)',         client:'Aoife Murphy' },
+      { date:'2026-05-12', type:'work-planned',    title:'Aoife Murphy build start — strip & prep',      client:'Aoife Murphy' },
+      { date:'2026-05-19', type:'work-done',       title:'Insulation completed',                         client:'Aoife Murphy' },
+      { date:'2026-05-27', type:'work-done',       title:'Electrical rough-in completed',                client:'Aoife Murphy' },
+      { date:'2026-05-28', type:'parts-arrive',    title:'Webasto Air Top Evo 40 arrived (early)',       client:'Aoife Murphy' },
+      // June
+      { date:'2026-06-02', type:'work-planned',    title:'Aoife — Framing & structure start',            client:'Aoife Murphy' },
+      { date:'2026-06-03', type:'work-done',       title:'Framing day 1 — bed frame complete',          client:'Aoife Murphy' },
+      { date:'2026-06-04', type:'work-planned',    title:'Aoife — Overhead locker carcasses',           client:'Aoife Murphy' },
+      { date:'2026-06-05', type:'work-planned',    title:'Aoife — Kitchen unit carcasses',              client:'Aoife Murphy' },
+      { date:'2026-06-09', type:'meeting',         title:'Consultation — Padraig Walsh (quote review)',  client:'Padraig Walsh' },
+      { date:'2026-06-10', type:'parts-arrive',    title:'Oak T&G Cladding expected (McNeils Timber)',  client:'Aoife Murphy' },
+      { date:'2026-06-10', type:'work-planned',    title:'Aoife — Cladding & flooring start',           client:'Aoife Murphy' },
+      { date:'2026-06-12', type:'parts-arrive',    title:'Solid Oak Worktop 2.4m expected',             client:'Aoife Murphy' },
+      { date:'2026-06-16', type:'work-planned',    title:'Siobhán — Electrical rough-in',               client:'Siobhán Kelly' },
+      { date:'2026-06-17', type:'parts-ordered',   title:'Ordered: Victron 100/50 + 300W panels ×2',    client:'Siobhán Kelly' },
+      { date:'2026-06-17', type:'work-planned',    title:'Aoife — Webasto fitting day',                 client:'Aoife Murphy' },
+      { date:'2026-06-18', type:'work-planned',    title:'Aoife — Water system plumbing',               client:'Aoife Murphy' },
+      { date:'2026-06-20', type:'due-date',        title:'Aoife Murphy — Midpoint payment due (€8,175)' ,client:'Aoife Murphy' },
+      { date:'2026-06-23', type:'work-planned',    title:'Aoife — Final fit-out begins',                client:'Aoife Murphy' },
+      { date:'2026-06-25', type:'parts-arrive',    title:'Victron & panels expected delivery',          client:'Siobhán Kelly' },
+      { date:'2026-06-26', type:'work-planned',    title:'Siobhán — Solar & battery install',           client:'Siobhán Kelly' },
+      { date:'2026-06-30', type:'work-done',       title:'Aoife — Fit-out & electrics commissioned',   client:'Aoife Murphy' },
+      // July
+      { date:'2026-07-07', type:'work-planned',    title:'Aoife Murphy — Handover prep',                client:'Aoife Murphy' },
+      { date:'2026-07-14', type:'due-date',        title:'Aoife Murphy — Handover target date',         client:'Aoife Murphy' },
+      { date:'2026-07-14', type:'due-date',        title:'Aoife Murphy — Final payment due (€8,175)',   client:'Aoife Murphy' },
+      { date:'2026-07-21', type:'meeting',         title:'New enquiry — viewing appointment',           client:'' },
+    ];
+
+    function renderCalendar() {
+      const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      document.getElementById('cal-month-title').textContent = `${monthNames[calMonth]} ${calYear}`;
+
+      const firstDow = ((new Date(calYear, calMonth, 1).getDay()) + 6) % 7; // Mon=0
+      const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+      const daysInPrev  = new Date(calYear, calMonth, 0).getDate();
+
+      const today = new Date();
+      const todayStr = `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+
+      const byDate = {};
+      calEvents.forEach(ev => { (byDate[ev.date] = byDate[ev.date]||[]).push(ev); });
+
+      const headers = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(
+        d => `<div class="cal-day-header">${d}</div>`).join('');
+
+      let cells = '';
+      // prev month fill
+      for (let i = firstDow - 1; i >= 0; i--) {
+        const d = daysInPrev - i;
+        const pm = calMonth - 1; const py = pm < 0 ? calYear - 1 : calYear;
+        const ds = `${py}-${pad((((pm%12)+12)%12)+1)}-${pad(d)}`;
+        cells += `<div class="cal-day cal-day--other-month" onclick="selectCalDay('${ds}')"><div class="cal-day__num">${d}</div></div>`;
+      }
+      // current month
+      for (let d = 1; d <= daysInMonth; d++) {
+        const ds = `${calYear}-${pad(calMonth+1)}-${pad(d)}`;
+        const evs = byDate[ds] || [];
+        let cls = 'cal-day';
+        if (ds === todayStr) cls += ' cal-day--today';
+        if (ds === calSelectedDay) cls += ' cal-day--selected';
+        const chips = evs.slice(0,3).map(ev =>
+          `<span class="cal-chip cal-chip--${ev.type}" title="${ev.title}">${ev.title}</span>`).join('');
+        const more = evs.length > 3 ? `<span class="cal-more">+${evs.length-3} more</span>` : '';
+        cells += `<div class="${cls}" onclick="selectCalDay('${ds}')"><div class="cal-day__num">${d}</div>${chips}${more}</div>`;
+      }
+      // next month fill
+      const total = Math.ceil((firstDow + daysInMonth) / 7) * 7;
+      for (let d = 1; d <= total - firstDow - daysInMonth; d++) {
+        const nm = calMonth + 1; const ny = nm > 11 ? calYear + 1 : calYear;
+        const ds = `${ny}-${pad((nm%12)+1)}-${pad(d)}`;
+        cells += `<div class="cal-day cal-day--other-month" onclick="selectCalDay('${ds}')"><div class="cal-day__num">${d}</div></div>`;
+      }
+
+      document.getElementById('cal-grid').innerHTML = headers + cells;
+      renderCalDay(calSelectedDay);
+    }
+
+    function pad(n) { return String(n).padStart(2,'0'); }
+
+    function selectCalDay(ds) {
+      calSelectedDay = ds;
+      const [y, m] = ds.split('-').map(Number);
+      if (y !== calYear || m-1 !== calMonth) { calYear = y; calMonth = m-1; }
+      renderCalendar();
+    }
+
+    function renderCalDay(ds) {
+      const el = document.getElementById('cal-day-detail');
+      if (!ds) { el.innerHTML = '<p class="cal-no-events">Click a date to see events</p>'; return; }
+      const [y, m, d] = ds.split('-').map(Number);
+      const label = new Date(y, m-1, d).toLocaleDateString('en-IE', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+      const evs = calEvents.filter(ev => ev.date === ds);
+
+      const dateInput = document.getElementById('cal-new-date');
+      if (dateInput) dateInput.value = ds;
+
+      el.innerHTML = `<p class="cal-detail__head">${label}</p>` + (evs.length
+        ? evs.map((ev, i) => `
+            <div class="cal-event-item">
+              <div class="cal-event-dot cal-event-dot--${ev.type}"></div>
+              <div style="flex:1">
+                <p class="cal-event-title">${ev.title}</p>
+                <p class="cal-event-type">${calEventTypes[ev.type]||ev.type}</p>
+                ${ev.client ? `<p class="cal-event-client">${ev.client}</p>` : ''}
+              </div>
+              <button class="cal-del-btn" onclick="calDeleteEvent('${ds}',${i})" title="Remove">×</button>
+            </div>`).join('')
+        : '<p class="cal-no-events">No events — add one below</p>');
+    }
+
+    function calDeleteEvent(ds, idx) {
+      const matching = calEvents.filter(ev => ev.date === ds);
+      const toRemove = matching[idx];
+      if (toRemove) {
+        const globalIdx = calEvents.indexOf(toRemove);
+        if (globalIdx > -1) calEvents.splice(globalIdx, 1);
+      }
+      renderCalDay(ds);
+      renderCalendar();
+    }
+
+    function calPrevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
+    function calNextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
+
+    function calAddEvent() {
+      const date  = document.getElementById('cal-new-date').value;
+      const type  = document.getElementById('cal-new-type').value;
+      const title = document.getElementById('cal-new-title').value.trim();
+      const client= document.getElementById('cal-new-client').value;
+      if (!date || !title) { alert('Please fill in the date and a title/note.'); return; }
+      calEvents.push({ date, type, title, client });
+      calSelectedDay = date;
+      const [y, m] = date.split('-').map(Number);
+      calYear = y; calMonth = m - 1;
+      document.getElementById('cal-new-title').value = '';
+      renderCalendar();
+    }
+
+  </script>
+
+</body>
+</html>
+

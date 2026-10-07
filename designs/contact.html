@@ -1,0 +1,459 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - Caolán's Campers</title>
+  <link rel="stylesheet" href="home.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    .page-hero {
+      padding: 140px 2rem 80px;
+      background: linear-gradient(160deg, var(--dark) 0%, #1e6b7a 60%, #2a7a6a 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 20% 60%, rgba(128,168,116,0.12) 0%, transparent 50%);
+    }
+    .page-hero__ornament {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      color: rgba(170, 211, 156, 0.28);
+    }
+    .page-hero__ornament svg { width: 100%; height: 100%; }
+    .page-hero__ornament--tl { top: 16px; left: 16px; }
+    .page-hero__ornament--tr { top: 16px; right: 16px; transform: scaleX(-1); }
+    .page-hero__eyebrow {
+      position: relative;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .page-hero__title {
+      position: relative;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+    .page-hero__sub {
+      position: relative;
+      font-size: 1rem;
+      color: rgba(234,243,222,0.75);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* CONTACT MAIN */
+    .contact-main {
+      padding: 6rem 0;
+      background: var(--cream);
+    }
+    .contact-main__inner {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    /* Left col */
+    .contact-info__eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 0.8rem;
+    }
+    .contact-info__title {
+      font-size: 1.9rem;
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+    .contact-info__divider { margin-bottom: 1.5rem; }
+    .contact-info__body {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.8;
+      margin-bottom: 0.9rem;
+    }
+    .contact-info__note {
+      background: var(--white);
+      border-left: 3px solid var(--sage);
+      padding: 1rem 1.2rem;
+      font-size: 0.88rem;
+      color: var(--text-light);
+      line-height: 1.65;
+      margin: 1.5rem 0 2rem;
+      border-radius: 0 3px 3px 0;
+    }
+    .contact-info__links {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+    .contact-info__link {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      color: var(--dark);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .contact-info__link svg {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      color: var(--sage);
+    }
+    .contact-info__link:hover { color: var(--sage); }
+    .contact-info__link-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      display: block;
+    }
+
+    /* Form */
+    .contact-form {
+      background: var(--white);
+      border: 1px solid rgba(128,168,116,0.25);
+      border-radius: 4px;
+      padding: 2.8rem;
+      position: relative;
+    }
+    .contact-form__title {
+      font-size: 1.2rem;
+      color: var(--dark);
+      margin-bottom: 0.4rem;
+    }
+    .contact-form__sub {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-bottom: 1.8rem;
+      line-height: 1.55;
+    }
+    .form__ornament {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      color: var(--mint);
+      opacity: 0.55;
+    }
+    .form__ornament svg { width: 100%; height: 100%; }
+    .form__ornament--tl { top: -8px; left: -8px; }
+    .form__ornament--br { bottom: -8px; right: -8px; transform: scale(-1); }
+    .form__group {
+      margin-bottom: 1.2rem;
+    }
+    .form__group label {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dark);
+      margin-bottom: 0.4rem;
+      font-weight: 700;
+    }
+    .form__group input,
+    .form__group textarea,
+    .form__group select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(128,168,116,0.4);
+      border-radius: 3px;
+      background: var(--cream);
+      color: var(--text);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      resize: vertical;
+      appearance: none;
+    }
+    .form__group input:focus,
+    .form__group textarea:focus,
+    .form__group select:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(128,168,116,0.15);
+    }
+    .form__group input::placeholder,
+    .form__group textarea::placeholder { color: rgba(74,99,88,0.45); }
+
+    /* FAQ */
+    .faq {
+      padding: 5rem 0;
+      background: var(--white);
+    }
+    .faq__list {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .faq__item {
+      border: 1px solid rgba(128,168,116,0.25);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .faq__q {
+      padding: 1.2rem 1.5rem;
+      background: var(--cream);
+      font-family: 'Cinzel', serif;
+      font-size: 0.92rem;
+      color: var(--dark);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .faq__q::after {
+      content: '+';
+      font-size: 1.2rem;
+      color: var(--sage);
+      flex-shrink: 0;
+    }
+    .faq__a {
+      padding: 1rem 1.5rem 1.3rem;
+      font-size: 0.9rem;
+      color: var(--text-light);
+      line-height: 1.75;
+      border-top: 1px solid rgba(128,168,116,0.15);
+    }
+
+    @media (max-width: 900px) {
+      .contact-main__inner { grid-template-columns: 1fr; gap: 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="celtic-corner" viewBox="0 0 80 80">
+      <g fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4,4 Q4,40 40,76" opacity="0.5"/>
+        <path d="M4,4 Q40,4 76,40" opacity="0.5"/>
+        <path d="M4,4 C4,20 16,20 16,36 C16,52 4,52 4,68" stroke-width="2.5"/>
+        <path d="M4,4 C20,4 20,16 36,16 C52,16 52,4 68,4" stroke-width="2.5"/>
+        <rect x="10" y="10" width="8" height="8" rx="1" transform="rotate(45 14 14)" stroke-width="1.5"/>
+        <path d="M28,4 C28,12 20,16 16,24" stroke-width="1.5"/>
+        <path d="M4,28 C12,28 16,20 24,16" stroke-width="1.5"/>
+      </g>
+    </symbol>
+    <symbol id="celtic-divider" viewBox="0 0 300 30">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="0" y1="15" x2="110" y2="15"/>
+        <line x1="190" y1="15" x2="300" y2="15"/>
+        <path d="M110,15 C120,5 130,25 150,15 C170,5 180,25 190,15"/>
+        <circle cx="150" cy="15" r="4" stroke-width="2"/>
+        <circle cx="130" cy="15" r="2.5"/>
+        <circle cx="170" cy="15" r="2.5"/>
+      </g>
+    </symbol>
+    <symbol id="leaf-motif" viewBox="0 0 40 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M20,58 C20,40 4,30 4,16 C4,6 12,2 20,2 C28,2 36,6 36,16 C36,30 20,40 20,58Z"/>
+        <path d="M20,58 C20,40 20,20 20,2" stroke-width="1"/>
+        <path d="M20,30 C14,28 8,22 8,16"/>
+        <path d="M20,30 C26,28 32,22 32,16"/>
+        <path d="M20,44 C16,42 12,38 10,34"/>
+        <path d="M20,44 C24,42 28,38 30,34"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <nav class="nav">
+    <div class="nav__inner">
+
+      <ul class="nav__links nav__links--left">
+        <li><a href="home.html#services">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="home.html#gallery">Gallery</a></li>
+      </ul>
+
+      <a href="home.html" class="nav__brand">
+        <span class="nav__brand-word">Caolán's</span>
+        <div class="nav__logo-placeholder">
+          <img src="logo_no_name.svg" alt="Caolán's Campers" />
+        </div>
+        <span class="nav__brand-word">Campers</span>
+      </a>
+
+      <ul class="nav__links nav__links--right">
+        <li class="nav__cta-li"><a href="quote.html" class="nav__cta">Get a Quote</a></li>
+        <li class="nav__portal-li"><a href="client.html">Client Portal</a></li>
+        <li class="nav__menu-wrap">
+          <button class="nav__menu-btn" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+          <div class="nav__dropdown"></div>
+        </li>
+      </ul>
+
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="page-hero__ornament page-hero__ornament--tl"><svg><use href="#celtic-corner"/></svg></div>
+    <div class="page-hero__ornament page-hero__ornament--tr"><svg><use href="#celtic-corner"/></svg></div>
+    <p class="page-hero__eyebrow">Get in Touch</p>
+    <h1 class="page-hero__title">Talk to Caolán</h1>
+    <p class="page-hero__sub">Drop him a message — no sales team, no waiting. You're talking directly to the man who'll be building your van.</p>
+  </section>
+
+  <section class="contact-main">
+    <div class="container contact-main__inner">
+      <div class="contact-info">
+        <p class="contact-info__eyebrow">Direct Contact</p>
+        <h2 class="contact-info__title">No Middlemen.<br>Just Caolán.</h2>
+        <div class="contact-info__divider">
+          <svg width="200" height="30"><use href="#celtic-divider" color="#80A874"/></svg>
+        </div>
+        <p class="contact-info__body">This is a one-man operation. When you send a message, Caolán reads it. When you call, Caolán answers. He's hands-on from first conversation to final handshake — that's the whole point.</p>
+        <div class="contact-info__note">
+          Caolán's usually in the workshop during the day, so messages are often quicker than calls. He'll aim to get back to you the same day.
+        </div>
+        <div class="contact-info__links">
+          <a href="tel:0894774522" class="contact-info__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>
+            <span>
+              <span class="contact-info__link-label">Phone</span>
+              089 477 4522
+            </span>
+          </a>
+          <a href="mailto:info@Caoláns-campers.ie" class="contact-info__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+            <span>
+              <span class="contact-info__link-label">Email</span>
+              info@Caoláns-campers.ie
+            </span>
+          </a>
+          <a href="https://instagram.com/mobilecampersolutions" class="contact-info__link" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+            <span>
+              <span class="contact-info__link-label">Instagram</span>
+              @Caolánscampers
+            </span>
+          </a>
+          <a href="https://facebook.com/mobilecampersolutions" class="contact-info__link" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="4"/><path d="M15 2v4h-2a1 1 0 00-1 1v3h3l-.5 4H12v8"/></svg>
+            <span>
+              <span class="contact-info__link-label">Facebook</span>
+              @Caolánscampers
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <form class="contact-form">
+        <div class="form__ornament form__ornament--tl"><svg><use href="#celtic-corner"/></svg></div>
+        <div class="form__ornament form__ornament--br"><svg><use href="#celtic-corner"/></svg></div>
+        <h3 class="contact-form__title">Send a Message</h3>
+        <p class="contact-form__sub">Tell Caolán a bit about yourself and what you're after. No commitment, no hard sell.</p>
+        <div class="form__group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" placeholder="Aoife Murphy" />
+        </div>
+        <div class="form__group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="aoife@example.ie" />
+        </div>
+        <div class="form__group">
+          <label for="phone">Phone (optional)</label>
+          <input type="tel" id="phone" name="phone" placeholder="087 ..." />
+        </div>
+        <div class="form__group">
+          <label for="subject">What's It About?</label>
+          <select id="subject" name="subject">
+            <option value="">Choose one…</option>
+            <option>Full van conversion</option>
+            <option>Solar / electrical system</option>
+            <option>Heating installation</option>
+            <option>Skylights or windows</option>
+            <option>Water system</option>
+            <option>Interior fit-out</option>
+            <option>Just exploring options</option>
+          </select>
+        </div>
+        <div class="form__group">
+          <label for="message">Your Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="Tell Caolán what you're dreaming of…"></textarea>
+        </div>
+        <button type="submit" class="btn btn--primary btn--full">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="container">
+      <div class="section-header">
+        <svg class="section-header__leaf" width="40" height="60"><use href="#leaf-motif" color="#80A874"/></svg>
+        <h2 class="section-header__title">Common Questions</h2>
+        <svg class="section-header__leaf section-header__leaf--flip" width="40" height="60"><use href="#leaf-motif" color="#80A874"/></svg>
+      </div>
+      <div class="section-header__divider">
+        <svg width="300" height="30"><use href="#celtic-divider" color="#195764"/></svg>
+      </div>
+      <div class="faq__list">
+        <div class="faq__item">
+          <div class="faq__q">How long does a full conversion take?</div>
+          <div class="faq__a">Every build is different, but a full conversion typically takes 4–8 weeks depending on complexity and the spec you're after. Caolán will give you a realistic timeline before any work starts — not an optimistic one that slips.</div>
+        </div>
+        <div class="faq__item">
+          <div class="faq__q">Do I need to supply my own van?</div>
+          <div class="faq__a">Yes — Caolán works on your van, not a dealer's stock. He can point you in the right direction if you're still hunting for the right base vehicle, and will flag anything worth knowing before you commit to buying it.</div>
+        </div>
+        <div class="faq__item">
+          <div class="faq__q">What does a conversion cost?</div>
+          <div class="faq__a">It depends entirely on what you want. A basic solar and bed setup is a very different job to a full plumbed and heated build with custom cabinetry. Caolán gives you an honest itemised quote so you can see exactly where the money goes.</div>
+        </div>
+        <div class="faq__item">
+          <div class="faq__q">Will you work on a camper I'm partly building myself?</div>
+          <div class="faq__a">Absolutely. Whether you want Caolán to handle specific elements — electrics, heating, skylights — or to step in partway through a self-build, he's happy to talk through what makes sense.</div>
+        </div>
+        <div class="faq__item">
+          <div class="faq__q">Is there a warranty on the work?</div>
+          <div class="faq__a">Yes. Caolán stands behind everything he builds. If something isn't right, he'll sort it. That's what it means to deal with the person who actually did the work.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__border">
+      <svg width="100%" height="30" preserveAspectRatio="none">
+        <line x1="0" y1="15" x2="100%" y2="15" stroke="#195764" stroke-width="1" stroke-dasharray="6 4"/>
+      </svg>
+    </div>
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <p class="footer__name">Caolán's Campers</p>
+        <p class="footer__tagline">Your Dream Campervan, Made Reality</p>
+      </div>
+      <nav class="footer__nav">
+        <a href="home.html#services">Services</a>
+        <a href="about.html">About</a>
+        <a href="home.html#gallery">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <p class="footer__copy">&copy; 2026 Caolán's Campers. Ireland.</p>
+    </div>
+  </footer>
+
+  <script>
+  (function(){var btn=document.querySelector('.nav__menu-btn'),drop=document.querySelector('.nav__dropdown');if(!btn||!drop)return;var ll=document.querySelectorAll('.nav__links--left a'),pl=document.querySelector('.nav__portal-li a'),cl=document.querySelector('.nav__cta-li a'),h='';ll.forEach(function(a){h+='<a href="'+a.getAttribute('href')+'">' +a.textContent+'</a>';});if(pl)h+='<a href="'+pl.getAttribute('href')+'">' +pl.textContent+'</a>';if(cl)h+='<a href="'+cl.getAttribute('href')+'" class="nav__dropdown-cta">'+cl.textContent+'</a>';drop.innerHTML=h;btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')=== 'true';btn.setAttribute('aria-expanded',String(!o));drop.classList.toggle('open',!o);});document.addEventListener('click',function(e){if(!btn.contains(e.target)&&!drop.contains(e.target)){btn.setAttribute('aria-expanded','false');drop.classList.remove('open');}});})();
+  </script>
+</body>
+</html>
+

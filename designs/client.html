@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&family=Uncial+Antiqua&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="home.css" />
   <style>
     /* ===== TOKENS ===== */
     :root {
@@ -1255,47 +1256,14 @@
       .g2, .g3 { grid-template-columns: 1fr; }
     }
 
-    /* ===== LOGIN NAV ===== */
-    .login-nav {
-      height: 60px;
-      display: flex;
-      align-items: center;
-      padding: 0 2rem;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      flex-shrink: 0;
+    /* ===== LOGIN SCREEN NAV OVERRIDE ===== */
+    #login-screen .nav {
       position: relative;
-      z-index: 1;
+      top: auto;
+      left: auto;
+      right: auto;
+      flex-shrink: 0;
     }
-    .login-nav__logo {
-      font-family: 'Cinzel', serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--mint);
-      text-decoration: none;
-      letter-spacing: 0.04em;
-      flex: 1;
-    }
-    .login-nav__links {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-    }
-    .login-nav__link {
-      font-size: 0.76rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(234,243,222,0.55);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .login-nav__link:hover { color: var(--cream); }
-    .login-nav__cta {
-      color: #39cccc !important;
-      border: 1px solid rgba(57,204,204,0.35);
-      padding: 0.45rem 1.1rem;
-      border-radius: 2px;
-    }
-    .login-nav__cta:hover { border-color: #39cccc !important; background: rgba(57,204,204,0.08); }
     .login-main {
       flex: 1;
       display: flex;
@@ -1399,13 +1367,28 @@
 
   <!-- ======================== LOGIN SCREEN ======================== -->
   <div id="login-screen">
-    <nav class="login-nav">
-      <a href="home.html" class="login-nav__logo">Caolán's Campers</a>
-      <div class="login-nav__links">
-        <a href="home.html" class="login-nav__link">Home</a>
-        <a href="about.html" class="login-nav__link">About</a>
-        <a href="contact.html" class="login-nav__link">Contact</a>
-        <a href="quote.html" class="login-nav__link login-nav__cta">Get a Quote</a>
+    <nav class="nav">
+      <div class="nav__inner">
+        <ul class="nav__links nav__links--left">
+          <li><a href="home.html#services">Services</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="home.html#gallery">Gallery</a></li>
+        </ul>
+        <a href="home.html" class="nav__brand">
+          <span class="nav__brand-word">Caolán's</span>
+          <div class="nav__logo-placeholder">
+            <img src="logo_no_name.svg" alt="Caolán's Campers" />
+          </div>
+          <span class="nav__brand-word">Campers</span>
+        </a>
+        <ul class="nav__links nav__links--right">
+          <li class="nav__cta-li"><a href="quote.html" class="nav__cta">Get a Quote</a></li>
+          <li class="nav__portal-li"><a href="client.html">Client Portal</a></li>
+          <li class="nav__menu-wrap">
+            <button class="nav__menu-btn" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+            <div class="nav__dropdown"></div>
+          </li>
+        </ul>
       </div>
     </nav>
     <div class="login-ornament login-ornament--tl"><img src="corner_chain.svg" alt="" width="60" /></div>
@@ -3387,6 +3370,9 @@
       renderCalendar();
     }
 
+  </script>
+  <script>
+  (function(){var btn=document.querySelector('.nav__menu-btn'),drop=document.querySelector('.nav__dropdown');if(!btn||!drop)return;var ll=document.querySelectorAll('.nav__links--left a'),pl=document.querySelector('.nav__portal-li a'),cl=document.querySelector('.nav__cta-li a'),h='';ll.forEach(function(a){h+='<a href="'+a.getAttribute('href')+'">' +a.textContent+'</a>';});if(pl)h+='<a href="'+pl.getAttribute('href')+'">' +pl.textContent+'</a>';h+='<a href="contact.html">Contact</a>';if(cl)h+='<a href="'+cl.getAttribute('href')+'" class="nav__dropdown-cta">'+cl.textContent+'</a>';drop.innerHTML=h;btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')=== 'true';btn.setAttribute('aria-expanded',String(!o));drop.classList.toggle('open',!o);});document.addEventListener('click',function(e){if(!btn.contains(e.target)&&!drop.contains(e.target)){btn.setAttribute('aria-expanded','false');drop.classList.remove('open');}});})();
   </script>
 
 </body>

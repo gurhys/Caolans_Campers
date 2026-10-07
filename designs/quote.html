@@ -401,6 +401,15 @@
       .estimate-bk-row__name { color: rgba(234, 243, 222, 0.45); font-size: 0.75rem; letter-spacing: 0.04em; }
       .estimate-bk-row__val { color: var(--mint); font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
       .estimate-bk-note { font-size: 0.7rem; color: rgba(234, 243, 222, 0.3); margin-top: 0.6rem; }
+      .estimate-bk-row--labour { border-top: 1px solid rgba(234, 243, 222, 0.18); margin-top: 0.25rem; padding-top: 0.45rem; }
+      .estimate-bk-row--labour .estimate-bk-row__name { color: rgba(234, 243, 222, 0.65); }
+      .estimate-bk-row--labour .estimate-bk-row__val { color: var(--teal); }
+      .estimate-display__time {
+        font-size: 0.88rem;
+        color: rgba(234, 243, 222, 0.6);
+        margin-top: 0.35rem;
+        letter-spacing: 0.02em;
+      }
 
       /* ======== QTY INPUTS ======== */
       .opt-qty-wrap { }
@@ -1550,6 +1559,7 @@
               <p class="estimate-display__value" id="estimate-val">
                 Select your options above
               </p>
+              <p class="estimate-display__time" id="estimate-time"></p>
               <p
                 class="estimate-display__breakdown"
                 id="estimate-breakdown"
@@ -2463,38 +2473,38 @@
       // ---- TIME RANGES per option (days) ----
       var TIME_DATA = {
         "vs-small": [0, 0],
-        "vs-medium": [1, 2],
-        "vs-large": [2, 3],
-        "p-light": [0.5, 0.5],
-        "p-charge": [0.25, 0.5],
-        "p-battery": [0.5, 1],
-        "p-solar": [1, 2],
-        "p-induction": [0.5, 1],
-        "p-gas": [0.5, 0.5],
-        "p-mains": [0.5, 1],
-        "h-insulation": [1, 2],
-        "h-diesel": [1, 2],
-        "h-hotwater": [1, 2],
-        "s-fan": [0.5, 1],
-        "s-toiletvent": [0.5, 0.5],
-        "s-largesky": [0.5, 1],
-        "s-smallsky": [0.5, 0.5],
-        "s-smallwin": [0.5, 0.5],
-        "s-largewin": [0.5, 1],
-        "w-sink": [1, 1.5],
-        "w-toilet": [0.5, 0.5],
-        "w-shower": [1, 2],
-        "w-wetroom": [1, 2],
-        "w-external": [0.5, 0.5],
-        "l-dbed": [1, 2],
-        "l-sbed": [1, 1],
-        "l-couch": [1, 1],
-        "l-kitchen": [2, 3],
-        "l-garage": [0.5, 1],
-        "l-bathroom": [2, 3],
-        "l-desk": [0.5, 1],
-        "l-storage": [1, 1],
-        "l-finish": [3, 5],
+        "vs-medium": [2, 4],
+        "vs-large": [4, 6],
+        "p-light": [1, 1],
+        "p-charge": [0.5, 1],
+        "p-battery": [1, 2],
+        "p-solar": [2, 4],
+        "p-induction": [1, 2],
+        "p-gas": [1, 1],
+        "p-mains": [1, 2],
+        "h-insulation": [2, 4],
+        "h-diesel": [2, 4],
+        "h-hotwater": [2, 4],
+        "s-fan": [1, 2],
+        "s-toiletvent": [1, 1],
+        "s-largesky": [1, 2],
+        "s-smallsky": [1, 1],
+        "s-smallwin": [1, 1],
+        "s-largewin": [1, 2],
+        "w-sink": [2, 3],
+        "w-toilet": [1, 1],
+        "w-shower": [2, 4],
+        "w-wetroom": [2, 4],
+        "w-external": [1, 1],
+        "l-dbed": [2, 4],
+        "l-sbed": [2, 2],
+        "l-couch": [2, 2],
+        "l-kitchen": [4, 6],
+        "l-garage": [1, 2],
+        "l-bathroom": [4, 6],
+        "l-desk": [1, 2],
+        "l-storage": [2, 2],
+        "l-finish": [6, 10],
       };
 
       // ---- HELPERS ----
@@ -2678,15 +2688,34 @@
 
         var totalMin = vanSize.min + power.min + heat.min + sky.min + water.min + layout.min;
         var totalMax = vanSize.max + power.max + heat.max + sky.max + water.max + layout.max;
+        var totalTimeMin = powerTime.min + heatTime.min + skyTime.min + waterTime.min + layoutTime.min;
+        var totalTimeMax = powerTime.max + heatTime.max + skyTime.max + waterTime.max + layoutTime.max;
 
         var valEl = document.getElementById("estimate-val");
+        var timeEl = document.getElementById("estimate-time");
         var brkEl = document.getElementById("estimate-breakdown");
+
+        var labourMin = Math.round(totalTimeMin * 350);
+        var labourMax = Math.round(totalTimeMax * 500);
+        var grandMin = totalMin + labourMin;
+        var grandMax = totalMax + labourMax;
 
         if (totalMin === 0 && totalMax === 0) {
           valEl.textContent = "Select your options above";
+          if (timeEl) timeEl.textContent = "";
           brkEl.innerHTML = "";
         } else {
-          valEl.textContent = fmt(totalMin) + " – " + fmt(totalMax);
+          valEl.textContent = fmt(grandMin) + " – " + fmt(grandMax);
+          if (timeEl) {
+            if (totalTimeMin > 0 || totalTimeMax > 0) {
+              var tMin = totalTimeMin, tMax = totalTimeMax;
+              var tStr = tMin === tMax ? "~" + tMin : tMin + "–" + tMax;
+              tStr += tMax === 1 ? " day" : " days";
+              timeEl.textContent = "Roughly " + tStr + " build time";
+            } else {
+              timeEl.textContent = "";
+            }
+          }
           var rows = [];
           if (power.min > 0 || power.max > 0) rows.push({ name: "Power & Electrics", price: power, time: powerTime });
           if (heat.min > 0 || heat.max > 0) rows.push({ name: "Heating", price: heat, time: heatTime });
@@ -2698,7 +2727,10 @@
             var timeStr = fmtDays(r.time.min, r.time.max);
             html += '<div class="estimate-bk-row"><span class="estimate-bk-row__name">' + r.name + '</span><span class="estimate-bk-row__val">' + fmt(r.price.min) + '–' + fmt(r.price.max) + (timeStr ? ' · ' + timeStr : '') + '</span></div>';
           });
-          html += '</div><p class="estimate-bk-note">Labour not included. These are ballpark ranges only.</p>';
+          if (labourMin > 0 || labourMax > 0) {
+            html += '<div class="estimate-bk-row estimate-bk-row--labour"><span class="estimate-bk-row__name">Labour</span><span class="estimate-bk-row__val">' + fmt(labourMin) + '–' + fmt(labourMax) + '</span></div>';
+          }
+          html += '</div><p class="estimate-bk-note">These are ballpark ranges only.</p>';
           brkEl.innerHTML = html;
         }
 

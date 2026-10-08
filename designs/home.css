@@ -363,7 +363,7 @@ h1, h2, h3 {
       rgba(30, 107, 122, 0.55) 50%,
       rgba(42, 122, 106, 0.62) 100%
     ),
-    url('/images/mountains.jpg') center center / cover no-repeat;
+    url('../../mountains.jpg') center center / cover no-repeat;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 
 const leftLinks = [
@@ -10,19 +9,9 @@ const leftLinks = [
 ];
 
 export default function Nav() {
-  const [open,     setOpen]     = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
-  const isHome   = pathname === "/";
-  const btnRef   = useRef<HTMLButtonElement>(null);
-  const dropRef  = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function onScroll() { setScrolled(window.scrollY > 100); }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const [open, setOpen] = useState(false);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const dropRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleOutsideClick(e: MouseEvent) {
@@ -37,14 +26,8 @@ export default function Nav() {
     return () => document.removeEventListener("click", handleOutsideClick);
   }, []);
 
-  const navClass = [
-    "nav",
-    isHome             ? "nav--transparent" : "",
-    isHome && scrolled ? "nav--scrolled"    : "",
-  ].filter(Boolean).join(" ");
-
   return (
-    <nav className={navClass}>
+    <nav className="nav">
       <div className="nav__inner">
 
         <ul className="nav__links nav__links--left">

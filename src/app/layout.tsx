@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { Cinzel, Cormorant_Garamond, Manrope } from "next/font/google";
+import { Cinzel, Lato, Uncial_Antiqua } from "next/font/google";
 import "./globals.css";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
 const cinzel = Cinzel({
   variable: "--font-cinzel",
@@ -8,16 +10,16 @@ const cinzel = Cinzel({
   weight: ["400", "500", "600", "700"],
 });
 
-const cormorantGaramond = Cormorant_Garamond({
-  variable: "--font-cormorant",
+const lato = Lato({
+  variable: "--font-lato",
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "700"],
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const uncialAntiqua = Uncial_Antiqua({
+  variable: "--font-uncial",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -32,9 +34,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cinzel.variable} ${cormorantGaramond.variable} ${manrope.variable} h-full`}
+      className={`${cinzel.variable} ${lato.variable} ${uncialAntiqua.variable}`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body>
+        <Nav />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
